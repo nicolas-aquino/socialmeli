@@ -53,12 +53,16 @@ Supongamos que queremos trabajar en la feature US_0XX. Lo ideal sería seguir es
 ### Abrir un Pull Request
 Despues de pushear tus cambios, dentro del repo en GitHub clickear el boton __"Compare & pull request"__. Si aparecen varios botones, asegurarse de clickear el que corresponde a la branch de la feature nueva.
 
+![img.png](readme-img/img.png)
+
 Si no se ve el boton, clickear el menu desplegable y seleccionar el branch correspondiente a la feature.
 
 ![img.png](readme-img/img3.png)
 
 Una vez en la branch de tu feature, clickear el boton "Contribute" y luego en el boton "Open pull request".
 
+![img.png](readme-img/img4.png)
 
-   * ![img.png](readme-img/img.png)
-   * ![img2.png](readme-img/img2.png)
+Finalmente, asegurarse que se selecciona a `dev` como base para mergearlo _hacia_ `dev`.
+
+![img2.png](readme-img/img2.png)
