@@ -34,8 +34,18 @@ Un analista funcional llevó a cabo el __relevamiento de los requerimientos téc
 
 ## Git Flow
 
-* Crear rama correspondiente a la feature
-* Codear los cambios
-* Comiteamos los cambios en nuestra rama 
-* Cambiar a la rama dev y hacemos pull
-* Hacer merge de dev--> rama (US_000)
+Supongamos que queremos trabajar en la feature US_0XX. Lo ideal sería seguir este procedimiento:
+1. Crear rama correspondiente a la feature (En la terminal: `git checkout -b US_0XX`)
+2. (Opcional) Pushear la nueva rama al repo (En la terminal: `git push origin US_0XX`)
+3. Asegurarse de estar en la rama correspondiente (En la terminal: `git branch` y ver que el asterisco (*) este en la branch creada)
+* Si no estas en la rama correspondiente, en la terminal cambiar con `git checkout US_0XX`
+4. Codear los cambios como siempre
+* Para pushear los cambios a tu rama __dentro__ del repo, usar `git push origin US_0XX`
+5. Comiteamos los cambios en nuestra rama como siempre
+6. Cambiar a la rama `dev` y hacemos pull para tener la version actualizada (En la terminal: `git pull origin dev`)
+7. Ahora que `dev` esta actualizado, antes de mergear los cambios:
+* Volver nuevamente a la branch que _queremos_ mergear (En la terminal: `git checkout US_0XX`)
+* Mergear los cambios actualizados _desde_ `dev` _hacia_ la branch de la feature (En la terminal: `git merge dev`)
+* Si surgen conflictos, solucionarlos en esta parte. Al terminar, por las dudas repetir pasos 6 y 7
+8. Pushear la feature al branch que esta en el repo con `git push origin US_0XX`
+9. Hacer un pull request para mergearlo al dev (No creo que haga falta revisiones, pero para ir acostumbrandonos)
