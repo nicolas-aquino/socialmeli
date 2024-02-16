@@ -49,3 +49,20 @@ Supongamos que queremos trabajar en la feature US_0XX. Lo ideal sería seguir es
 * Si surgen conflictos, solucionarlos en esta parte. Al terminar, por las dudas repetir pasos 6 y 7
 8. Pushear la feature al branch que esta en el repo con `git push origin US_0XX`
 9. Hacer un pull request para mergearlo al dev (No creo que haga falta revisiones, pero para ir acostumbrandonos)
+
+### Abrir un Pull Request
+Despues de pushear tus cambios, dentro del repo en GitHub clickear el boton __"Compare & pull request"__. Si aparecen varios botones, asegurarse de clickear el que corresponde a la branch de la feature nueva.
+
+![img.png](readme-img/img.png)
+
+Si no se ve el boton, clickear el menu desplegable y seleccionar el branch correspondiente a la feature.
+
+![img.png](readme-img/img3.png)
+
+Una vez en la branch de tu feature, clickear el boton "Contribute" y luego en el boton "Open pull request".
+
+![img.png](readme-img/img4.png)
+
+Finalmente, asegurarse que se selecciona a `dev` como base para mergearlo _hacia_ `dev`.
+
+![img2.png](readme-img/img2.png)
