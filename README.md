@@ -4,7 +4,7 @@
 - [Excalibur (Diagrama de clases)](https://excalidraw.com/#room=3525b414b8674fc9a010,4H2FJFBKAW5q2_6V6Tcg4w)
 - [Especificación técnica funcional](https://www.google.com/url?q=https://docs.google.com/document/d/1Q-xGaOMPij-qk_gMvcN0Sk0isbCPqjJS/edit?usp%3Dsharing%26ouid%3D109742565608469686147%26rtpof%3Dtrue%26sd%3Dtrue&sa=D&source=editors&ust=1708099270823216&usg=AOvVaw2JhBoFP4pvFzUyAwHRjz3Z)
 
-# Git Flow (Robado de [The Odin Project](https://www.theodinproject.com/lessons/ruby-using-git-in-the-real-world#ongoing-workflow)
+# Git Flow (Robado de [The Odin Project](https://www.theodinproject.com/lessons/ruby-using-git-in-the-real-world#ongoing-workflow))
 
 #### Ongoing workflow
 
