@@ -12,5 +12,5 @@ import java.util.List;
 public abstract class User {
     protected Integer userId;
     protected String userName;
-    private List<Vendor> following;
+    protected List<Vendor> following;
 }
