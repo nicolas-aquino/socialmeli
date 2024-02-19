@@ -2,6 +2,7 @@ package org.socialmeli.controller;
 
 import org.socialmeli.dto.request.UserIdDto;
 import org.socialmeli.dto.response.FollowSuccessDto;
+import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.service.IPostsService;
 import org.socialmeli.service.IUsersService;
 import org.socialmeli.service.PostsServiceImp;
@@ -21,12 +22,6 @@ public class UsersController {
     public UsersController(PostsServiceImp postsService, UsersServiceImp usersService) {
         this.postsService = postsService;
         this.usersService = usersService;
-    }
-    @GetMapping("/")
-    public ResponseEntity<?> ok(){
-        //TODO:
-        return new ResponseEntity<>("ok",HttpStatus.OK);
-
     }
 
     /// users/{userId}/follow/{userIdToFollow}
@@ -49,10 +44,8 @@ public class UsersController {
 
     ///users/{userId}/followers/list
     @GetMapping("/{userId}/followers/list")
-    public ResponseEntity<?> followersList(
-            @PathVariable Integer userId){
-        //TODO:
-        return null;
+    public ResponseEntity<VendorsFollowingListDto> followersList(@PathVariable UserIdDto userId){
+        return new ResponseEntity<>(usersService.getFollowingList(userId), HttpStatus.OK);
     }
 
     ///users/{userId}/followed/list?order=
