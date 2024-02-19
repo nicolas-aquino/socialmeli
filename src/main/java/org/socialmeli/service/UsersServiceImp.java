@@ -10,13 +10,15 @@ import org.socialmeli.exception.NotFoundException;
 import org.socialmeli.dto.VendorFollowersListDTO;
 import org.socialmeli.dto.request.UserIdDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
-import org.socialmeli.entity.Client;
-import org.socialmeli.entity.Vendor;
-import org.socialmeli.exception.NotFoundException;
 import org.socialmeli.repository.ClientRepositoryImp;
 import org.socialmeli.repository.VendorRepositoryImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Comparator;
+import java.util.List;
+
+import static java.util.Comparator.comparing;
 
 @Service
 public class UsersServiceImp implements IUsersService {
@@ -72,12 +74,27 @@ public class UsersServiceImp implements IUsersService {
     }
 
     @Override
-    public VendorFollowersListDTO getFollowersList(UserIdDto userId) {
+    public VendorFollowersListDTO getFollowersList(UserIdDto userId, String order) {
         Vendor vendor = vendorRepositoryImp.findOne(userId.getUserId());
         if (vendor == null) {
-            throw new NotFoundException(String.format("No se encontró un usuario con id %d", userId));
+            throw new NotFoundException(String.format("No se encontró un usuario con id %d", userId.getUserId()));
         }
-        return new VendorFollowersListDTO(vendor);
+
+        List<User> followerUsers = vendor.getFollowers();
+
+        switch (order){
+            case "name_asc" -> followerUsers = ordenarListaPor(followerUsers, comparing(User::getUserName));
+                //break;
+            case "name_desc" -> followerUsers = ordenarListaPor(followerUsers, comparing(User::getUserName).reversed());
+                //break;
+            default -> throw new BadRequestException("El ordenamiento pedido es inválido");
+        }
+
+        return new VendorFollowersListDTO(vendor, followerUsers);
+    }
+
+    private static List<User> ordenarListaPor(List<User> followerUsers, Comparator<User> comparing) {
+        return followerUsers.stream().sorted(comparing).toList();
     }
 
     @Override

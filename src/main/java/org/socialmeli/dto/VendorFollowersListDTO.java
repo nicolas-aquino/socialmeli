@@ -2,6 +2,7 @@ package org.socialmeli.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
 
 import java.util.List;
@@ -18,6 +19,15 @@ public class VendorFollowersListDTO {
         this.user_id = vendor.getUserId();
         this.user_name = vendor.getUserName();
         this.followers = vendor.getFollowers()
+                .stream()
+                .map(u -> new UserDTO(u.getUserId(), u.getUserName()))
+                .toList();
+    }
+
+    public VendorFollowersListDTO(Vendor vendor, List<User> followersList) {
+        this.user_id = vendor.getUserId();
+        this.user_name = vendor.getUserName();
+        this.followers = followersList
                 .stream()
                 .map(u -> new UserDTO(u.getUserId(), u.getUserName()))
                 .toList();

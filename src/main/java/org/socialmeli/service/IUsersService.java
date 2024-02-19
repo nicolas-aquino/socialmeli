@@ -7,7 +7,7 @@ import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.entity.User;
 
 public interface IUsersService {
-    VendorFollowersListDTO getFollowersList(UserIdDto userIdDto);
+    VendorFollowersListDTO getFollowersList(UserIdDto userIdDto, String order);
     VendorsFollowingListDto getFollowingList(UserIdDto userIdDto);
     User getUserById(Integer userId);
     void userFollowVendor(Integer userId, Integer vendorId);

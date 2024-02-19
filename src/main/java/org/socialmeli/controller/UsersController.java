@@ -46,8 +46,11 @@ public class UsersController {
 
     //US_0003
     @GetMapping("/{userId}/followers/list")
-    public ResponseEntity<VendorFollowersListDTO> followersList(@PathVariable UserIdDto userId){
-        return new ResponseEntity<>(usersService.getFollowersList(userId), HttpStatus.OK);
+    public ResponseEntity<VendorFollowersListDTO> followersList(
+            @PathVariable UserIdDto userId,
+            @RequestParam(required = false, defaultValue = "name_desc") String order){
+
+        return new ResponseEntity<>(usersService.getFollowersList(userId, order), HttpStatus.OK);
     }
 
     //US_0004
