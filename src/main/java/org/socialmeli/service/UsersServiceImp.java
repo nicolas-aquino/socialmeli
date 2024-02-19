@@ -1,5 +1,6 @@
 package org.socialmeli.service;
 
+import org.socialmeli.dto.VendorFollowersListDTO;
 import org.socialmeli.dto.request.UserIdDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.entity.Client;
@@ -17,6 +18,15 @@ public class UsersServiceImp implements IUsersService {
 
     @Autowired
     VendorRepositoryImp vendorRepositoryImp;
+
+    @Override
+    public VendorFollowersListDTO getFollowersList(Integer userId) {
+        Vendor vendor = vendorRepositoryImp.findOne(userId);
+        if (vendor == null) {
+            throw new NotFoundException(String.format("No se encontró un usuario con id %d", userId));
+        }
+        return new VendorFollowersListDTO(vendor);
+    }
 
     @Override
     public VendorsFollowingListDto getFollowingList(UserIdDto userIdDto) {
