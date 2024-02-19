@@ -1,6 +1,7 @@
 package org.socialmeli.controller;
 
 import org.socialmeli.dto.request.UserIdDto;
+import org.socialmeli.dto.response.MessageDTO;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.service.IPostsService;
 import org.socialmeli.service.IUsersService;
@@ -52,9 +53,8 @@ public class UsersController {
 
     ///users/{userId}/unfollow/{userIdToUnfollow}
     @PostMapping()
-    public ResponseEntity<?> unfollowVendor(@PathVariable Integer userId,
-                                            @PathVariable Integer userIdToUnFollow){
-        //TODO:
-        return null;
+    public ResponseEntity<MessageDTO> unfollowVendor(@PathVariable UserIdDto userId,
+                                                     @PathVariable UserIdDto userIdToUnFollow){
+        return new ResponseEntity<>(usersService.unfollowVendor(userId, userIdToUnFollow), HttpStatus.OK);
     }
 }
