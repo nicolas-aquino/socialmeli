@@ -102,26 +102,33 @@ public class UsersServiceImp implements IUsersService {
 
     @Override
     public MessageDTO unfollowVendor(UserIdDto userIdDto, UserIdDto vendorIdDto) {
+        boolean removedFromClient = false;
+        boolean removedFromVendor = false;
         Integer userId = userIdDto.getUserId();
         Integer vendorId = vendorIdDto.getUserId();
 
         Client userClient = clientRepositoryImp.findOne(userId);
         Vendor userVendor = vendorRepositoryImp.findOne(userId);
 
-        if (userClient == null && userVendor == null) {
-             throw new NotFoundException("No se encontró el usuario con id " + userId);
-        }
+        //Check if IDs exist
+        if (userClient == null && userVendor == null)
+            throw new NotFoundException("No se encontró el usuario con id " + userId);
+        if (vendorRepositoryImp.findOne(vendorId) == null)
+            throw new NotFoundException("No se encontró el vendedor con id " + vendorId);
+
+        // El 'userId' ingresado es un cliente
         if (userClient != null) {
             //Usé new ArrayList para que no tire excepcion ya que devuelve UnmodifiableCollection
             List<Vendor> l = new ArrayList<>(userClient.getFollowing());
-            l.removeIf(vendor -> vendor.getUserId().equals(vendorId));
+            removedFromClient = l.removeIf(vendor -> vendor.getUserId().equals(vendorId));
             userClient.setFollowing(l);
-        }
-        if (userVendor != null) {
-            userVendor.getFollowing().removeIf(v -> v.getUserId().equals(vendorId));
+        } else if (userVendor != null) { // El 'userId' ingresado es un vendedor
+            removedFromVendor = userVendor.getFollowing().removeIf(v -> v.getUserId().equals(vendorId));
             userVendor.getFollowers().removeIf(u -> u.getUserId().equals(userId));
         }
-
-        return new MessageDTO("El usuario con id " + userId + " ha dejado de seguir al vendedor con id " + vendorId);
+        if (removedFromClient || removedFromVendor)
+            return new MessageDTO("El usuario con id " + userId + " ha dejado de seguir al vendedor con id " + vendorId);
+        else
+            throw new NotFoundException("El usuario con id " + userId + "no está siguiendo al vendedor con id " + vendorId);
     }
 }
