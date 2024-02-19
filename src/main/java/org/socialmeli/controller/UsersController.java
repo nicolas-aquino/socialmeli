@@ -8,7 +8,6 @@ import org.socialmeli.service.IUsersService;
 import org.socialmeli.service.PostsServiceImp;
 import org.socialmeli.service.UsersServiceImp;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +23,7 @@ public class UsersController {
         this.usersService = usersService;
     }
 
-    /// users/{userId}/follow/{userIdToFollow}
+    /// US_0001
     @PostMapping("/{userId}/follow/{userIdToFollow}")
     public ResponseEntity<?> followUser(@PathVariable Integer userId,
                                        @PathVariable Integer userIdToFollow){
@@ -35,7 +34,7 @@ public class UsersController {
 
     }
 
-    ///users/{userId}/followers/count
+    /// US_0002
     @GetMapping("/{userId}/followers/count")
     public ResponseEntity<?> followersCount(@PathVariable Integer userId){
         //TODO:
@@ -48,13 +47,7 @@ public class UsersController {
         return new ResponseEntity<>(usersService.getFollowingList(userId), HttpStatus.OK);
     }
 
-    ///users/{userId}/followed/list?order=
-    @GetMapping("/followed/{userId}/list")
-    public ResponseEntity<?> followedList(@PathVariable UserIdDto userId, @RequestParam(required = false, defaultValue = "date_desc") String order){
-        return new ResponseEntity<>(postsService.getFollowedList(userId.getUserId(), order), HttpStatus.OK);
-    }
-
-    ///users/{userId}/unfollow/{userIdToUnfollow}
+    // US_0007
     @PostMapping()
     public ResponseEntity<?> unfollowVendor(@PathVariable Integer userId,
                                             @PathVariable Integer userIdToUnFollow){

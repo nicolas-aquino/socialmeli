@@ -1,6 +1,5 @@
 package org.socialmeli.dto.request;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 

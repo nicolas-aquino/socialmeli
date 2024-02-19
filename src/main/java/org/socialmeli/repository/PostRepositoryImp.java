@@ -19,7 +19,7 @@ public class PostRepositoryImp implements IRepository<Post> {
     private List<Post> posts;
     private VendorRepositoryImp vendorRepositoryImp;
     
-    public PostRepositoryImp(){
+    public PostRepositoryImp() {
         vendorRepositoryImp = new VendorRepositoryImp();
         Product product1 = new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
         Product product2 = new Product(2, "Zapatos", "Calzado", "Adidas", "Negro", "N/A");
@@ -33,24 +33,27 @@ public class PostRepositoryImp implements IRepository<Post> {
     public List<Post> findAll() {
         return posts;
     }
+
     public void save(Post client) {
         posts.add(client);
     }
-    public Post findOne (Integer id) {
+
+    public Post findOne(Integer id) {
         return posts.stream()
                 .filter(client -> client.getPostId().equals(id))
                 .findFirst()
                 .orElse(null);
     }
+
     public void deleteOne(Integer id) {
         posts.removeIf(c -> c.getPostId().equals(id));
     }
 
-    public List<Vendor> getFollowedList(Client client, List<Vendor> vendorList){
+    public List<Vendor> getFollowedList(Client client, List<Vendor> vendorList) {
         List<Vendor> auxListVendors = new ArrayList<>();
-        for(Vendor vendor: vendorList){
-            for(int i=0; i<client.getFollowing().size(); i++){
-                if(vendor.getUserId().intValue() == client.getFollowing().get(i).getUserId()){
+        for (Vendor vendor: vendorList) {
+            for (int i=0; i<client.getFollowing().size(); i++) {
+                if (vendor.getUserId().intValue() == client.getFollowing().get(i).getUserId()) {
                     auxListVendors.add(vendor);
                 }
             }

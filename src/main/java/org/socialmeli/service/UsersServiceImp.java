@@ -1,5 +1,6 @@
 package org.socialmeli.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
@@ -8,9 +9,6 @@ import org.socialmeli.exception.NotFoundException;
 import org.socialmeli.dto.VendorFollowersListDTO;
 import org.socialmeli.dto.request.UserIdDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
-import org.socialmeli.entity.Client;
-import org.socialmeli.entity.Vendor;
-import org.socialmeli.exception.NotFoundException;
 import org.socialmeli.repository.ClientRepositoryImp;
 import org.socialmeli.repository.VendorRepositoryImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,44 +22,45 @@ public class UsersServiceImp implements IUsersService {
     @Autowired
     VendorRepositoryImp vendorRepositoryImp;
 
+    ObjectMapper mapper = new ObjectMapper();
+
     @Override
     public User getUserById(Integer userId) {
         User user  = clientRepositoryImp.findOne(userId);
-        if(user == null){
+        if(user == null) {
              user  = vendorRepositoryImp.findOne(userId);
               if (user == null) throw new NotFoundException("El usuario ingresado no existe ");
         }
         return user;
     }
 
-    public Vendor getVendorById(Integer vendorId){
+    public Vendor getVendorById(Integer vendorId) {
             Vendor vendor = vendorRepositoryImp.findOne(vendorId);
             if(vendor == null ) throw new NotFoundException("El vendedor no existe");
              return vendor;
 
     }
-    public void userFollowVendor(Integer userId, Integer vendorId){
-
-        if(userId.equals(vendorId))  throw new BadRequestException("Un usuario no se puede seguir a si mismo");
+    public void userFollowVendor(Integer userId, Integer vendorId) {
+        if (userId.equals(vendorId)) {
+            throw new BadRequestException("Un usuario no se puede seguir a si mismo");
+        }
         User user = getUserById(userId);
         Vendor vendor = getVendorById(vendorId);
 
-
         boolean alreadyFollowed = vendor.getFollowers().stream().anyMatch(u -> u.getUserId().equals(userId));
-        if(alreadyFollowed){
+        if (alreadyFollowed) {
                 throw new BadRequestException("Un usuario no se puede seguir a si mismo");
         }
-
 
         user.getFollowing().add(vendor);
         vendor.getFollowers().add(user);
     }
 
     @Override
-    public VendorFollowersListDTO getFollowersList(Integer userId) {
-        Vendor vendor = vendorRepositoryImp.findOne(userId);
+    public VendorFollowersListDTO getFollowersList(UserIdDto userIdDto) {
+        Vendor vendor = vendorRepositoryImp.findOne(userIdDto.getUserId());
         if (vendor == null) {
-            throw new NotFoundException(String.format("No se encontró un usuario con id %d", userId));
+            throw new NotFoundException(String.format("No se encontró un usuario con id %d", userIdDto));
         }
         return new VendorFollowersListDTO(vendor);
     }
@@ -79,6 +78,6 @@ public class UsersServiceImp implements IUsersService {
             return new VendorsFollowingListDto(vendor.getUserId(), vendor.getFollowing());
         }
 
-        throw new NotFoundException("No existe ningún usuario con ese ID.");
+        throw new NotFoundException(String.format("No se encontró un usuario con el ID %d.", userIdDto.getUserId()));
     }
 }
