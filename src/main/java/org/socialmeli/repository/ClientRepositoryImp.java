@@ -31,8 +31,9 @@ public class ClientRepositoryImp implements IRepository<Client> {
     public List<Client> findAll() {
         return clients;
     }
-    public void save(Client client) {
+    public Integer save(Client client) {
         clients.add(client);
+        return client.getUserId();
     }
     public Client findOne (Integer id) {
         return clients.stream()

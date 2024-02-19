@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.socialmeli.dto.request.PostReqDto;
 import org.socialmeli.dto.response.FollowedListDto;
 import org.socialmeli.dto.response.PostDto;
+import org.socialmeli.dto.response.PostIdDto;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.Post;
 import org.socialmeli.entity.Product;
@@ -82,15 +83,8 @@ public class PostsServiceImp implements IPostsService {
     }
 
     @Override
-    public PostReqDto savePost(PostReqDto postDto) {
-       // postRepositoryImp.save(mapper.convertValue(postDto, Post.class));
-       Post post = new Post(postDto.userId(), postDto.getDate(), postDto.getProduct(), postDto.getCategory(), postDto.getPrice());
-       for(Post p : postRepositoryImp.findAll()){
-        if(p.getProduct().getProductId().intValue() == post.getProduct().getProductId().intValue()){
-            throw new BadRequestException("Ya existe un producto con el mismo id registrado.");
-        }
-       }
-       postRepositoryImp.save(post);
-        return postDto;
+    public PostIdDto savePost(PostReqDto postReqDto) {
+        Integer response =  postRepositoryImp.save(mapper.convertValue(postReqDto, Post.class));
+        return new PostIdDto(response);
     }
 }

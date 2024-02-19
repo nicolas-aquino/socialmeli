@@ -9,11 +9,8 @@ import org.socialmeli.exception.BadRequestException;
 import org.socialmeli.exception.NotFoundException;
 import org.socialmeli.dto.VendorFollowersListDTO;
 import org.socialmeli.dto.request.UserIdDto;
-import org.socialmeli.dto.response.MessageDTO;
+import org.socialmeli.dto.response.MessageDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
-import org.socialmeli.entity.Client;
-import org.socialmeli.entity.Vendor;
-import org.socialmeli.exception.NotFoundException;
 import org.socialmeli.repository.ClientRepositoryImp;
 import org.socialmeli.repository.VendorRepositoryImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,7 +98,7 @@ public class UsersServiceImp implements IUsersService {
     }
 
     @Override
-    public MessageDTO unfollowVendor(UserIdDto userIdDto, UserIdDto vendorIdDto) {
+    public MessageDto unfollowVendor(UserIdDto userIdDto, UserIdDto vendorIdDto) {
         boolean removedFromClient = false;
         boolean removedFromVendor = false;
         Integer userId = userIdDto.getUserId();
@@ -127,7 +124,7 @@ public class UsersServiceImp implements IUsersService {
             userVendor.getFollowers().removeIf(u -> u.getUserId().equals(userId));
         }
         if (removedFromClient || removedFromVendor)
-            return new MessageDTO("El usuario con id " + userId + " ha dejado de seguir al vendedor con id " + vendorId);
+            return new MessageDto("El usuario con id " + userId + " ha dejado de seguir al vendedor con id " + vendorId);
         else
             throw new NotFoundException("El usuario con id " + userId + " no está siguiendo al vendedor con id " + vendorId);
     }

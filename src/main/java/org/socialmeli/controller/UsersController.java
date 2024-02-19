@@ -8,12 +8,11 @@ import org.socialmeli.service.IUsersService;
 import org.socialmeli.service.PostsServiceImp;
 import org.socialmeli.service.UsersServiceImp;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.socialmeli.dto.response.FollowSuccessDto;
 import org.socialmeli.dto.response.FollowerCountDto;
-import org.socialmeli.dto.response.MessageDTO;
+import org.socialmeli.dto.response.MessageDto;
 
 
 @RestController
@@ -28,22 +27,18 @@ public class UsersController {
         this.usersService = usersService;
     }
 
-    /// US_0001
+    // US_0001
     @PostMapping("/{userId}/follow/{userIdToFollow}")
     public ResponseEntity<?> followUser(@PathVariable Integer userId,
                                        @PathVariable Integer userIdToFollow){
-        //TODO:
         usersService.userFollowVendor(userId,userIdToFollow);
-
         return new ResponseEntity<FollowSuccessDto>(new FollowSuccessDto("Vendedor seguido exitosamente"),HttpStatus.OK);
 
     }
 
-    /// US_0002
+    // US_0002
     @GetMapping("/{userId}/followers/count")
     public ResponseEntity<?> followersCount(@PathVariable Integer userId){
-
-
         return  new ResponseEntity<FollowerCountDto>(usersService.vendorFollowersCount(userId),HttpStatus.OK);
     }
 
@@ -59,15 +54,15 @@ public class UsersController {
         return new ResponseEntity<>(usersService.getFollowingList(userId), HttpStatus.OK);
     }
 
-    ///users/{userId}/followed/list?order=
+    // US_0006
     @GetMapping("/followed/{userId}/list")
     public ResponseEntity<?> followedList(@PathVariable UserIdDto userId, @RequestParam(required = false, defaultValue = "date_desc") String order){
         return new ResponseEntity<>(postsService.getFollowedList(userId.getUserId(), order), HttpStatus.OK);
     }
 
-    ///users/{userId}/unfollow/{userIdToUnfollow}
+    // US_0007
     @PostMapping("/{userId}/unfollow/{userIdToUnfollow}")
-    public ResponseEntity<MessageDTO> unfollowVendor(@PathVariable UserIdDto userId,
+    public ResponseEntity<MessageDto> unfollowVendor(@PathVariable UserIdDto userId,
                                                      @PathVariable UserIdDto userIdToUnfollow){
         return new ResponseEntity<>(usersService.unfollowVendor(userId, userIdToUnfollow), HttpStatus.OK);
     }
