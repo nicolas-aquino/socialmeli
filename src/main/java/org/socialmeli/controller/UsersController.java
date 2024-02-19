@@ -10,7 +10,6 @@ import org.socialmeli.service.IUsersService;
 import org.socialmeli.service.PostsServiceImp;
 import org.socialmeli.service.UsersServiceImp;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,20 +25,18 @@ public class UsersController {
         this.usersService = usersService;
     }
 
-    /// users/{userId}/follow/{userIdToFollow}
-    //US_001
+    /// US_0001
     @PostMapping("/{userId}/follow/{userIdToFollow}")
     public ResponseEntity<?> followUser(@PathVariable Integer userId,
                                        @PathVariable Integer userIdToFollow){
-
+        //TODO:
         usersService.userFollowVendor(userId,userIdToFollow);
 
         return new ResponseEntity<FollowSuccessDto>(new FollowSuccessDto("Vendedor seguido exitosamente"),HttpStatus.OK);
 
     }
 
-    ///users/{userId}/followers/count
-    //US_002
+    /// US_0002
     @GetMapping("/{userId}/followers/count")
     public ResponseEntity<?> followersCount(@PathVariable Integer userId){
 
