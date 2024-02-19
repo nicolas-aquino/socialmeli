@@ -6,6 +6,7 @@ import org.socialmeli.entity.Client;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -16,12 +17,16 @@ public class ClientRepositoryImp implements IRepository<Client> {
     private VendorRepositoryImp vendorRepositoryImp;
 
     public ClientRepositoryImp(){
+        this.clients = new ArrayList<>();
         this.vendorRepositoryImp = new VendorRepositoryImp();
         Client cliente1 = new Client(1,"Juan Perez");
         Client cliente2 = new Client(2, "María García");
         Client cliente3 = new Client(3, "Luis Rodríguez");
-        cliente1.setFollowing(List.of(vendorRepositoryImp.findAll().get(0)));
-        this.clients = new ArrayList<>(List.of(cliente1, cliente2, cliente3));
+        //cliente1.setFollowing(List.of(vendorRepositoryImp.findAll().get(0)));
+
+        this.clients.add(cliente1);
+        this.clients.add(cliente2);
+        this.clients.add(cliente3);
     }
 
     public List<Client> findAll() {

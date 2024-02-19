@@ -1,3 +1,9 @@
 package org.socialmeli.service;
 
-public interface IUsersService { }
+import org.socialmeli.entity.User;
+
+public interface IUsersService {
+
+    User getUserById(Integer userId);
+    void userFollowVendor(Integer userId, Integer vendorId);
+}

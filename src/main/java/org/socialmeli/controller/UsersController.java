@@ -1,6 +1,7 @@
 package org.socialmeli.controller;
 
 import org.socialmeli.dto.request.UserIdDto;
+import org.socialmeli.dto.response.FollowSuccessDto;
 import org.socialmeli.service.IPostsService;
 import org.socialmeli.service.IUsersService;
 import org.socialmeli.service.PostsServiceImp;
@@ -21,13 +22,22 @@ public class UsersController {
         this.postsService = postsService;
         this.usersService = usersService;
     }
+    @GetMapping("/")
+    public ResponseEntity<?> ok(){
+        //TODO:
+        return new ResponseEntity<>("ok",HttpStatus.OK);
+
+    }
 
     /// users/{userId}/follow/{userIdToFollow}
     @PostMapping("/{userId}/follow/{userIdToFollow}")
-    public RequestEntity<?> followUser(@PathVariable Integer userId,
+    public ResponseEntity<?> followUser(@PathVariable Integer userId,
                                        @PathVariable Integer userIdToFollow){
         //TODO:
-        return null;
+        usersService.userFollowVendor(userId,userIdToFollow);
+
+        return new ResponseEntity<FollowSuccessDto>(new FollowSuccessDto("Vendedor seguido exitosamente"),HttpStatus.OK);
+
     }
 
     ///users/{userId}/followers/count

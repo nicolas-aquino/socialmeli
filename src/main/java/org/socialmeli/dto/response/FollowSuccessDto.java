@@ -1,2 +1,6 @@
-package org.socialmeli.dto.response;public record FollowSuccessDto() {
+package org.socialmeli.dto.response;
+
+public record FollowSuccessDto(String message) {
+
+
 }
