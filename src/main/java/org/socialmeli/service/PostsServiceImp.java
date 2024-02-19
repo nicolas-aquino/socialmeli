@@ -11,9 +11,9 @@ import org.socialmeli.dto.request.PostReqDto;
 import org.socialmeli.dto.response.FollowedListDto;
 import org.socialmeli.dto.response.PostDto;
 import org.socialmeli.dto.response.PostIdDto;
+import org.socialmeli.dto.response.ProductDto;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.Post;
-import org.socialmeli.entity.Product;
 import org.socialmeli.entity.Vendor;
 import org.socialmeli.exception.BadRequestException;
 import org.socialmeli.exception.NotFoundException;
@@ -59,7 +59,7 @@ public class PostsServiceImp implements IPostsService {
                 for (Post p : postRepositoryImp.findAll()) {
                     if (p.getUserId().intValue() == v.getUserId().intValue()) {
                         if (p.getDate().isAfter(LocalDate.now().minusWeeks(2))) {
-                            postDtoList.add(new PostDto(p.getPostId(), p.getUserId(), p.getDate(), p.getProduct(),
+                            postDtoList.add(new PostDto(p.getPostId(), p.getUserId(), p.getDate(), new ProductDto(p.getProduct().getProductId(), p.getProduct().getProductName(), p.getProduct().getType(), p.getProduct().getBrand(), p.getProduct().getColor(), p.getProduct().getNotes()),
                             p.getCategory(), p.getPrice()));
                         }
                     }
