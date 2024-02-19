@@ -16,4 +16,14 @@ public class Post {
     private Product product;
     private Integer category;
     private Double price;
+    private static Integer count=0;
+
+    public Post(Integer userId, LocalDate date, Product product,Integer category, Double price){
+        this.postId = ++Post.count;
+        this.userId = userId;
+        this.date = date;
+        this.product = product;
+        this.category=category;
+        this.price = price;
+    }
 }

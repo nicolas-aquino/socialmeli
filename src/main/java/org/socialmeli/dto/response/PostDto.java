@@ -15,5 +15,27 @@ public record PostDto(
 ) {
         public LocalDate date() {
                 return date;
-        }       
+        }
+
+        public Integer postId() {
+                return postId;
+        }
+
+        public Integer userId() {
+                return userId;
+        }
+
+        public Product product() {
+                return product;
+        }
+
+        public Integer category() {
+                return category;
+        }
+
+        public Double price() {
+                return price;
+        }      
+        
+        
 }

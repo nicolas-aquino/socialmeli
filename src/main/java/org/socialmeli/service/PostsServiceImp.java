@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Comparator;
 
+import org.socialmeli.dto.request.PostReqDto;
 import org.socialmeli.dto.response.FollowedListDto;
 import org.socialmeli.dto.response.PostDto;
 import org.socialmeli.entity.Client;
@@ -71,5 +72,11 @@ public class PostsServiceImp implements IPostsService {
 
         }
         return new FollowedListDto(id, postDtoList);
+    }
+
+    @Override
+    public PostReqDto savePost(PostReqDto postDto){
+        postRepositoryImp.save(new Post(postDto.userId(), postDto.date(), postDto.product(), postDto.category(), postDto.price()));
+        return postDto;
     }
 }
