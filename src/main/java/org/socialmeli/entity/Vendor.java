@@ -13,9 +13,7 @@ public class Vendor extends User{
     private List<User> followers;
 
     public Vendor(Integer userId, String userName) {
-        this.userId = userId;
-        this.userName = userName;
-        this.following = new ArrayList<>();;
+        super(userId, userName);
         this.followers = new ArrayList<>();
     }
 }

@@ -1,3 +1,7 @@
 package org.socialmeli.service;
 
-public interface IUsersService { }
+import org.socialmeli.dto.VendorFollowersListDTO;
+
+public interface IUsersService {
+    VendorFollowersListDTO getFollowersList(Integer userId);
+}
