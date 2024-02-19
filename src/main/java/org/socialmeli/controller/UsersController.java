@@ -40,7 +40,7 @@ public class UsersController {
     public ResponseEntity<?> followersList(
             @PathVariable Integer userId){
         //TODO:
-        return null;
+        return ResponseEntity.ok(usersService.getFollowersList(userId));
     }
 
 

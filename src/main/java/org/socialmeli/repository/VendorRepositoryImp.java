@@ -8,14 +8,19 @@ import org.socialmeli.entity.Vendor;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Repository
 public class VendorRepositoryImp implements IRepository<Vendor> {
     private List<Vendor> vendors;
+
+    public VendorRepositoryImp() {
+        this.vendors = new ArrayList<>();
+        vendors.add(new Vendor(1, "Juan Perez"));
+    }
 
     public List<Vendor> findAll() {
         return vendors;

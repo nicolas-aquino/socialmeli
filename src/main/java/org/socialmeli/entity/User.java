@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -12,5 +13,11 @@ import java.util.List;
 public abstract class User {
     protected Integer userId;
     protected String userName;
-    private List<Vendor> following;
+    protected List<Vendor> following;
+
+    public User(Integer userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
+        this.following = new ArrayList<>();
+    }
 }
