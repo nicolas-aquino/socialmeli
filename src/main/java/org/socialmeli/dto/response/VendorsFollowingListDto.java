@@ -4,5 +4,5 @@ import org.socialmeli.entity.Vendor;
 
 import java.util.List;
 
-public record VendorsFollowingListDto(Integer userId, List<Vendor> vendors) {
+public record VendorsFollowingListDto(Integer userId, String userName, List<Vendor> vendors) {
 }

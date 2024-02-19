@@ -28,7 +28,7 @@ public class UsersServiceImp implements IUsersService {
     @Autowired
     VendorRepositoryImp vendorRepositoryImp;
 
-    ObjectMapper mapper = new ObjectMapper();
+    //ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public User getUserById(Integer userId) {
@@ -83,9 +83,9 @@ public class UsersServiceImp implements IUsersService {
         List<User> followerUsers = vendor.getFollowers();
 
         switch (order){
-            case "name_asc" -> followerUsers = ordenarListaPor(followerUsers, comparing(User::getUserName));
+            case "name_asc" -> followerUsers = ordenarListaUsuariosPor(followerUsers, comparing(User::getUserName));
                 //break;
-            case "name_desc" -> followerUsers = ordenarListaPor(followerUsers, comparing(User::getUserName).reversed());
+            case "name_desc" -> followerUsers = ordenarListaUsuariosPor(followerUsers, comparing(User::getUserName).reversed());
                 //break;
             default -> throw new BadRequestException("El ordenamiento pedido es inválido");
         }
@@ -93,23 +93,48 @@ public class UsersServiceImp implements IUsersService {
         return new VendorFollowersListDTO(vendor, followerUsers);
     }
 
-    private static List<User> ordenarListaPor(List<User> followerUsers, Comparator<User> comparing) {
+    private List<User> ordenarListaUsuariosPor(List<User> followerUsers, Comparator<User> comparing) {
         return followerUsers.stream().sorted(comparing).toList();
     }
 
     @Override
-    public VendorsFollowingListDto getFollowingList(UserIdDto userIdDto) {
+    public VendorsFollowingListDto getFollowingList(UserIdDto userIdDto, String order) {
         Client client = clientRepositoryImp.findOne(userIdDto.getUserId());
         Vendor vendor = vendorRepositoryImp.findOne(userIdDto.getUserId());
 
         if (client != null) {
-            return new VendorsFollowingListDto(client.getUserId(), client.getFollowing());
+            return new VendorsFollowingListDto(client.getUserId(), client.getUserName(), client.getFollowing());
         }
 
         if (vendor != null) {
-            return new VendorsFollowingListDto(vendor.getUserId(), vendor.getFollowing());
+            return new VendorsFollowingListDto(vendor.getUserId(), vendor.getUserName(), vendor.getFollowing());
         }
+        /*
+        VendorsFollowingListDto clientFollowing = getVendorsFollowingListDto(order, client);
+        if (clientFollowing != null) return clientFollowing;
+
+        VendorsFollowingListDto vendorFollowing = getVendorsFollowingListDto(order, vendor);
+        if (vendorFollowing != null) return vendorFollowing;
+        */
 
         throw new NotFoundException(String.format("No se encontró un usuario con el ID %d.", userIdDto.getUserId()));
+    }
+
+    private VendorsFollowingListDto getVendorsFollowingListDto(String order, User user) {
+        if (user != null) {
+            List<Vendor> following = user.getFollowing();
+            switch (order) {
+                case "name_asc":
+                    following = following.stream().sorted(comparing(User::getUserName)).toList();
+                    return new VendorsFollowingListDto(user.getUserId(), user.getUserName(), following);
+                case "name_desc":
+                    following = following.stream().sorted(comparing(User::getUserName).reversed()).toList();
+                    return new VendorsFollowingListDto(user.getUserId(), user.getUserName(), following);
+                default:
+                    throw new BadRequestException("El ordenamiento pedido es inválido");
+            }
+            //return new VendorsFollowingListDto(vendor.getUserId(), vendor.getFollowing());
+        }
+        return null;
     }
 }
