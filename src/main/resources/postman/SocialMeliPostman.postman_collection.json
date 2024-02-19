@@ -10,18 +10,35 @@
 			"name": "US_0006 & US_0009",
 			"item": [
 				{
-					"name": "1",
+					"name": "order desc",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": ""
+							"raw": "http://localhost:8080/products/followed/1/list?order=date_desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"products",
+								"followed",
+								"1",
+								"list"
+							],
+							"query": [
+								{
+									"key": "order",
+									"value": "date_desc"
+								}
+							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "2",
+					"name": "sin orden",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -50,7 +67,7 @@
 					"response": []
 				},
 				{
-					"name": "3",
+					"name": "order asc",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -219,7 +236,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/users/1/follow/4",
+							"raw": "localhost:8080/users/1/follow/1",
 							"host": [
 								"localhost"
 							],
@@ -228,7 +245,7 @@
 								"users",
 								"1",
 								"follow",
-								"4"
+								"1"
 							]
 						}
 					},
@@ -292,6 +309,53 @@
 								"13",
 								"follow",
 								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "US_0002",
+			"item": [
+				{
+					"name": "404 not found",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/1/followers/count",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"1",
+								"followers",
+								"count"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 ok",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/4/followers/count",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"4",
+								"followers",
+								"count"
 							]
 						}
 					},
