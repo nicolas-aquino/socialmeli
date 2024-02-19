@@ -1,9 +1,12 @@
 package org.socialmeli.controller;
 
+import org.socialmeli.dto.request.PostReqDto;
+import org.socialmeli.entity.Product;
 import org.socialmeli.service.IPostsService;
 import org.socialmeli.service.IUsersService;
 import org.socialmeli.service.PostsServiceImp;
 import org.socialmeli.service.UsersServiceImp;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +25,8 @@ public class ProductsController {
 
     ///products/post
     @PostMapping("/post")
-    public RequestEntity<?>  createPost(/*@RequestBody PostDto postDto*/){
-        //TODO:
-        return null;
+    public ResponseEntity<?> createPost(@RequestBody PostReqDto postDto){
+        return new ResponseEntity<>(postsService.savePost(postDto), HttpStatus.OK);
     }
 
     //products/followed/{userId}/list
