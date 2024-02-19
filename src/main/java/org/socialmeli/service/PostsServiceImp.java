@@ -12,6 +12,7 @@ import org.socialmeli.dto.response.FollowedListDto;
 import org.socialmeli.dto.response.PostDto;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.Post;
+import org.socialmeli.entity.Product;
 import org.socialmeli.entity.Vendor;
 import org.socialmeli.exception.BadRequestException;
 import org.socialmeli.exception.NotFoundException;
@@ -84,6 +85,11 @@ public class PostsServiceImp implements IPostsService {
     public PostReqDto savePost(PostReqDto postDto) {
        // postRepositoryImp.save(mapper.convertValue(postDto, Post.class));
        Post post = new Post(postDto.userId(), postDto.getDate(), postDto.getProduct(), postDto.getCategory(), postDto.getPrice());
+       for(Post p : postRepositoryImp.findAll()){
+        if(p.getProduct().getProductId().intValue() == post.getProduct().getProductId().intValue()){
+            throw new BadRequestException("Ya existe un producto con el mismo id registrado.");
+        }
+       }
        postRepositoryImp.save(post);
         return postDto;
     }

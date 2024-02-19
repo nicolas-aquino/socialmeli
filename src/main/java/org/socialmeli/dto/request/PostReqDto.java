@@ -16,12 +16,12 @@ public class PostReqDto {
         private Integer category;
         private Double price;
 
-        public PostReqDto(Integer userId, String date, Product product, Integer category,
+        public PostReqDto(Integer user_id, String date, Product product, Integer category,
                         Double price) {
 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                 this.date = LocalDate.parse(date, formatter);
-                this.userId = userId;
+                this.userId = user_id;
                 this.product = product;
                 this.category = category;
                 this.price = price;
