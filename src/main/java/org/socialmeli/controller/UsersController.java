@@ -28,9 +28,7 @@ public class UsersController {
     @PostMapping("/{userId}/follow/{userIdToFollow}")
     public ResponseEntity<?> followUser(@PathVariable Integer userId,
                                        @PathVariable Integer userIdToFollow){
-        //TODO:
         usersService.userFollowVendor(userId,userIdToFollow);
-
         return new ResponseEntity<FollowSuccessDto>(new FollowSuccessDto("Vendedor seguido exitosamente"),HttpStatus.OK);
 
     }

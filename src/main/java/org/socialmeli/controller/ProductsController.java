@@ -22,13 +22,13 @@ public class ProductsController {
         this.usersService = usersService;
     }
 
-    ///products/post
+    // US_0005
     @PostMapping("/post")
     public ResponseEntity<?> createPost(@RequestBody PostReqDto postDto){
         return new ResponseEntity<>(postsService.savePost(postDto), HttpStatus.OK);
     }
 
-    // US_0006
+    // US_0006 & US_0009
     @GetMapping("/followed/{userId}/list")
     public ResponseEntity<?> followedList(
             @PathVariable UserIdDto userId,
