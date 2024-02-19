@@ -19,5 +19,5 @@ public abstract class User {
         this.userId = userId;
         this.userName = userName;
         this.following = new ArrayList<>();
-    
+    }
 }
