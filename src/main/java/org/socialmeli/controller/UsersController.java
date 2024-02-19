@@ -1,9 +1,11 @@
 package org.socialmeli.controller;
 
+import org.socialmeli.dto.request.UserIdDto;
 import org.socialmeli.service.IPostsService;
 import org.socialmeli.service.IUsersService;
 import org.socialmeli.service.PostsServiceImp;
 import org.socialmeli.service.UsersServiceImp;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,13 +45,10 @@ public class UsersController {
         return ResponseEntity.ok(usersService.getFollowersList(userId));
     }
 
-
-    ///users/{userId}/followed/list
-    @GetMapping("/{userId}/followed/list")
-    public ResponseEntity<?> followedList(@PathVariable Integer userId){
-
-        //TODO:
-        return null;
+    ///users/{userId}/followed/list?order=
+    @GetMapping("/followed/{userId}/list")
+    public ResponseEntity<?> followedList(@PathVariable UserIdDto userId, @RequestParam(required = false, defaultValue = "date_desc") String order){
+        return new ResponseEntity<>(postsService.getFollowedList(userId.getUserId(), order), HttpStatus.OK);
     }
 
     ///users/{userId}/unfollow/{userIdToUnfollow}

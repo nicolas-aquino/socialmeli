@@ -31,3 +31,38 @@ Un analista funcional llevó a cabo el __relevamiento de los requerimientos téc
 
 
 [Especificación técnica funcional](https://www.google.com/url?q=https://docs.google.com/document/d/1Q-xGaOMPij-qk_gMvcN0Sk0isbCPqjJS/edit?usp%3Dsharing%26ouid%3D109742565608469686147%26rtpof%3Dtrue%26sd%3Dtrue&sa=D&source=editors&ust=1708099270823216&usg=AOvVaw2JhBoFP4pvFzUyAwHRjz3Z)
+
+## Git Flow
+
+Supongamos que queremos trabajar en la feature US_0XX. Lo ideal sería seguir este procedimiento:
+1. Crear rama correspondiente a la feature (En la terminal: `git checkout -b US_0XX`)
+2. (Opcional) Pushear la nueva rama al repo (En la terminal: `git push origin US_0XX`)
+3. Asegurarse de estar en la rama correspondiente (En la terminal: `git branch` y ver que el asterisco (*) este en la branch creada)
+* Si no estas en la rama correspondiente, en la terminal cambiar con `git checkout US_0XX`
+4. Codear los cambios como siempre
+* Para pushear los cambios a tu rama __dentro__ del repo, usar `git push origin US_0XX`
+5. Comiteamos los cambios en nuestra rama como siempre
+6. Cambiar a la rama `dev` y hacemos pull para tener la version actualizada (En la terminal: `git pull origin dev`)
+7. Ahora que `dev` esta actualizado, antes de mergear los cambios:
+* Volver nuevamente a la branch que _queremos_ mergear (En la terminal: `git checkout US_0XX`)
+* Mergear los cambios actualizados _desde_ `dev` _hacia_ la branch de la feature (En la terminal: `git merge dev`)
+* Si surgen conflictos, solucionarlos en esta parte. Al terminar, por las dudas repetir pasos 6 y 7
+8. Pushear la feature al branch que esta en el repo con `git push origin US_0XX`
+9. Hacer un pull request para mergearlo al dev (No creo que haga falta revisiones, pero para ir acostumbrandonos)
+
+### Abrir un Pull Request
+Despues de pushear tus cambios, dentro del repo en GitHub clickear el boton __"Compare & pull request"__. Si aparecen varios botones, asegurarse de clickear el que corresponde a la branch de la feature nueva.
+
+![img.png](readme-img/img.png)
+
+Si no se ve el boton, clickear el menu desplegable y seleccionar el branch correspondiente a la feature.
+
+![img.png](readme-img/img3.png)
+
+Una vez en la branch de tu feature, clickear el boton "Contribute" y luego en el boton "Open pull request".
+
+![img.png](readme-img/img4.png)
+
+Finalmente, asegurarse que se selecciona a `dev` como base para mergearlo _hacia_ `dev`.
+
+![img2.png](readme-img/img2.png)
