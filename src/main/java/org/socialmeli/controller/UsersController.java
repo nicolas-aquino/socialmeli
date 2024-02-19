@@ -1,5 +1,6 @@
 package org.socialmeli.controller;
 
+import org.socialmeli.dto.VendorFollowersListDTO;
 import org.socialmeli.dto.request.UserIdDto;
 import org.socialmeli.dto.response.FollowSuccessDto;
 import org.socialmeli.dto.response.FollowerCountDto;
@@ -46,19 +47,19 @@ public class UsersController {
         return  new ResponseEntity<FollowerCountDto>(usersService.vendorFollowersCount(userId),HttpStatus.OK);
     }
 
-    ///users/{userId}/followers/list
+    //US_0003
     @GetMapping("/{userId}/followers/list")
-    public ResponseEntity<VendorsFollowingListDto> followersList(@PathVariable UserIdDto userId){
+    public ResponseEntity<VendorFollowersListDTO> followersList(@PathVariable UserIdDto userId){
+        return new ResponseEntity<>(usersService.getFollowersList(userId), HttpStatus.OK);
+    }
+
+    //US_0004
+    @GetMapping("/{userId}/followed/list")
+    public ResponseEntity<VendorsFollowingListDto> followingList(@PathVariable UserIdDto userId){
         return new ResponseEntity<>(usersService.getFollowingList(userId), HttpStatus.OK);
     }
 
-    ///users/{userId}/followed/list?order=
-    @GetMapping("/followed/{userId}/list")
-    public ResponseEntity<?> followedList(@PathVariable UserIdDto userId, @RequestParam(required = false, defaultValue = "date_desc") String order){
-        return new ResponseEntity<>(postsService.getFollowedList(userId.getUserId(), order), HttpStatus.OK);
-    }
-
-    ///users/{userId}/unfollow/{userIdToUnfollow}
+    // US_0007
     @PostMapping()
     public ResponseEntity<?> unfollowVendor(@PathVariable Integer userId,
                                             @PathVariable Integer userIdToUnFollow){

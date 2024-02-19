@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Comparator;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.socialmeli.dto.request.PostReqDto;
 import org.socialmeli.dto.response.FollowedListDto;
 import org.socialmeli.dto.response.PostDto;
@@ -24,10 +25,13 @@ import org.springframework.stereotype.Service;
 public class PostsServiceImp implements IPostsService {
     @Autowired
     PostRepositoryImp postRepositoryImp;
+
     @Autowired
     VendorRepositoryImp vendorRepositoryImp;
+
     @Autowired
     ClientRepositoryImp clientRepositoryImp;
+    ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public FollowedListDto getFollowedList(Integer id, String order) {
@@ -54,7 +58,8 @@ public class PostsServiceImp implements IPostsService {
                     if (p.getUserId().intValue() == v.getUserId().intValue()) {
                         if (p.getDate().isAfter(LocalDate.now().minusWeeks(2))) {
                             postDtoList.add(new PostDto(p.getPostId(), p.getUserId(), p.getDate(), p.getProduct(),
-                            p.getCategory(), p.getPrice()));                        }
+                            p.getCategory(), p.getPrice()));
+                        }
                     }
                 }
             }
@@ -63,20 +68,21 @@ public class PostsServiceImp implements IPostsService {
             throw new NotFoundException("No hay posteos realizados por los vendedores que sigue el usuario las últimas dos semanas.");
         }
         // Ordena el ArrayList de posteos:
-        if(order.equals("date_asc")){
+        if (order.equals("date_asc")) {
             Collections.sort(postDtoList, Comparator.comparing(PostDto::date));
-        }else if(order.equals("date_desc")) {
+        }
+        else if (order.equals("date_desc")) {
             Collections.sort(postDtoList, Comparator.comparing(PostDto::date, Comparator.reverseOrder()));
-        }else{
+        }
+        else {
             throw new BadRequestException("Indicación de ordenamiento no válida. La misma tiene que ser \"date_asc\" o \"date_desc\"");
-
         }
         return new FollowedListDto(id, postDtoList);
     }
 
     @Override
-    public PostReqDto savePost(PostReqDto postDto){
-        postRepositoryImp.save(new Post(postDto.userId(), postDto.date(), postDto.product(), postDto.category(), postDto.price()));
+    public PostReqDto savePost(PostReqDto postDto) {
+        postRepositoryImp.save(mapper.convertValue(postDto, Post.class));
         return postDto;
     }
 }

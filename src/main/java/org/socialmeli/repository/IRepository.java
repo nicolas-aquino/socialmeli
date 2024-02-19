@@ -1,7 +1,4 @@
 package org.socialmeli.repository;
-import org.socialmeli.entity.Client;
-import org.socialmeli.entity.Post;
-import org.socialmeli.entity.Vendor;
 
 import java.util.List;
 
