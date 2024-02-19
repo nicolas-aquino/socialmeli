@@ -48,13 +48,13 @@ public class UsersController {
     ///users/{userId}/followed/list?order=
     @GetMapping("/followed/{userId}/list")
     public ResponseEntity<?> followedList(@PathVariable UserIdDto userId, @RequestParam(required = false, defaultValue = "date_desc") String order){
-        return new ResponseEntity<>(postsService.getFollowedList(userId.getUserId(), order), HttpStatus.OK);
+        return new ResponseEntity<>(usersService.getFollowingList(userId), HttpStatus.OK);
     }
 
     ///users/{userId}/unfollow/{userIdToUnfollow}
-    @PostMapping()
+    @PostMapping("/{userId}/unfollow/{userIdToUnfollow}")
     public ResponseEntity<MessageDTO> unfollowVendor(@PathVariable UserIdDto userId,
-                                                     @PathVariable UserIdDto userIdToUnFollow){
-        return new ResponseEntity<>(usersService.unfollowVendor(userId, userIdToUnFollow), HttpStatus.OK);
+                                                     @PathVariable UserIdDto userIdToUnfollow){
+        return new ResponseEntity<>(usersService.unfollowVendor(userId, userIdToUnfollow), HttpStatus.OK);
     }
 }

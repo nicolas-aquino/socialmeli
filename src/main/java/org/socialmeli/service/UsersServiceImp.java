@@ -12,6 +12,9 @@ import org.socialmeli.repository.VendorRepositoryImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UsersServiceImp implements IUsersService {
     @Autowired
@@ -57,20 +60,16 @@ public class UsersServiceImp implements IUsersService {
              throw new NotFoundException("No se encontró el usuario con id " + userId);
         }
         if (userClient != null) {
-            boolean removed = userClient.getFollowing().removeIf(v -> v.getUserId().equals(vendorId));
-            if (!removed)
-                throw new NotFoundException("No se encontro el vendedor con id " + vendorId);
+            //Usé new ArrayList para que no tire excepcion ya que devuelve UnmodifiableCollection
+            List<Vendor> l = new ArrayList<>(userClient.getFollowing());
+            l.removeIf(vendor -> vendor.getUserId().equals(vendorId));
+            userClient.setFollowing(l);
         }
         if (userVendor != null) {
-            boolean removedFollowing = userVendor.getFollowing().removeIf(v -> v.getUserId().equals(vendorId));
-            boolean removedFollower = userVendor.getFollowers().removeIf(u -> u.getUserId().equals(userId));
-            if (!removedFollowing)
-                throw new NotFoundException("No se encontro el vendedor con id " + vendorId);
-            if (!removedFollower)
-                throw new NotFoundException("No se encontro el seguidor con id " + userClient
-                        + "en los seguidores del vendedor con id " + vendorId);
+            userVendor.getFollowing().removeIf(v -> v.getUserId().equals(vendorId));
+            userVendor.getFollowers().removeIf(u -> u.getUserId().equals(userId));
         }
 
-        return new MessageDTO("Usuario" + userId + "ha dejado de seguir al vendedor con id " + vendorId);
+        return new MessageDTO("El usuario con id " + userId + " ha dejado de seguir al vendedor con id " + vendorId);
     }
 }
