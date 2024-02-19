@@ -129,6 +129,6 @@ public class UsersServiceImp implements IUsersService {
         if (removedFromClient || removedFromVendor)
             return new MessageDTO("El usuario con id " + userId + " ha dejado de seguir al vendedor con id " + vendorId);
         else
-            throw new NotFoundException("El usuario con id " + userId + "no está siguiendo al vendedor con id " + vendorId);
+            throw new NotFoundException("El usuario con id " + userId + " no está siguiendo al vendedor con id " + vendorId);
     }
 }
