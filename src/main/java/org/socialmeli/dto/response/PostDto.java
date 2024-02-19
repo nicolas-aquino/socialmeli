@@ -8,7 +8,7 @@ public record PostDto(
         Integer postId,
         Integer userId,
         LocalDate date,
-        Product product,
+        ProductDto product,
         Integer category,
         Double price
 
@@ -25,7 +25,7 @@ public record PostDto(
                 return userId;
         }
 
-        public Product product() {
+        public ProductDto product() {
                 return product;
         }
 
