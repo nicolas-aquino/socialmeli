@@ -1,5 +1,6 @@
 package org.socialmeli.controller;
 
+import org.socialmeli.dto.request.UserIdDto;
 import org.socialmeli.service.IPostsService;
 import org.socialmeli.service.IUsersService;
 import org.socialmeli.service.PostsServiceImp;
@@ -44,11 +45,10 @@ public class UsersController {
         return null;
     }
 
-
-    ///users/{userId}/followed/list
+    ///users/{userId}/followed/list?order=
     @GetMapping("/followed/{userId}/list")
-    public ResponseEntity<?> followedList(@PathVariable Integer userId){
-         return new ResponseEntity<>(postsService.getFollowedList(userId), HttpStatus.OK);
+    public ResponseEntity<?> followedList(@PathVariable UserIdDto userId, @RequestParam String order){
+        return new ResponseEntity<>(postsService.getFollowedList(userId.getUserId(), order), HttpStatus.OK);
     }
 
     ///users/{userId}/unfollow/{userIdToUnfollow}

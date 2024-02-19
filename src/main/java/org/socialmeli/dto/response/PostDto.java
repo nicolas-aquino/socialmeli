@@ -13,4 +13,7 @@ public record PostDto(
         Double price
 
 ) {
+        public LocalDate date() {
+                return date;
+        }       
 }

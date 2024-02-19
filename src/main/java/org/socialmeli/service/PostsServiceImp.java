@@ -2,13 +2,16 @@ package org.socialmeli.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Comparator;
 
 import org.socialmeli.dto.response.FollowedListDto;
 import org.socialmeli.dto.response.PostDto;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.Post;
 import org.socialmeli.entity.Vendor;
+import org.socialmeli.exception.BadRequestException;
 import org.socialmeli.exception.NotFoundException;
 import org.socialmeli.repository.ClientRepositoryImp;
 import org.socialmeli.repository.PostRepositoryImp;
@@ -26,7 +29,7 @@ public class PostsServiceImp implements IPostsService {
     ClientRepositoryImp clientRepositoryImp;
 
     @Override
-    public FollowedListDto getFollowedList(Integer id) {
+    public FollowedListDto getFollowedList(Integer id, String order) {
         // Busca cliente por ID:
         Client client = new Client();
         for (Client c : this.clientRepositoryImp.findAll()) {
@@ -57,6 +60,15 @@ public class PostsServiceImp implements IPostsService {
         }
         if (postDtoList.isEmpty()) {
             throw new NotFoundException("No hay posteos realizados por los vendedores que sigue el usuario las últimas dos semanas.");
+        }
+        // Ordena el ArrayList de posteos:
+        if(order.equals("date_asc")){
+            Collections.sort(postDtoList, Comparator.comparing(PostDto::date));
+        }else if(order.equals("date_desc")) {
+            Collections.sort(postDtoList, Comparator.comparing(PostDto::date, Comparator.reverseOrder()));
+        }else{
+            throw new BadRequestException("Indicación de ordenamiento no válida. La misma tiene que ser \"date_asc\" o \"date_desc\"");
+
         }
         return new FollowedListDto(id, postDtoList);
     }

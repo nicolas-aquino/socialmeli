@@ -20,7 +20,7 @@ public class ClientRepositoryImp implements IRepository<Client> {
         Client cliente1 = new Client(1,"Juan Perez");
         Client cliente2 = new Client(2, "María García");
         Client cliente3 = new Client(3, "Luis Rodríguez");
-        cliente1.setFollowing(List.of(vendorRepositoryImp.findAll().get(0), vendorRepositoryImp.findAll().get(1)));
+        cliente1.setFollowing(List.of(vendorRepositoryImp.findAll().get(0)));
         this.clients = new ArrayList<>(List.of(cliente1, cliente2, cliente3));
     }
 
