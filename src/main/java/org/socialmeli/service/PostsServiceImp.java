@@ -82,7 +82,9 @@ public class PostsServiceImp implements IPostsService {
 
     @Override
     public PostReqDto savePost(PostReqDto postDto) {
-        postRepositoryImp.save(mapper.convertValue(postDto, Post.class));
+       // postRepositoryImp.save(mapper.convertValue(postDto, Post.class));
+       Post post = new Post(postDto.userId(), postDto.getDate(), postDto.getProduct(), postDto.getCategory(), postDto.getPrice());
+       postRepositoryImp.save(post);
         return postDto;
     }
 }
