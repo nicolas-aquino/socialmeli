@@ -15,7 +15,7 @@ public class Vendor extends User{
     public Vendor(Integer userId, String userName) {
         this.userId = userId;
         this.userName = userName;
-        this.following = new ArrayList<>();;
+        this.following = new ArrayList<>();
         this.followers = new ArrayList<>();
     }
 }
