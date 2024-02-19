@@ -47,7 +47,7 @@ public class UsersController {
 
     ///users/{userId}/followed/list?order=
     @GetMapping("/followed/{userId}/list")
-    public ResponseEntity<?> followedList(@PathVariable UserIdDto userId, @RequestParam String order){
+    public ResponseEntity<?> followedList(@PathVariable UserIdDto userId, @RequestParam(required = false, defaultValue = "date_desc") String order){
         return new ResponseEntity<>(postsService.getFollowedList(userId.getUserId(), order), HttpStatus.OK);
     }
 
