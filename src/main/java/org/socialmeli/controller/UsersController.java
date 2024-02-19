@@ -2,6 +2,7 @@ package org.socialmeli.controller;
 
 import org.socialmeli.dto.request.UserIdDto;
 import org.socialmeli.dto.response.FollowSuccessDto;
+import org.socialmeli.dto.response.FollowerCountDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.service.IPostsService;
 import org.socialmeli.service.IUsersService;
@@ -25,10 +26,11 @@ public class UsersController {
     }
 
     /// users/{userId}/follow/{userIdToFollow}
+    //US_001
     @PostMapping("/{userId}/follow/{userIdToFollow}")
     public ResponseEntity<?> followUser(@PathVariable Integer userId,
                                        @PathVariable Integer userIdToFollow){
-        //TODO:
+
         usersService.userFollowVendor(userId,userIdToFollow);
 
         return new ResponseEntity<FollowSuccessDto>(new FollowSuccessDto("Vendedor seguido exitosamente"),HttpStatus.OK);
@@ -36,10 +38,12 @@ public class UsersController {
     }
 
     ///users/{userId}/followers/count
+    //US_002
     @GetMapping("/{userId}/followers/count")
     public ResponseEntity<?> followersCount(@PathVariable Integer userId){
-        //TODO:
-        return null;
+
+
+        return  new ResponseEntity<FollowerCountDto>(usersService.vendorFollowersCount(userId),HttpStatus.OK);
     }
 
     ///users/{userId}/followers/list

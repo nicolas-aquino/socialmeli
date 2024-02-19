@@ -1,5 +1,6 @@
 package org.socialmeli.service;
 
+import org.socialmeli.dto.response.FollowerCountDto;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
@@ -49,12 +50,22 @@ public class UsersServiceImp implements IUsersService {
 
         boolean alreadyFollowed = vendor.getFollowers().stream().anyMatch(u -> u.getUserId().equals(userId));
         if(alreadyFollowed){
-                throw new BadRequestException("Un usuario no se puede seguir a si mismo");
+                throw new BadRequestException("Ya se esta siguiendo al vendedor");
         }
 
 
         user.getFollowing().add(vendor);
         vendor.getFollowers().add(user);
+    }
+
+    @Override
+    public FollowerCountDto vendorFollowersCount(Integer userId) {
+        Vendor vendor = vendorRepositoryImp.findOne(userId);
+
+        if(vendor == null) throw new NotFoundException(String.format("No se encontró un usuario con id %d", userId));
+
+
+        return  new FollowerCountDto(userId,vendor.getUserName(),vendor.getFollowers().size());
     }
 
     @Override
