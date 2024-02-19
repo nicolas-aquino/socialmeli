@@ -107,14 +107,17 @@ public class UsersServiceImp implements IUsersService {
         Integer userId = userIdDto.getUserId();
         Integer vendorId = vendorIdDto.getUserId();
 
+        if (userId == vendorId)
+            throw new BadRequestException("Error: Ambos id son identicos");
+
         Client userClient = clientRepositoryImp.findOne(userId);
         Vendor userVendor = vendorRepositoryImp.findOne(userId);
 
         //Check if IDs exist
         if (userClient == null && userVendor == null)
-            throw new NotFoundException("No se encontró el usuario con id " + userId);
+            throw new NotFoundException("Error: No se encontró el usuario con id " + userId);
         if (vendorRepositoryImp.findOne(vendorId) == null)
-            throw new NotFoundException("No se encontró el vendedor con id " + vendorId);
+            throw new NotFoundException("Error: No se encontró el vendedor con id " + vendorId);
 
         // El 'userId' ingresado es un cliente
         if (userClient != null) {
@@ -129,6 +132,6 @@ public class UsersServiceImp implements IUsersService {
         if (removedFromClient || removedFromVendor)
             return new MessageDTO("El usuario con id " + userId + " ha dejado de seguir al vendedor con id " + vendorId);
         else
-            throw new NotFoundException("El usuario con id " + userId + " no está siguiendo al vendedor con id " + vendorId);
+            throw new NotFoundException("Error: El usuario con id " + userId + " no está siguiendo al vendedor con id " + vendorId);
     }
 }
