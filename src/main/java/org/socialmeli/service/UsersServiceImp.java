@@ -1,20 +1,20 @@
 package org.socialmeli.service;
 
+import org.socialmeli.dto.UserDTO;
+import org.socialmeli.dto.VendorFollowersListDTO;
+import org.socialmeli.dto.request.UserIdDto;
+import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
 import org.socialmeli.exception.BadRequestException;
 import org.socialmeli.exception.NotFoundException;
-import org.socialmeli.dto.VendorFollowersListDTO;
-import org.socialmeli.dto.request.UserIdDto;
-import org.socialmeli.dto.response.VendorsFollowingListDto;
-import org.socialmeli.entity.Client;
-import org.socialmeli.entity.Vendor;
-import org.socialmeli.exception.NotFoundException;
 import org.socialmeli.repository.ClientRepositoryImp;
 import org.socialmeli.repository.VendorRepositoryImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UsersServiceImp implements IUsersService {
