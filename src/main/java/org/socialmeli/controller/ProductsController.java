@@ -1,13 +1,12 @@
 package org.socialmeli.controller;
 
 import org.socialmeli.dto.request.PostReqDto;
-import org.socialmeli.entity.Product;
+import org.socialmeli.dto.request.UserIdDto;
 import org.socialmeli.service.IPostsService;
 import org.socialmeli.service.IUsersService;
 import org.socialmeli.service.PostsServiceImp;
 import org.socialmeli.service.UsersServiceImp;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,17 +22,17 @@ public class ProductsController {
         this.usersService = usersService;
     }
 
-    ///products/post
+    // US_0005
     @PostMapping("/post")
     public ResponseEntity<?> createPost(@RequestBody PostReqDto postDto){
         return new ResponseEntity<>(postsService.savePost(postDto), HttpStatus.OK);
     }
 
-    //products/followed/{userId}/list
+    // US_0006 & US_0009
     @GetMapping("/followed/{userId}/list")
-    public ResponseEntity vendorFollowedList(@PathVariable Integer userId){
-        //TODO:
-
-        return null;
+    public ResponseEntity<?> followedList(
+            @PathVariable UserIdDto userId,
+            @RequestParam(required = false, defaultValue = "date_desc") String order){
+        return new ResponseEntity<>(postsService.getFollowedList(userId.getUserId(), order), HttpStatus.OK);
     }
 }
