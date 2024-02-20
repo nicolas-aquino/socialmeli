@@ -111,7 +111,7 @@ public class PostsServiceImp implements IPostsService {
         if (client.getUserId() == null && vendor.getUserId() == null) {
             throw new NotFoundException("No se encontró ningun usuario en el sistema con el ID indicado.");
         }
-        Post post = new Post(postReqDto.userId(), postReqDto.date(), postReqDto.product(), postReqDto.category(), postReqDto.price());
+        Post post = new Post(postReqDto.getUserId(), postReqDto.getDate(), postReqDto.getProduct(), postReqDto.getCategory(), postReqDto.getPrice());
         Integer response =  postRepositoryImp.save(post);
         return new PostIdDto(response);
     }
