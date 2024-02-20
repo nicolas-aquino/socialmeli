@@ -1,6 +1,5 @@
 package org.socialmeli.repository;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.User;
@@ -10,14 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @Repository
 public class ClientRepositoryImp implements IRepository<Client> {
     private List<Client> clients = new ArrayList<>();
     private VendorRepositoryImp vendorRepositoryImp;
 
-    public ClientRepositoryImp() {
-        vendorRepositoryImp = new VendorRepositoryImp();
+    public ClientRepositoryImp(VendorRepositoryImp vendorRepositoryImp) {
+        this.vendorRepositoryImp = vendorRepositoryImp;
         Client client1 = new Client();
         Client client2 = new Client();
         Client client3 = new Client();
@@ -35,7 +33,10 @@ public class ClientRepositoryImp implements IRepository<Client> {
     }
 
     private Integer autoIncrementId() {
+        System.out.println("CLIENTS");
+        System.out.println("ID anterior: " + User.userIdCounter);
         User.userIdCounter ++;
+        System.out.println("ID posterior: " + User.userIdCounter);
         return User.userIdCounter;
     }
 

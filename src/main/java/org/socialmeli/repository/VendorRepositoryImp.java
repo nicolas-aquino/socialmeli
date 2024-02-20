@@ -36,7 +36,10 @@ public class VendorRepositoryImp implements IRepository<Vendor> {
     }
 
     private Integer autoIncrementId() {
+        System.out.println("VENDOR");
+        System.out.println("ID anterior: " + User.userIdCounter);
         User.userIdCounter ++ ;
+        System.out.println("ID posterior: " + User.userIdCounter);
         return User.userIdCounter;
     }
 

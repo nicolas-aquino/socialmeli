@@ -17,11 +17,9 @@ import org.springframework.web.bind.annotation.*;
 public class ProductsController {
 
     private IPostsService postsService;
-    private IUsersService usersService;
 
-    public ProductsController(PostsServiceImp postsService, UsersServiceImp usersService) {
+    public ProductsController(PostsServiceImp postsService) {
         this.postsService = postsService;
-        this.usersService = usersService;
     }
 
     // US_0005

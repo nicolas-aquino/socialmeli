@@ -1,12 +1,10 @@
 package org.socialmeli.repository;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.socialmeli.entity.Post;
 import org.socialmeli.entity.Product;
 import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
-import org.socialmeli.entity.Client;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -14,14 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @Repository
 public class PostRepositoryImp implements IRepository<Post> {
     private List<Post> posts = new ArrayList<>();
     private VendorRepositoryImp vendorRepositoryImp;
     
-    public PostRepositoryImp() {
-        vendorRepositoryImp = new VendorRepositoryImp();
+    public PostRepositoryImp(VendorRepositoryImp vendorRepositoryImp) {
+        this.vendorRepositoryImp = vendorRepositoryImp;
         Product product1 = new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
         Product product2 = new Product(2, "Zapatos", "Calzado", "Adidas", "Negro", "N/A");
         Product product3 = new Product(3, "Bolso", "Accesorio", "Puma", "Rojo", "Cuero");
@@ -43,7 +40,10 @@ public class PostRepositoryImp implements IRepository<Post> {
     }
 
     public Integer save(Post post) {
+        System.out.println("POST");
+        System.out.println("ID anterior: " + Post.postIdCounter);
         post.setPostId(autoIncrementId());
+        System.out.println("ID posterior: " + Post.postIdCounter);
         posts.add(post);
         return post.getPostId();
     }

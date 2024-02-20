@@ -1,8 +1,7 @@
 package org.socialmeli.controller;
 
 import org.socialmeli.dto.request.*;
-import org.socialmeli.dto.response.VendorFollowersListDTO;
-import org.socialmeli.dto.response.VendorsFollowingListDto;
+import org.socialmeli.dto.response.*;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
@@ -13,9 +12,6 @@ import org.socialmeli.service.UsersServiceImp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.socialmeli.dto.response.FollowSuccessDto;
-import org.socialmeli.dto.response.FollowerCountDto;
-import org.socialmeli.dto.response.MessageDto;
 
 import java.util.List;
 
@@ -34,17 +30,17 @@ public class UsersController {
 
     // US_0001
     @PostMapping("/{userId}/follow/{userIdToFollow}")
-    public ResponseEntity<?> followUser(@PathVariable Integer userId,
+    public ResponseEntity<FollowSuccessDto> followUser(@PathVariable Integer userId,
                                        @PathVariable Integer userIdToFollow){
         usersService.userFollowVendor(new UserFollowVendorDto(userId,userIdToFollow));
-        return new ResponseEntity<FollowSuccessDto>(new FollowSuccessDto("Vendedor seguido exitosamente"),HttpStatus.OK);
+        return new ResponseEntity<>(new FollowSuccessDto("Vendedor seguido exitosamente"),HttpStatus.OK);
 
     }
 
     // US_0002
     @GetMapping("/{userId}/followers/count")
-    public ResponseEntity<?> followersCount(@PathVariable Integer userId){
-        return  new ResponseEntity<FollowerCountDto>(usersService.vendorFollowersCount(new UserIdDto(userId)),HttpStatus.OK);
+    public ResponseEntity<FollowerCountDto> followersCount(@PathVariable Integer userId){
+        return  new ResponseEntity<>(usersService.vendorFollowersCount(new UserIdDto(userId)),HttpStatus.OK);
     }
 
     //US_0003
@@ -67,7 +63,7 @@ public class UsersController {
 
     // US_0006
     @GetMapping("/followed/{userId}/list")
-    public ResponseEntity<?> followedList(
+    public ResponseEntity<FollowedListDto> followedList(
             @PathVariable Integer userId,
             @RequestParam(required = false, defaultValue = "date_desc") String order){
         return new ResponseEntity<>(postsService.getFollowedList(new FollowedListReqDto(userId, order)), HttpStatus.OK);
@@ -81,7 +77,7 @@ public class UsersController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Client>> getusers() {
+    public ResponseEntity<List<Vendor>> getusers() {
         return new ResponseEntity<>(usersService.getAll(), HttpStatus.OK);
     }
 }
