@@ -96,19 +96,13 @@ public class PostsServiceImp implements IPostsService {
 
     @Override
     public PostIdDto savePost(PostReqDto postReqDto) {
-        Client client = new Client();
         Vendor vendor = new Vendor();
-        for (Client c : this.clientRepositoryImp.findAll()) {
-            if (c.getUserId().equals(postReqDto.getUserId())) {
-                client = c;
-            }
-        }
         for (Vendor c : this.vendorRepositoryImp.findAll()) {
             if (c.getUserId().equals(postReqDto.getUserId())) {
                 vendor = c;
             }
         }
-        if (client.getUserId() == null && vendor.getUserId() == null) {
+        if (vendor.getUserId() == null) {
             throw new NotFoundException("No se encontró ningun usuario en el sistema con el ID indicado.");
         }
         Post post = new Post(postReqDto.userId(), postReqDto.date(), postReqDto.product(), postReqDto.category(), postReqDto.price());
