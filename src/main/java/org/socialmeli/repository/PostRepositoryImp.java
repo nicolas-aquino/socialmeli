@@ -25,21 +25,26 @@ public class PostRepositoryImp implements IRepository<Post> {
         Product product1 = new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
         Product product2 = new Product(2, "Zapatos", "Calzado", "Adidas", "Negro", "N/A");
         Product product3 = new Product(3, "Bolso", "Accesorio", "Puma", "Rojo", "Cuero");
-        Post post1 = new Post(vendorRepositoryImp.findAll().get(0).getUserId(), LocalDate.of(2023, 3, 20), product1, 1, 35.99);
-        Post post2 = new Post(vendorRepositoryImp.findAll().get(0).getUserId(), LocalDate.of(2024, 2, 15), product2, 2, 79.99);
-        Post post3 = new Post(vendorRepositoryImp.findAll().get(0).getUserId(), LocalDate.now(), product3, 1, 49.99);
-        posts.add(post1);
-        posts.add(post2);
-        posts.add(post3);
+        Post post1 = new Post(autoIncrementId(), vendorRepositoryImp.findAll().get(0).getUserId(), LocalDate.of(2023, 3, 20), product1, 1, 35.99);
+        Post post2 = new Post(autoIncrementId(), vendorRepositoryImp.findAll().get(0).getUserId(), LocalDate.of(2024, 2, 15), product2, 2, 79.99);
+        Post post3 = new Post(autoIncrementId(), vendorRepositoryImp.findAll().get(0).getUserId(), LocalDate.now(), product3, 1, 49.99);
+        this.save(post1);
+        this.save(post2);
+        this.save(post3);
+    }
+
+    private Integer autoIncrementId() {
+        return posts.size() + 1;
     }
 
     public List<Post> findAll() {
         return posts;
     }
 
-    public Integer save(Post client) {
-        posts.add(client);
-        return client.getPostId();
+    public Integer save(Post post) {
+        post.setPostId(autoIncrementId());
+        posts.add(post);
+        return post.getPostId();
     }
 
     public Post findOne(Integer id) {
