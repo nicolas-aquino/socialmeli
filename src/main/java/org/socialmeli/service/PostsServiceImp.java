@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Comparator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.socialmeli.dto.request.FollowedListReqDto;
 import org.socialmeli.dto.request.PostReqDto;
 import org.socialmeli.dto.response.FollowedListDto;
 import org.socialmeli.dto.response.PostDto;
@@ -36,7 +37,9 @@ public class PostsServiceImp implements IPostsService {
     ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public FollowedListDto getFollowedList(Integer id, String order) {
+    public FollowedListDto getFollowedList(FollowedListReqDto req) {
+        Integer id = req.getUserId();
+        String order = req.getOrder();
         // Busca cliente por ID:
         Client client = new Client();
         Vendor vendor = new Vendor();
@@ -83,10 +86,10 @@ public class PostsServiceImp implements IPostsService {
         
         // Ordena el ArrayList de posteos:
         if (order.equals("date_asc")) {
-            Collections.sort(postDtoList, Comparator.comparing(PostDto::date));
+            Collections.sort(postDtoList, Comparator.comparing(PostDto::getDate));
         }
         else if (order.equals("date_desc")) {
-            Collections.sort(postDtoList, Comparator.comparing(PostDto::date, Comparator.reverseOrder()));
+            Collections.sort(postDtoList, Comparator.comparing(PostDto::getDate, Comparator.reverseOrder()));
         }
         else {
             throw new BadRequestException("Indicación de ordenamiento no válida. La misma tiene que ser \"date_asc\" o \"date_desc\"");
@@ -105,7 +108,7 @@ public class PostsServiceImp implements IPostsService {
         if (vendor.getUserId() == null) {
             throw new NotFoundException("No se encontró ningun usuario en el sistema con el ID indicado.");
         }
-        Post post = new Post(postReqDto.userId(), postReqDto.date(), postReqDto.product(), postReqDto.category(), postReqDto.price());
+        Post post = new Post(postReqDto.getUserId(), postReqDto.getDate(), postReqDto.getProduct(), postReqDto.getCategory(), postReqDto.getPrice());
         Integer response =  postRepositoryImp.save(post);
         return new PostIdDto(response);
     }

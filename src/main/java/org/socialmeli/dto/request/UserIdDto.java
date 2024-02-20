@@ -1,13 +1,13 @@
 package org.socialmeli.dto.request;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.experimental.FieldDefaults;
+
+@Data
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserIdDto {
-    private Integer userId;
-
-    public UserIdDto(String userId) {
-        this.userId = Integer.parseInt(userId);
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
+    Integer userId;
 }

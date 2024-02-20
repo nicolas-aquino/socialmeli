@@ -1,9 +1,18 @@
 package org.socialmeli.dto.response;
 
-public record ProductDto(Integer productId,
-        String productName,
-        String type,
-        String brand,
-        String color,
-        String notes) {
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.experimental.FieldDefaults;
+
+@Data
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class ProductDto {
+    Integer productId;
+    String productName;
+    String type;
+    String brand;
+    String color;
+    String notes;
 }

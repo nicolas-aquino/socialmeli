@@ -1,24 +1,22 @@
 package org.socialmeli.service;
 
-import org.socialmeli.dto.VendorFollowersListDTO;
-import org.socialmeli.dto.request.UserIdDto;
+import org.socialmeli.dto.request.*;
+import org.socialmeli.dto.response.VendorFollowersListDTO;
+import org.socialmeli.dto.request.UserUnfollowVendorDTO;
 import org.socialmeli.dto.response.FollowerCountDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.entity.Client;
-import org.socialmeli.entity.User;
 import org.socialmeli.dto.response.MessageDto;
-import org.socialmeli.entity.Vendor;
 
 import java.util.List;
 
 
 public interface IUsersService {
-    VendorFollowersListDTO getFollowersList(UserIdDto userIdDto, String order);
-    VendorsFollowingListDto getFollowingList(UserIdDto userIdDto, String order);
-    User getUserById(Integer userId);
-    void userFollowVendor(Integer userId, Integer vendorId);
-    FollowerCountDto vendorFollowersCount(Integer userId);
-    MessageDto unfollowVendor(UserIdDto userId, UserIdDto vendorId);
+    VendorFollowersListDTO getFollowersList(FollowersListReqDto req);
+    VendorsFollowingListDto getFollowingList(FollowersListReqDto req);
+    void userFollowVendor(UserFollowVendorDto req);
+    FollowerCountDto vendorFollowersCount(UserIdDto userIdDto);
+    MessageDto unfollowVendor(UserUnfollowVendorDTO req);
     List<Client> getAll();
 }
 

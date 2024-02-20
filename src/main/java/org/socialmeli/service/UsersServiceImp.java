@@ -1,5 +1,6 @@
 package org.socialmeli.service;
 
+import org.socialmeli.dto.request.*;
 import org.socialmeli.dto.response.FollowerCountDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.socialmeli.entity.Client;
@@ -7,12 +8,12 @@ import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
 import org.socialmeli.exception.BadRequestException;
 import org.socialmeli.exception.NotFoundException;
-import org.socialmeli.dto.VendorFollowersListDTO;
-import org.socialmeli.dto.request.UserIdDto;
+import org.socialmeli.dto.response.VendorFollowersListDTO;
 import org.socialmeli.dto.response.MessageDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.repository.ClientRepositoryImp;
 import org.socialmeli.repository.VendorRepositoryImp;
+import org.socialmeli.utils.DTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +34,8 @@ public class UsersServiceImp implements IUsersService {
 
     ObjectMapper mapper = new ObjectMapper();
 
-    @Override
-    public User getUserById(Integer userId) {
+
+    private User getUserById(Integer userId) {
         User user  = clientRepositoryImp.findOne(userId);
         if(user == null) {
              user  = vendorRepositoryImp.findOne(userId);
@@ -43,13 +44,15 @@ public class UsersServiceImp implements IUsersService {
         return user;
     }
 
-    public Vendor getVendorById(Integer vendorId) {
+    private Vendor getVendorById(Integer vendorId) {
             Vendor vendor = vendorRepositoryImp.findOne(vendorId);
             if(vendor == null ) throw new NotFoundException("El vendedor no existe");
             return vendor;
 
     }
-    public void userFollowVendor(Integer userId, Integer vendorId){
+    public void userFollowVendor(UserFollowVendorDto req){
+        Integer userId = req.getUserFollower();
+        Integer vendorId = req.getVendorToFollow();
 
         if(userId.equals(vendorId))  throw new BadRequestException("Un usuario no se puede seguir a si mismo");
         User user = getUserById(userId);
@@ -67,7 +70,8 @@ public class UsersServiceImp implements IUsersService {
     }
 
     @Override
-    public FollowerCountDto vendorFollowersCount(Integer userId) {
+    public FollowerCountDto vendorFollowersCount(UserIdDto userIdDto) {
+        Integer userId = userIdDto.getUserId();
         Vendor vendor = vendorRepositoryImp.findOne(userId);
 
         if(vendor == null) throw new NotFoundException(String.format("No se encontró un usuario con id %d", userId));
@@ -77,10 +81,12 @@ public class UsersServiceImp implements IUsersService {
     }
 
     @Override
-    public VendorFollowersListDTO getFollowersList(UserIdDto userId, String order) {
-        Vendor vendor = vendorRepositoryImp.findOne(userId.getUserId());
+    public VendorFollowersListDTO getFollowersList(FollowersListReqDto req) {
+        Integer userId = req.getUserId();
+        String order = req.getOrder();
+        Vendor vendor = vendorRepositoryImp.findOne(userId);
         if (vendor == null) {
-            throw new NotFoundException(String.format("No se encontró un usuario con id %d", userId.getUserId()));
+            throw new NotFoundException(String.format("No se encontró un usuario con id %d", userId));
         }
 
         List<User> followerUsers = vendor.getFollowers();
@@ -93,7 +99,7 @@ public class UsersServiceImp implements IUsersService {
             default -> throw new BadRequestException("El ordenamiento pedido es inválido");
         }
 
-        return new VendorFollowersListDTO(vendor, followerUsers);
+        return DTOMapper.toVendorFollowersList(vendor, followerUsers);
     }
 
     private List<User> ordenarListaUsuariosPor(List<User> followerUsers, Comparator<User> comparing) {
@@ -101,9 +107,11 @@ public class UsersServiceImp implements IUsersService {
     }
 
     @Override
-    public VendorsFollowingListDto getFollowingList(UserIdDto userIdDto, String order) {
-        Client client = clientRepositoryImp.findOne(userIdDto.getUserId());
-        Vendor vendor = vendorRepositoryImp.findOne(userIdDto.getUserId());
+    public VendorsFollowingListDto getFollowingList(FollowingListReqDto req) {
+        Integer userId = req.getUserIdDto();
+        String order = req.getOrder();
+        Client client = clientRepositoryImp.findOne(userId);
+        Vendor vendor = vendorRepositoryImp.findOne(userId);
 
         VendorsFollowingListDto clientFollowing = getVendorsFollowingListDto(order, client);
         if (clientFollowing != null) return clientFollowing;
@@ -111,7 +119,7 @@ public class UsersServiceImp implements IUsersService {
         VendorsFollowingListDto vendorFollowing = getVendorsFollowingListDto(order, vendor);
         if (vendorFollowing != null) return vendorFollowing;
 
-        throw new NotFoundException(String.format("No se encontró un usuario con el ID %d.", userIdDto.getUserId()));
+        throw new NotFoundException(String.format("No se encontró un usuario con el ID %d.", userId));
     }
 
     private VendorsFollowingListDto getVendorsFollowingListDto(String order, User user) {
@@ -127,17 +135,17 @@ public class UsersServiceImp implements IUsersService {
                 default:
                     throw new BadRequestException("El ordenamiento pedido es inválido");
             }
-            return new VendorsFollowingListDto(user.getUserId(), user.getUserName(), following);
+            return DTOMapper.toVendorsFollowingList(user.getUserId(), user.getUserName(), following);
         }
         return null;
     }
 
     @Override
-    public MessageDto unfollowVendor(UserIdDto userIdDto, UserIdDto vendorIdDto) {
+    public MessageDto unfollowVendor(UserUnfollowVendorDTO req) {
         boolean removedFromClient = false;
         boolean removedFromVendor = false;
-        Integer userId = userIdDto.getUserId();
-        Integer vendorId = vendorIdDto.getUserId();
+        Integer userId = req.getUserId();
+        Integer vendorId = req.getUserId();
 
         if (userId.equals(vendorId))
             throw new BadRequestException("Error: Ambos id son identicos");

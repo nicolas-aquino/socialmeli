@@ -21,12 +21,17 @@ public class ClientRepositoryImp implements IRepository<Client> {
         Client client1 = new Client();
         Client client2 = new Client();
         Client client3 = new Client();
+        Client client4 = new Client();
+
         client1.setUserName("Juan Perez");
         client2.setUserName("María García");
         client3.setUserName("Luis Rodríguez");
+        client4.setUserName("Pepe Giménez");
+
         this.save(client1);
         this.save(client2);
         this.save(client3);
+        this.save(client4);
     }
 
     private Integer autoIncrementId() {

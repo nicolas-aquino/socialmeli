@@ -20,12 +20,19 @@ public class VendorRepositoryImp implements IRepository<Vendor> {
         Vendor vendor1 = new Vendor();
         Vendor vendor2 = new Vendor();
         Vendor vendor3 = new Vendor();
+        Vendor vendor4 = new Vendor();
+        Vendor vendor5 = new Vendor();
+
         vendor1.setUserName("Fernando Gómez");
         vendor2.setUserName("Alejandra Torres");
         vendor3.setUserName("Javier Hernández");
+        vendor4.setUserName("José Cobra Mucho");
+        vendor5.setUserName("Pablo Ricachón");
         this.save(vendor1);
         this.save(vendor2);
         this.save(vendor3);
+        this.save(vendor4);
+        this.save(vendor5);
     }
 
     private Integer autoIncrementId() {
