@@ -164,14 +164,15 @@ public class UsersServiceImp implements IUsersService {
             //Usé new ArrayList para que no tire excepcion ya que devuelve UnmodifiableCollection
             removedFromClient = userClient.getFollowing().removeIf(v -> v.getUserId().equals(vendorId));
             vendorToUnfollow.getFollowers().removeIf(u -> u.getUserId().equals(userId));
-        } else if (userVendor != null) { // El 'userId' ingresado es un vendedor
+        } else { // El 'userId' ingresado es un vendedor
             removedFromVendor = userVendor.getFollowing().removeIf(v -> v.getUserId().equals(vendorId));
             userVendor.getFollowers().removeIf(u -> u.getUserId().equals(userId));
         }
-        if (removedFromClient || removedFromVendor)
+        if (removedFromClient || removedFromVendor) {
             return new MessageDto("El usuario con id " + userId + " ha dejado de seguir al vendedor con id " + vendorId);
-        else
+        } else {
             throw new NotFoundException("Error: El usuario con id " + userId + " no está siguiendo al vendedor con id " + vendorId);
+        }
     }
 
     public List<Vendor> getAll() {
