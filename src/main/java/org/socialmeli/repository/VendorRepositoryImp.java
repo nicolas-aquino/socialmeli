@@ -13,26 +13,32 @@ import java.util.List;
 @AllArgsConstructor
 @Repository
 public class VendorRepositoryImp implements IRepository<Vendor> {
-    private List<Vendor> vendors;
+    private List<Vendor> vendors = new ArrayList<>();
 
     public VendorRepositoryImp() {
-        this.vendors = new ArrayList<>();
-        Vendor vendor1 = new Vendor(4, "Fernando Gómez");
-        Vendor vendor2 = new Vendor(5, "Alejandra Torres");
-        Vendor vendor3 = new Vendor(6, "Javier Hernández");
+        Vendor vendor1 = new Vendor();
+        Vendor vendor2 = new Vendor();
+        Vendor vendor3 = new Vendor();
+        vendor1.setUserName("Fernando Gómez");
+        vendor2.setUserName("Alejandra Torres");
+        vendor3.setUserName("Javier Hernández");
+        this.save(vendor1);
+        this.save(vendor2);
+        this.save(vendor3);
+    }
 
-        this.vendors.add(vendor1);
-        this.vendors.add(vendor2);
-        this.vendors.add(vendor3);
+    private Integer autoIncrementId() {
+        return vendors.size() + 1;
     }
 
     public List<Vendor> findAll() {
         return vendors;
     }
 
-    public Integer save(Vendor client) {
-        vendors.add(client);
-        return client.getUserId();
+    public Integer save(Vendor vendor) {
+        vendor.setUserId(autoIncrementId());
+        vendors.add(vendor);
+        return vendor.getUserId();
     }
 
     public Vendor findOne (Integer id) {

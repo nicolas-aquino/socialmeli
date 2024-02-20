@@ -12,35 +12,43 @@ import java.util.List;
 @AllArgsConstructor
 @Repository
 public class ClientRepositoryImp implements IRepository<Client> {
-    private List<Client> clients;
+    private List<Client> clients = new ArrayList<>();
     private VendorRepositoryImp vendorRepositoryImp;
 
     public ClientRepositoryImp(){
-        this.clients = new ArrayList<>();
-        this.vendorRepositoryImp = new VendorRepositoryImp();
-        Client cliente1 = new Client(1,"Juan Perez");
-        Client cliente2 = new Client(2, "María García");
-        Client cliente3 = new Client(3, "Luis Rodríguez");
-       cliente1.getFollowing().add(vendorRepositoryImp.findAll().get(0));
+        vendorRepositoryImp = new VendorRepositoryImp();
+        Client client1 = new Client();
+        Client client2 = new Client();
+        Client client3 = new Client();
+        client1.setUserName("Juan Perez");
+        client2.setUserName("María García");
+        client3.setUserName("Luis Rodríguez");
+        this.save(client1);
+        this.save(client2);
+        this.save(client3);
+    }
 
-        this.clients.add(cliente1);
-        this.clients.add(cliente2);
-        this.clients.add(cliente3);
+    private Integer autoIncrementId() {
+        return clients.size() + 1;
     }
 
     public List<Client> findAll() {
         return clients;
     }
+
     public Integer save(Client client) {
+        client.setUserId(autoIncrementId());
         clients.add(client);
         return client.getUserId();
     }
-    public Client findOne (Integer id) {
+
+    public Client findOne(Integer id) {
         return clients.stream()
                 .filter(client -> client.getUserId().equals(id))
                 .findFirst()
                 .orElse(null);
     }
+
     public void deleteOne(Integer id) {
         clients.removeIf(c -> c.getUserId().equals(id));
     }
