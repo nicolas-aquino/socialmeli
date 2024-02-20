@@ -16,7 +16,6 @@ public interface IUsersService {
     void userFollowVendor(UserFollowVendorDto req);
     FollowerCountDto vendorFollowersCount(UserIdDto userIdDto);
     MessageDto unfollowVendor(UserUnfollowVendorDTO req);
-    List<Vendor> getAll();
 }
 
 

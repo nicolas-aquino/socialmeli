@@ -73,9 +73,4 @@ public class UsersController {
                                                      @PathVariable Integer userIdToUnfollow){
         return new ResponseEntity<>(usersService.unfollowVendor(new UserUnfollowVendorDTO(userId, userIdToUnfollow)), HttpStatus.OK);
     }
-
-    @GetMapping("/")
-    public ResponseEntity<List<Vendor>> getusers() {
-        return new ResponseEntity<>(usersService.getAll(), HttpStatus.OK);
-    }
 }
