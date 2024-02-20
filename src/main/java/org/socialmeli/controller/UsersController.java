@@ -1,10 +1,7 @@
 package org.socialmeli.controller;
 
-import org.socialmeli.dto.request.FollowedListReqDto;
-import org.socialmeli.dto.request.FollowersListReqDto;
-import org.socialmeli.dto.request.FollowingListReqDto;
+import org.socialmeli.dto.request.*;
 import org.socialmeli.dto.response.VendorFollowersListDTO;
-import org.socialmeli.dto.request.UserIdDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.service.IPostsService;
 import org.socialmeli.service.IUsersService;
@@ -34,7 +31,7 @@ public class UsersController {
     @PostMapping("/{userId}/follow/{userIdToFollow}")
     public ResponseEntity<?> followUser(@PathVariable Integer userId,
                                        @PathVariable Integer userIdToFollow){
-        usersService.userFollowVendor(userId,userIdToFollow);
+        usersService.userFollowVendor(new UserFollowVendorDto(userId,userIdToFollow));
         return new ResponseEntity<FollowSuccessDto>(new FollowSuccessDto("Vendedor seguido exitosamente"),HttpStatus.OK);
 
     }
@@ -42,7 +39,7 @@ public class UsersController {
     // US_0002
     @GetMapping("/{userId}/followers/count")
     public ResponseEntity<?> followersCount(@PathVariable Integer userId){
-        return  new ResponseEntity<FollowerCountDto>(usersService.vendorFollowersCount(userId),HttpStatus.OK);
+        return  new ResponseEntity<FollowerCountDto>(usersService.vendorFollowersCount(new UserIdDto(userId)),HttpStatus.OK);
     }
 
     //US_0003
@@ -75,6 +72,6 @@ public class UsersController {
     @PostMapping("/{userId}/unfollow/{userIdToUnfollow}")
     public ResponseEntity<MessageDto> unfollowVendor(@PathVariable Integer userId,
                                                      @PathVariable Integer userIdToUnfollow){
-        return new ResponseEntity<>(usersService.unfollowVendor(new UserIdDto(userId), new UserIdDto(userIdToUnfollow)), HttpStatus.OK);
+        return new ResponseEntity<>(usersService.unfollowVendor(new UserUnfollowVendorDTO(userId, userIdToUnfollow)), HttpStatus.OK);
     }
 }

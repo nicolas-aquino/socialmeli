@@ -1,7 +1,6 @@
 package org.socialmeli.service;
 
-import org.socialmeli.dto.request.FollowersListReqDto;
-import org.socialmeli.dto.request.FollowingListReqDto;
+import org.socialmeli.dto.request.*;
 import org.socialmeli.dto.response.FollowerCountDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.socialmeli.entity.Client;
@@ -10,7 +9,6 @@ import org.socialmeli.entity.Vendor;
 import org.socialmeli.exception.BadRequestException;
 import org.socialmeli.exception.NotFoundException;
 import org.socialmeli.dto.response.VendorFollowersListDTO;
-import org.socialmeli.dto.request.UserIdDto;
 import org.socialmeli.dto.response.MessageDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.repository.ClientRepositoryImp;
@@ -36,8 +34,8 @@ public class UsersServiceImp implements IUsersService {
 
     ObjectMapper mapper = new ObjectMapper();
 
-    @Override
-    public User getUserById(Integer userId) {
+
+    private User getUserById(Integer userId) {
         User user  = clientRepositoryImp.findOne(userId);
         if(user == null) {
              user  = vendorRepositoryImp.findOne(userId);
@@ -46,13 +44,15 @@ public class UsersServiceImp implements IUsersService {
         return user;
     }
 
-    public Vendor getVendorById(Integer vendorId) {
+    private Vendor getVendorById(Integer vendorId) {
             Vendor vendor = vendorRepositoryImp.findOne(vendorId);
             if(vendor == null ) throw new NotFoundException("El vendedor no existe");
             return vendor;
 
     }
-    public void userFollowVendor(Integer userId, Integer vendorId){
+    public void userFollowVendor(UserFollowVendorDto req){
+        Integer userId = req.getUserFollower();
+        Integer vendorId = req.getVendorToFollow();
 
         if(userId.equals(vendorId))  throw new BadRequestException("Un usuario no se puede seguir a si mismo");
         User user = getUserById(userId);
@@ -70,7 +70,8 @@ public class UsersServiceImp implements IUsersService {
     }
 
     @Override
-    public FollowerCountDto vendorFollowersCount(Integer userId) {
+    public FollowerCountDto vendorFollowersCount(UserIdDto userIdDto) {
+        Integer userId = userIdDto.getUserId();
         Vendor vendor = vendorRepositoryImp.findOne(userId);
 
         if(vendor == null) throw new NotFoundException(String.format("No se encontró un usuario con id %d", userId));
@@ -140,11 +141,11 @@ public class UsersServiceImp implements IUsersService {
     }
 
     @Override
-    public MessageDto unfollowVendor(UserIdDto userIdDto, UserIdDto vendorIdDto) {
+    public MessageDto unfollowVendor(UserUnfollowVendorDTO req) {
         boolean removedFromClient = false;
         boolean removedFromVendor = false;
-        Integer userId = userIdDto.getUserId();
-        Integer vendorId = vendorIdDto.getUserId();
+        Integer userId = req.getUserId();
+        Integer vendorId = req.getUserId();
 
         if (userId.equals(vendorId))
             throw new BadRequestException("Error: Ambos id son identicos");
