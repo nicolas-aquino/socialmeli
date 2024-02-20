@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FollowerCountDto {
-    Integer user_id;
-    String user_name;
+    Integer userId;
+    String userName;
     Integer followers_count;
 }

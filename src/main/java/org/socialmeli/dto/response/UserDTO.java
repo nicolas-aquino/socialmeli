@@ -9,11 +9,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserDTO {
-    Integer user_id;
-    String user_name;
-
-    //public UserDTO(User user) {
-    //    this.user_id = user.getUserId();
-    //    this.user_name = user.getUserName();
-    //}
+    Integer userId;
+    String userName;
 }

@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class VendorFollowersListDTO {
-    Integer user_id;
-    String user_name;
+    Integer userId;
+    String userName;
     List<UserDTO> followers;
 }
