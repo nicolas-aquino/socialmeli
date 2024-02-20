@@ -2,6 +2,7 @@ package org.socialmeli.controller;
 
 import org.socialmeli.dto.request.FollowedListReqDto;
 import org.socialmeli.dto.request.PostReqDto;
+import org.socialmeli.dto.response.FollowedListDto;
 import org.socialmeli.dto.response.PostIdDto;
 import org.socialmeli.service.IPostsService;
 import org.socialmeli.service.PostsServiceImp;
@@ -27,7 +28,7 @@ public class ProductsController {
 
     // US_0006 & US_0009
     @GetMapping("/followed/{userId}/list")
-    public ResponseEntity<?> followedList(
+    public ResponseEntity<FollowedListDto> followedList(
             @PathVariable Integer userId,
             @RequestParam(required = false, defaultValue = "date_desc") String order) {
         return new ResponseEntity<>(postsService.getFollowedList(new FollowedListReqDto(userId, order)), HttpStatus.OK);
