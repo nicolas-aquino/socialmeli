@@ -1,11 +1,5 @@
 package org.socialmeli.service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Comparator;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.socialmeli.dto.request.FollowedListReqDto;
 import org.socialmeli.dto.request.PostReqDto;
@@ -23,6 +17,12 @@ import org.socialmeli.repository.PostRepositoryImp;
 import org.socialmeli.repository.VendorRepositoryImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 public class PostsServiceImp implements IPostsService {

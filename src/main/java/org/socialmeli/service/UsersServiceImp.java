@@ -1,28 +1,27 @@
 package org.socialmeli.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.socialmeli.dto.request.*;
 import org.socialmeli.dto.response.FollowerCountDto;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.socialmeli.dto.response.MessageDto;
+import org.socialmeli.dto.response.VendorFollowersListDTO;
+import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
 import org.socialmeli.exception.BadRequestException;
 import org.socialmeli.exception.NotFoundException;
-import org.socialmeli.dto.response.VendorFollowersListDTO;
-import org.socialmeli.dto.response.MessageDto;
-import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.repository.ClientRepositoryImp;
 import org.socialmeli.repository.VendorRepositoryImp;
 import org.socialmeli.utils.DTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import static java.util.Comparator.comparing;
-
-import java.util.ArrayList;
 
 @Service
 public class UsersServiceImp implements IUsersService {

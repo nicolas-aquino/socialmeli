@@ -2,8 +2,6 @@ package org.socialmeli.controller;
 
 import org.socialmeli.dto.request.*;
 import org.socialmeli.dto.response.*;
-import org.socialmeli.entity.Client;
-import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
 import org.socialmeli.service.IPostsService;
 import org.socialmeli.service.IUsersService;

@@ -1,15 +1,13 @@
 package org.socialmeli.dto.request;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.socialmeli.entity.Product;
 
-import lombok.Data;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor

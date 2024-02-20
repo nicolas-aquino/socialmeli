@@ -1,7 +1,5 @@
 package org.socialmeli.utils;
 
-import org.socialmeli.entity.User;
-
 import java.util.Comparator;
 import java.util.List;
 
