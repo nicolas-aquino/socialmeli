@@ -140,7 +140,7 @@ public class UsersServiceImp implements IUsersService {
         Integer userId = userIdDto.getUserId();
         Integer vendorId = vendorIdDto.getUserId();
 
-        if (userId == vendorId)
+        if (userId.equals(vendorId))
             throw new BadRequestException("Error: Ambos id son identicos");
 
         Client userClient = clientRepositoryImp.findOne(userId);
