@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "64ec8581-bda8-425d-9324-a2c6d4bef5a5",
+		"_postman_id": "5ddfcf8c-8a26-49a7-8f03-c6c2e3fb87a7",
 		"name": "SocialMeliPostman",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "33067254"
+		"_exporter_id": "32843174"
 	},
 	"item": [
 		{
@@ -337,118 +337,6 @@
 			]
 		},
 		{
-			"name": "US_0003",
-			"item": [
-				{
-					"name": "404 Not Found",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/users/1/followers/list",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"users",
-								"1",
-								"followers",
-								"list"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": "",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "200 OK",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/users/4/followers/list",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"users",
-								"4",
-								"followers",
-								"list"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": "",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "US_0004",
-			"item": [
-				{
-					"name": "200 OK",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/users/1/followed/list",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"users",
-								"1",
-								"followed",
-								"list"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "404 Not Found",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/users/100/followed/list",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"users",
-								"100",
-								"followed",
-								"list"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "US_0005",
 			"item": [
 				{
@@ -475,123 +363,6 @@
 							"path": [
 								"products",
 								"post"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "US_0008",
-			"item": [
-				{
-					"name": "Order asc - US_0004",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/users/1/followed/list?order=name_asc",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"users",
-								"1",
-								"followed",
-								"list"
-							],
-							"query": [
-								{
-									"key": "order",
-									"value": "name_asc"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Order asc - US_0003",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/users/4/followers/list?order=name_asc",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"users",
-								"4",
-								"followers",
-								"list"
-							],
-							"query": [
-								{
-									"key": "order",
-									"value": "name_asc"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Order desc - US_0004",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/users/1/followed/list?order=name_desc",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"users",
-								"1",
-								"followed",
-								"list"
-							],
-							"query": [
-								{
-									"key": "order",
-									"value": "name_desc"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Order desc - US_0003",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/users/4/followers/list?order=name_desc",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"users",
-								"4",
-								"followers",
-								"list"
-							],
-							"query": [
-								{
-									"key": "order",
-									"value": "name_desc"
-								}
 							]
 						}
 					},
@@ -657,6 +428,311 @@
 						}
 					},
 					"response": []
+				}
+			]
+		},
+		{
+			"name": "Followers list tests",
+			"item": [
+				{
+					"name": "SetUp",
+					"item": [
+						{
+							"name": "SetUp",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let url = pm.globals.get(\"local\");",
+											"",
+											"for(var i = 1; i <= 6;i++) {",
+											"    if(i!=4) {",
+											"        pm.sendRequest({",
+											"            url: url+\"/users/4/follow/\"+i,",
+											"            method: 'POST'",
+											"            }, function (err, response) {",
+											"        });",
+											"    }",
+											"}",
+											"",
+											"for(var i = 1; i <= 3;i++) {",
+											"    if(i!=4) {",
+											"        pm.sendRequest({",
+											"            url: url+\"/users/\"+i+\"/follow/4\",",
+											"            method: 'POST'",
+											"            }, function (err, response) {",
+											"        });",
+											"    }",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "US_0008",
+					"item": [
+						{
+							"name": "Order asc - US_0004",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/users/1/followed/list?order=name_asc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users",
+										"1",
+										"followed",
+										"list"
+									],
+									"query": [
+										{
+											"key": "order",
+											"value": "name_asc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Order asc - US_0003",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/users/4/followers/list?order=name_asc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users",
+										"4",
+										"followers",
+										"list"
+									],
+									"query": [
+										{
+											"key": "order",
+											"value": "name_asc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Order desc - US_0004",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/users/1/followed/list?order=name_desc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users",
+										"1",
+										"followed",
+										"list"
+									],
+									"query": [
+										{
+											"key": "order",
+											"value": "name_desc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Order desc - US_0003",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/users/4/followers/list?order=name_desc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users",
+										"4",
+										"followers",
+										"list"
+									],
+									"query": [
+										{
+											"key": "order",
+											"value": "name_desc"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "US_0003",
+					"item": [
+						{
+							"name": "404 Not Found",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/users/1/followers/list",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users",
+										"1",
+										"followers",
+										"list"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200 OK",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/users/4/followers/list",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users",
+										"4",
+										"followers",
+										"list"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "US_0004",
+					"item": [
+						{
+							"name": "200 OK",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/users/1/followed/list",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users",
+										"1",
+										"followed",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "404 Not Found",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/users/100/followed/list",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users",
+										"100",
+										"followed",
+										"list"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		}
