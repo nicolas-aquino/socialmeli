@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class Post {
     private Integer postId;
@@ -16,6 +15,7 @@ public class Post {
     private Product product;
     private Integer category;
     private Double price;
+    public static Integer postIdCounter = 0;
 
     public Post(Integer userId, LocalDate date, Product product, Integer category, Double price) {
         this.userId = userId;

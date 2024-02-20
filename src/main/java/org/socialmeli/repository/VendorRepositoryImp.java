@@ -2,6 +2,7 @@ package org.socialmeli.repository;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
 
 import org.springframework.stereotype.Repository;
@@ -28,7 +29,8 @@ public class VendorRepositoryImp implements IRepository<Vendor> {
     }
 
     private Integer autoIncrementId() {
-        return vendors.size() + 1;
+        User.userIdCounter ++ ;
+        return User.userIdCounter;
     }
 
     public List<Vendor> findAll() {

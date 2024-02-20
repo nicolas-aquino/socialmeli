@@ -4,8 +4,12 @@ import org.socialmeli.dto.VendorFollowersListDTO;
 import org.socialmeli.dto.request.UserIdDto;
 import org.socialmeli.dto.response.FollowerCountDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
+import org.socialmeli.entity.Client;
 import org.socialmeli.entity.User;
 import org.socialmeli.dto.response.MessageDto;
+import org.socialmeli.entity.Vendor;
+
+import java.util.List;
 
 
 public interface IUsersService {
@@ -15,6 +19,7 @@ public interface IUsersService {
     void userFollowVendor(Integer userId, Integer vendorId);
     FollowerCountDto vendorFollowersCount(Integer userId);
     MessageDto unfollowVendor(UserIdDto userId, UserIdDto vendorId);
+    List<Client> getAll();
 }
 
 

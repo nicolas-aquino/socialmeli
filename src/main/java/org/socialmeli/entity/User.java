@@ -13,4 +13,5 @@ public abstract class User {
     protected Integer userId;
     protected String userName;
     protected List<Vendor> following;
+    public static Integer userIdCounter = 0;
 }

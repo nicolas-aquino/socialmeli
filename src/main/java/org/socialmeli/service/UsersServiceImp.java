@@ -166,4 +166,8 @@ public class UsersServiceImp implements IUsersService {
         else
             throw new NotFoundException("Error: El usuario con id " + userId + " no está siguiendo al vendedor con id " + vendorId);
     }
+
+    public List<Client> getAll() {
+        return clientRepositoryImp.getClients();
+    }
 }

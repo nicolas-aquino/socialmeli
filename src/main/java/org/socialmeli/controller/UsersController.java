@@ -3,6 +3,9 @@ package org.socialmeli.controller;
 import org.socialmeli.dto.VendorFollowersListDTO;
 import org.socialmeli.dto.request.UserIdDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
+import org.socialmeli.entity.Client;
+import org.socialmeli.entity.User;
+import org.socialmeli.entity.Vendor;
 import org.socialmeli.service.IPostsService;
 import org.socialmeli.service.IUsersService;
 import org.socialmeli.service.PostsServiceImp;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.socialmeli.dto.response.FollowSuccessDto;
 import org.socialmeli.dto.response.FollowerCountDto;
 import org.socialmeli.dto.response.MessageDto;
+
+import java.util.List;
 
 
 @RestController
@@ -71,5 +76,10 @@ public class UsersController {
     public ResponseEntity<MessageDto> unfollowVendor(@PathVariable UserIdDto userId,
                                                      @PathVariable UserIdDto userIdToUnfollow){
         return new ResponseEntity<>(usersService.unfollowVendor(userId, userIdToUnfollow), HttpStatus.OK);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<Client>> getusers() {
+        return new ResponseEntity<>(usersService.getAll(), HttpStatus.OK);
     }
 }
