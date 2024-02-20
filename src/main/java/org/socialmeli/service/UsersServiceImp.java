@@ -43,7 +43,7 @@ public class UsersServiceImp implements IUsersService {
     public Vendor getVendorById(Integer vendorId) {
             Vendor vendor = vendorRepositoryImp.findOne(vendorId);
             if(vendor == null ) throw new NotFoundException("El vendedor no existe");
-             return vendor;
+            return vendor;
 
     }
     public void userFollowVendor(Integer userId, Integer vendorId){
@@ -102,20 +102,11 @@ public class UsersServiceImp implements IUsersService {
         Client client = clientRepositoryImp.findOne(userIdDto.getUserId());
         Vendor vendor = vendorRepositoryImp.findOne(userIdDto.getUserId());
 
-        if (client != null) {
-            return new VendorsFollowingListDto(client.getUserId(), client.getUserName(), client.getFollowing());
-        }
-
-        if (vendor != null) {
-            return new VendorsFollowingListDto(vendor.getUserId(), vendor.getUserName(), vendor.getFollowing());
-        }
-        /*
         VendorsFollowingListDto clientFollowing = getVendorsFollowingListDto(order, client);
         if (clientFollowing != null) return clientFollowing;
 
         VendorsFollowingListDto vendorFollowing = getVendorsFollowingListDto(order, vendor);
         if (vendorFollowing != null) return vendorFollowing;
-        */
 
         throw new NotFoundException(String.format("No se encontró un usuario con el ID %d.", userIdDto.getUserId()));
     }
@@ -126,14 +117,14 @@ public class UsersServiceImp implements IUsersService {
             switch (order) {
                 case "name_asc":
                     following = following.stream().sorted(comparing(User::getUserName)).toList();
-                    return new VendorsFollowingListDto(user.getUserId(), user.getUserName(), following);
+                    break;
                 case "name_desc":
                     following = following.stream().sorted(comparing(User::getUserName).reversed()).toList();
-                    return new VendorsFollowingListDto(user.getUserId(), user.getUserName(), following);
+                    break;
                 default:
                     throw new BadRequestException("El ordenamiento pedido es inválido");
             }
-            //return new VendorsFollowingListDto(vendor.getUserId(), vendor.getFollowing());
+            return new VendorsFollowingListDto(user.getUserId(), user.getUserName(), following);
         }
         return null;
     }

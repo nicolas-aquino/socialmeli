@@ -55,11 +55,11 @@ public class UsersController {
 
     //US_0004
     @GetMapping("/{userId}/followed/list")
-    public VendorsFollowingListDto followingList(
+    public ResponseEntity<VendorsFollowingListDto> followingList(
              @PathVariable UserIdDto userId,
              @RequestParam(required = false, defaultValue = "name_desc") String order){
 
-        return usersService.getFollowingList(userId, order);
+        return ResponseEntity.ok(usersService.getFollowingList(userId, order));
     }
 
     // US_0007
