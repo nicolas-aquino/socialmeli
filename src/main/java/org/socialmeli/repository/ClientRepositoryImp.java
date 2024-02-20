@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Repository
 public class ClientRepositoryImp implements IRepository<Client> {
-    private List<Client> clients;
+    private List<Client> clients = new ArrayList<>();
     private VendorRepositoryImp vendorRepositoryImp;
 
     public ClientRepositoryImp(){

@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Repository
 public class VendorRepositoryImp implements IRepository<Vendor> {
-    private List<Vendor> vendors;
+    private List<Vendor> vendors = new ArrayList<>();
 
     public VendorRepositoryImp() {
         Vendor vendor1 = new Vendor();
