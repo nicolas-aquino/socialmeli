@@ -21,7 +21,7 @@ public class ClientRepositoryImp implements IRepository<Client> {
         Client client3 = new Client();
         Client client4 = new Client();
 
-        client1.setUserName("Juan Perez");
+        client1.setUserName("Martin Perez");
         client2.setUserName("María García");
         client3.setUserName("Luis Rodríguez");
         client4.setUserName("Pepe Giménez");

@@ -40,10 +40,7 @@ public class PostRepositoryImp implements IRepository<Post> {
     }
 
     public Integer save(Post post) {
-        System.out.println("POST");
-        System.out.println("ID anterior: " + Post.postIdCounter);
         post.setPostId(autoIncrementId());
-        System.out.println("ID posterior: " + Post.postIdCounter);
         posts.add(post);
         return post.getPostId();
     }
