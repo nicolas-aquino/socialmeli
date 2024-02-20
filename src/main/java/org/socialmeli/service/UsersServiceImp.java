@@ -9,6 +9,7 @@ import org.socialmeli.exception.BadRequestException;
 import org.socialmeli.exception.NotFoundException;
 import org.socialmeli.dto.VendorFollowersListDTO;
 import org.socialmeli.dto.request.UserIdDto;
+import org.socialmeli.dto.response.MessageDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.repository.ClientRepositoryImp;
 import org.socialmeli.repository.VendorRepositoryImp;
@@ -20,6 +21,9 @@ import java.util.List;
 
 import static java.util.Comparator.comparing;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UsersServiceImp implements IUsersService {
     @Autowired
@@ -28,7 +32,7 @@ public class UsersServiceImp implements IUsersService {
     @Autowired
     VendorRepositoryImp vendorRepositoryImp;
 
-    //ObjectMapper mapper = new ObjectMapper();
+    ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public User getUserById(Integer userId) {
@@ -127,5 +131,40 @@ public class UsersServiceImp implements IUsersService {
             return new VendorsFollowingListDto(user.getUserId(), user.getUserName(), following);
         }
         return null;
+    }
+
+    @Override
+    public MessageDto unfollowVendor(UserIdDto userIdDto, UserIdDto vendorIdDto) {
+        boolean removedFromClient = false;
+        boolean removedFromVendor = false;
+        Integer userId = userIdDto.getUserId();
+        Integer vendorId = vendorIdDto.getUserId();
+
+        if (userId == vendorId)
+            throw new BadRequestException("Error: Ambos id son identicos");
+
+        Client userClient = clientRepositoryImp.findOne(userId);
+        Vendor userVendor = vendorRepositoryImp.findOne(userId);
+
+        //Check if IDs exist
+        if (userClient == null && userVendor == null)
+            throw new NotFoundException("Error: No se encontró el usuario con id " + userId);
+        if (vendorRepositoryImp.findOne(vendorId) == null)
+            throw new NotFoundException("Error: No se encontró el vendedor con id " + vendorId);
+
+        // El 'userId' ingresado es un cliente
+        if (userClient != null) {
+            //Usé new ArrayList para que no tire excepcion ya que devuelve UnmodifiableCollection
+            List<Vendor> l = new ArrayList<>(userClient.getFollowing());
+            removedFromClient = l.removeIf(vendor -> vendor.getUserId().equals(vendorId));
+            userClient.setFollowing(l);
+        } else if (userVendor != null) { // El 'userId' ingresado es un vendedor
+            removedFromVendor = userVendor.getFollowing().removeIf(v -> v.getUserId().equals(vendorId));
+            userVendor.getFollowers().removeIf(u -> u.getUserId().equals(userId));
+        }
+        if (removedFromClient || removedFromVendor)
+            return new MessageDto("El usuario con id " + userId + " ha dejado de seguir al vendedor con id " + vendorId);
+        else
+            throw new NotFoundException("Error: El usuario con id " + userId + " no está siguiendo al vendedor con id " + vendorId);
     }
 }

@@ -30,8 +30,9 @@ public class VendorRepositoryImp implements IRepository<Vendor> {
         return vendors;
     }
 
-    public void save(Vendor client) {
+    public Integer save(Vendor client) {
         vendors.add(client);
+        return client.getUserId();
     }
 
     public Vendor findOne (Integer id) {

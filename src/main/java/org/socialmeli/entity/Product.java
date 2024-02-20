@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Product {
     private Integer productId;
-    private String productname;
+    private String productName;
     private String type;
     private String brand;
     private String color;
