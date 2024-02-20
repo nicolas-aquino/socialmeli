@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.socialmeli.entity.Post;
 import org.socialmeli.entity.Product;
+import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
 import org.socialmeli.entity.Client;
 import org.springframework.stereotype.Repository;
@@ -52,7 +53,7 @@ public class PostRepositoryImp implements IRepository<Post> {
         posts.removeIf(c -> c.getPostId().equals(id));
     }
 
-    public List<Vendor> getFollowedList(Client client, List<Vendor> vendorList) {
+    public List<Vendor> getFollowedList(User client, List<Vendor> vendorList) {
         List<Vendor> auxListVendors = new ArrayList<>();
         for (Vendor vendor: vendorList) {
             for (int i=0; i<client.getFollowing().size(); i++) {

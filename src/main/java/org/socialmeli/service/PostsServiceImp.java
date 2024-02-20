@@ -39,17 +39,28 @@ public class PostsServiceImp implements IPostsService {
     public FollowedListDto getFollowedList(Integer id, String order) {
         // Busca cliente por ID:
         Client client = new Client();
+        Vendor vendor = new Vendor();
+        List<Vendor> vendorList = new ArrayList<>();
         for (Client c : this.clientRepositoryImp.findAll()) {
             if (c.getUserId().intValue() == id.intValue()) {
                 client = c;
             }
         }
-        if (client.getUserId() == null) {
-            throw new NotFoundException("No se encontró ningun cliente en el sistema con el ID indicado.");
+        for (Vendor c : this.vendorRepositoryImp.findAll()) {
+            if (c.getUserId().intValue() == id.intValue()) {
+                vendor = c;
+            }
+        }
+        if (client.getUserId() == null && vendor.getUserId() == null) {
+            throw new NotFoundException("No se encontró ningun usuario en el sistema con el ID indicado.");
         }
 
         // Busca vendedores seguidos cliente:
-        List<Vendor> vendorList = this.postRepositoryImp.getFollowedList(client, this.vendorRepositoryImp.findAll());
+        if(client.getUserId() != null){
+            vendorList= this.postRepositoryImp.getFollowedList(client, this.vendorRepositoryImp.findAll());
+        }else{
+            vendorList= this.postRepositoryImp.getFollowedList(vendor, this.vendorRepositoryImp.findAll());
+        }
         List<PostDto> postDtoList = new ArrayList<>();
         if (vendorList.isEmpty()) {
             throw new NotFoundException("El usuario ingresado no sigue a ningun vendedor.");
@@ -69,6 +80,7 @@ public class PostsServiceImp implements IPostsService {
         if (postDtoList.isEmpty()) {
             throw new NotFoundException("No hay posteos realizados por los vendedores que sigue el usuario las últimas dos semanas.");
         }
+        
         // Ordena el ArrayList de posteos:
         if (order.equals("date_asc")) {
             Collections.sort(postDtoList, Comparator.comparing(PostDto::date));
