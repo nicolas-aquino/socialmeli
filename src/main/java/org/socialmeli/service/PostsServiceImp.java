@@ -83,10 +83,10 @@ public class PostsServiceImp implements IPostsService {
         
         // Ordena el ArrayList de posteos:
         if (order.equals("date_asc")) {
-            Collections.sort(postDtoList, Comparator.comparing(PostDto::date));
+            Collections.sort(postDtoList, Comparator.comparing(PostDto::getDate));
         }
         else if (order.equals("date_desc")) {
-            Collections.sort(postDtoList, Comparator.comparing(PostDto::date, Comparator.reverseOrder()));
+            Collections.sort(postDtoList, Comparator.comparing(PostDto::getDate, Comparator.reverseOrder()));
         }
         else {
             throw new BadRequestException("Indicación de ordenamiento no válida. La misma tiene que ser \"date_asc\" o \"date_desc\"");

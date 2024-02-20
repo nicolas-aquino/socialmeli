@@ -1,6 +1,6 @@
 package org.socialmeli.controller;
 
-import org.socialmeli.dto.VendorFollowersListDTO;
+import org.socialmeli.dto.response.VendorFollowersListDTO;
 import org.socialmeli.dto.request.UserIdDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.service.IPostsService;

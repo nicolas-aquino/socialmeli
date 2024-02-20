@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import org.socialmeli.dto.ExceptionDto;
+import org.socialmeli.dto.response.ExceptionDto;
 
 @ControllerAdvice(annotations = RestController.class)
 @FieldDefaults(level = AccessLevel.PRIVATE)

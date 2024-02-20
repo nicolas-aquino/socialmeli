@@ -1,6 +1,6 @@
 package org.socialmeli.service;
 
-import org.socialmeli.dto.VendorFollowersListDTO;
+import org.socialmeli.dto.response.VendorFollowersListDTO;
 import org.socialmeli.dto.request.UserIdDto;
 import org.socialmeli.dto.response.FollowerCountDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;

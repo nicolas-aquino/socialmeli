@@ -7,12 +7,13 @@ import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
 import org.socialmeli.exception.BadRequestException;
 import org.socialmeli.exception.NotFoundException;
-import org.socialmeli.dto.VendorFollowersListDTO;
+import org.socialmeli.dto.response.VendorFollowersListDTO;
 import org.socialmeli.dto.request.UserIdDto;
 import org.socialmeli.dto.response.MessageDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.repository.ClientRepositoryImp;
 import org.socialmeli.repository.VendorRepositoryImp;
+import org.socialmeli.utils.DTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,6 @@ import java.util.List;
 import static java.util.Comparator.comparing;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class UsersServiceImp implements IUsersService {
@@ -94,7 +94,7 @@ public class UsersServiceImp implements IUsersService {
             default -> throw new BadRequestException("El ordenamiento pedido es inválido");
         }
 
-        return new VendorFollowersListDTO(vendor, followerUsers);
+        return DTOMapper.toVendorFollowersList(vendor, followerUsers);
     }
 
     private List<User> ordenarListaUsuariosPor(List<User> followerUsers, Comparator<User> comparing) {
@@ -128,7 +128,7 @@ public class UsersServiceImp implements IUsersService {
                 default:
                     throw new BadRequestException("El ordenamiento pedido es inválido");
             }
-            return new VendorsFollowingListDto(user.getUserId(), user.getUserName(), following);
+            return DTOMapper.toVendorsFollowingList(user.getUserId(), user.getUserName(), following);
         }
         return null;
     }

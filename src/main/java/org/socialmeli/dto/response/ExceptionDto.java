@@ -5,12 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
-
-@Data
 @AllArgsConstructor
+@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class FollowedListDto {
-    Integer userId;
-    List<PostDto> posts;
+public class ExceptionDto {
+    String message;
 }

@@ -2,40 +2,21 @@ package org.socialmeli.dto.response;
 
 import java.time.LocalDate;
 
-import org.socialmeli.entity.Product;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
-public record PostDto(
-        Integer postId,
-        Integer userId,
-        LocalDate date,
-        ProductDto product,
-        Integer category,
-        Double price
-
-) {
-        public LocalDate date() {
-                return date;
-        }
-
-        public Integer postId() {
-                return postId;
-        }
-
-        public Integer userId() {
-                return userId;
-        }
-
-        public ProductDto product() {
-                return product;
-        }
-
-        public Integer category() {
-                return category;
-        }
-
-        public Double price() {
-                return price;
-        }      
-        
-        
+@Data
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class PostDto {
+        Integer postId;
+        Integer userId;
+        @JsonFormat(pattern = "dd-MM-yyyy")
+        LocalDate date;
+        ProductDto product;
+        Integer category;
+        Double price;
 }
