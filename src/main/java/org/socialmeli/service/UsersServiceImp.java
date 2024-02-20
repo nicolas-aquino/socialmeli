@@ -144,26 +144,26 @@ public class UsersServiceImp implements IUsersService {
         boolean removedFromClient = false;
         boolean removedFromVendor = false;
         Integer userId = req.getUserId();
-        Integer vendorId = req.getUserId();
+        Integer vendorId = req.getVendorId();
 
         if (userId.equals(vendorId))
             throw new BadRequestException("Error: Ambos id son identicos");
 
         Client userClient = clientRepositoryImp.findOne(userId);
         Vendor userVendor = vendorRepositoryImp.findOne(userId);
+        Vendor vendorToUnfollow = vendorRepositoryImp.findOne(vendorId);
 
         //Check if IDs exist
         if (userClient == null && userVendor == null)
             throw new NotFoundException("Error: No se encontró el usuario con id " + userId);
-        if (vendorRepositoryImp.findOne(vendorId) == null)
+        if (vendorToUnfollow == null)
             throw new NotFoundException("Error: No se encontró el vendedor con id " + vendorId);
 
         // El 'userId' ingresado es un cliente
         if (userClient != null) {
             //Usé new ArrayList para que no tire excepcion ya que devuelve UnmodifiableCollection
-            List<Vendor> l = new ArrayList<>(userClient.getFollowing());
-            removedFromClient = l.removeIf(vendor -> vendor.getUserId().equals(vendorId));
-            userClient.setFollowing(l);
+            removedFromClient = userClient.getFollowing().removeIf(v -> v.getUserId().equals(vendorId));
+            vendorToUnfollow.getFollowers().removeIf(u -> u.getUserId().equals(userId));
         } else if (userVendor != null) { // El 'userId' ingresado es un vendedor
             removedFromVendor = userVendor.getFollowing().removeIf(v -> v.getUserId().equals(vendorId));
             userVendor.getFollowers().removeIf(u -> u.getUserId().equals(userId));

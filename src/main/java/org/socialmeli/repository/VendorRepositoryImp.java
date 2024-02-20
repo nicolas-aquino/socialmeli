@@ -27,6 +27,7 @@ public class VendorRepositoryImp implements IRepository<Vendor> {
         vendor3.setUserName("Javier Hernández");
         vendor4.setUserName("José Cobra Mucho");
         vendor5.setUserName("Pablo Ricachón");
+
         this.save(vendor1);
         this.save(vendor2);
         this.save(vendor3);

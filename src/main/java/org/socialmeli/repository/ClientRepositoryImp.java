@@ -33,10 +33,7 @@ public class ClientRepositoryImp implements IRepository<Client> {
     }
 
     private Integer autoIncrementId() {
-        System.out.println("CLIENTS");
-        System.out.println("ID anterior: " + User.userIdCounter);
         User.userIdCounter ++;
-        System.out.println("ID posterior: " + User.userIdCounter);
         return User.userIdCounter;
     }
 
