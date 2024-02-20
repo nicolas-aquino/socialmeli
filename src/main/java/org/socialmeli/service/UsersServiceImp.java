@@ -1,5 +1,7 @@
 package org.socialmeli.service;
 
+import org.socialmeli.dto.request.FollowersListReqDto;
+import org.socialmeli.dto.request.FollowingListReqDto;
 import org.socialmeli.dto.response.FollowerCountDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.socialmeli.entity.Client;
@@ -78,10 +80,12 @@ public class UsersServiceImp implements IUsersService {
     }
 
     @Override
-    public VendorFollowersListDTO getFollowersList(UserIdDto userId, String order) {
-        Vendor vendor = vendorRepositoryImp.findOne(userId.getUserId());
+    public VendorFollowersListDTO getFollowersList(FollowersListReqDto req) {
+        Integer userId = req.getUserId();
+        String order = req.getOrder();
+        Vendor vendor = vendorRepositoryImp.findOne(userId);
         if (vendor == null) {
-            throw new NotFoundException(String.format("No se encontró un usuario con id %d", userId.getUserId()));
+            throw new NotFoundException(String.format("No se encontró un usuario con id %d", userId));
         }
 
         List<User> followerUsers = vendor.getFollowers();
@@ -102,9 +106,11 @@ public class UsersServiceImp implements IUsersService {
     }
 
     @Override
-    public VendorsFollowingListDto getFollowingList(UserIdDto userIdDto, String order) {
-        Client client = clientRepositoryImp.findOne(userIdDto.getUserId());
-        Vendor vendor = vendorRepositoryImp.findOne(userIdDto.getUserId());
+    public VendorsFollowingListDto getFollowingList(FollowingListReqDto req) {
+        Integer userId = req.getUserIdDto();
+        String order = req.getOrder();
+        Client client = clientRepositoryImp.findOne(userId);
+        Vendor vendor = vendorRepositoryImp.findOne(userId);
 
         VendorsFollowingListDto clientFollowing = getVendorsFollowingListDto(order, client);
         if (clientFollowing != null) return clientFollowing;
@@ -112,7 +118,7 @@ public class UsersServiceImp implements IUsersService {
         VendorsFollowingListDto vendorFollowing = getVendorsFollowingListDto(order, vendor);
         if (vendorFollowing != null) return vendorFollowing;
 
-        throw new NotFoundException(String.format("No se encontró un usuario con el ID %d.", userIdDto.getUserId()));
+        throw new NotFoundException(String.format("No se encontró un usuario con el ID %d.", userId));
     }
 
     private VendorsFollowingListDto getVendorsFollowingListDto(String order, User user) {

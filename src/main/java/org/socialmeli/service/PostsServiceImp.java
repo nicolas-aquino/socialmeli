@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Comparator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.socialmeli.dto.request.FollowedListReqDto;
 import org.socialmeli.dto.request.PostReqDto;
 import org.socialmeli.dto.response.FollowedListDto;
 import org.socialmeli.dto.response.PostDto;
@@ -36,7 +37,9 @@ public class PostsServiceImp implements IPostsService {
     ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public FollowedListDto getFollowedList(Integer id, String order) {
+    public FollowedListDto getFollowedList(FollowedListReqDto req) {
+        Integer id = req.getUserId();
+        String order = req.getOrder();
         // Busca cliente por ID:
         Client client = new Client();
         Vendor vendor = new Vendor();

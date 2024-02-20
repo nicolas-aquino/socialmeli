@@ -1,5 +1,8 @@
 package org.socialmeli.controller;
 
+import org.socialmeli.dto.request.FollowedListReqDto;
+import org.socialmeli.dto.request.FollowersListReqDto;
+import org.socialmeli.dto.request.FollowingListReqDto;
 import org.socialmeli.dto.response.VendorFollowersListDTO;
 import org.socialmeli.dto.request.UserIdDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
@@ -48,7 +51,7 @@ public class UsersController {
             @PathVariable Integer userId,
             @RequestParam(required = false, defaultValue = "name_desc") String order){
 
-        return new ResponseEntity<>(usersService.getFollowersList(new UserIdDto(userId), order), HttpStatus.OK);
+        return new ResponseEntity<>(usersService.getFollowersList(new FollowersListReqDto(userId, order)), HttpStatus.OK);
     }
 
     //US_0004
@@ -57,7 +60,7 @@ public class UsersController {
              @PathVariable Integer userId,
              @RequestParam(required = false, defaultValue = "name_desc") String order){
 
-        return ResponseEntity.ok(usersService.getFollowingList(new UserIdDto(userId), order));
+        return ResponseEntity.ok(usersService.getFollowingList(new FollowingListReqDto(userId, order)));
     }
 
     // US_0006
@@ -65,7 +68,7 @@ public class UsersController {
     public ResponseEntity<?> followedList(
             @PathVariable Integer userId,
             @RequestParam(required = false, defaultValue = "date_desc") String order){
-        return new ResponseEntity<>(postsService.getFollowedList(userId, order), HttpStatus.OK);
+        return new ResponseEntity<>(postsService.getFollowedList(new FollowedListReqDto(userId, order)), HttpStatus.OK);
     }
 
     // US_0007
