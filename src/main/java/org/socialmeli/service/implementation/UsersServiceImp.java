@@ -107,7 +107,7 @@ public class UsersServiceImp implements IUsersService {
 
     @Override
     public VendorsFollowingListDto getFollowingList(FollowingListReqDto req) {
-        Integer userId = req.getUserIdDto();
+        Integer userId = req.getUserId();
         String order = req.getOrder();
         Client client = clientRepositoryImp.findOne(userId);
         Vendor vendor = vendorRepositoryImp.findOne(userId);

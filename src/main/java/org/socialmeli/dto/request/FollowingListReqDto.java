@@ -1,5 +1,6 @@
 package org.socialmeli.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FollowingListReqDto {
-    Integer userIdDto;
+    Integer userId;
     String order;
 }
