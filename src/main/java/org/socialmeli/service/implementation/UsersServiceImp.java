@@ -14,7 +14,7 @@ import org.socialmeli.exception.NotFoundException;
 import org.socialmeli.repository.implementation.ClientRepositoryImp;
 import org.socialmeli.repository.implementation.VendorRepositoryImp;
 import org.socialmeli.service.IUsersService;
-import org.socialmeli.utils.DTOMapper;
+import org.socialmeli.util.DTOMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
