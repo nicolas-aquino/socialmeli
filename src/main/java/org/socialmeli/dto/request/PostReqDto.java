@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.socialmeli.dto.response.ProductDto;
-import org.socialmeli.entity.Product;
 
 import java.time.LocalDate;
 
