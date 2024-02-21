@@ -1,8 +1,10 @@
-package org.socialmeli.repository;
+package org.socialmeli.repository.implementation;
 
 import lombok.Data;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.User;
+import org.socialmeli.repository.IRepository;
+import org.socialmeli.repository.implementation.VendorRepositoryImp;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

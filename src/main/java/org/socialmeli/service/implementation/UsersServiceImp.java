@@ -1,4 +1,4 @@
-package org.socialmeli.service;
+package org.socialmeli.service.implementation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.socialmeli.dto.request.*;
@@ -11,13 +11,13 @@ import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
 import org.socialmeli.exception.BadRequestException;
 import org.socialmeli.exception.NotFoundException;
-import org.socialmeli.repository.ClientRepositoryImp;
-import org.socialmeli.repository.VendorRepositoryImp;
+import org.socialmeli.repository.implementation.ClientRepositoryImp;
+import org.socialmeli.repository.implementation.VendorRepositoryImp;
+import org.socialmeli.service.IUsersService;
 import org.socialmeli.utils.DTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
