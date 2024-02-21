@@ -15,7 +15,6 @@ import org.socialmeli.repository.implementation.ClientRepositoryImp;
 import org.socialmeli.repository.implementation.VendorRepositoryImp;
 import org.socialmeli.service.IUsersService;
 import org.socialmeli.utils.DTOMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -25,14 +24,15 @@ import static java.util.Comparator.comparing;
 
 @Service
 public class UsersServiceImp implements IUsersService {
-    @Autowired
     ClientRepositoryImp clientRepositoryImp;
-
-    @Autowired
     VendorRepositoryImp vendorRepositoryImp;
 
     ObjectMapper mapper = new ObjectMapper();
 
+    public UsersServiceImp(ClientRepositoryImp clientRepo, VendorRepositoryImp vendorRepo) {
+        this.clientRepositoryImp = clientRepo;
+        this.vendorRepositoryImp = vendorRepo;
+    }
 
     private User getUserById(Integer userId) {
         User user  = clientRepositoryImp.findOne(userId);

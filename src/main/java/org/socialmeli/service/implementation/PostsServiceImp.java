@@ -16,7 +16,6 @@ import org.socialmeli.repository.implementation.ClientRepositoryImp;
 import org.socialmeli.repository.implementation.PostRepositoryImp;
 import org.socialmeli.repository.implementation.VendorRepositoryImp;
 import org.socialmeli.service.IPostsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,15 +26,17 @@ import java.util.List;
 
 @Service
 public class PostsServiceImp implements IPostsService {
-    @Autowired
     PostRepositoryImp postRepositoryImp;
-
-    @Autowired
     VendorRepositoryImp vendorRepositoryImp;
-
-    @Autowired
     ClientRepositoryImp clientRepositoryImp;
+
     ObjectMapper mapper = new ObjectMapper();
+
+    public PostsServiceImp(PostRepositoryImp postRepo, VendorRepositoryImp vendorRepo, ClientRepositoryImp clientRepo) {
+        this.postRepositoryImp = postRepo;
+        this.vendorRepositoryImp = vendorRepo;
+        this.clientRepositoryImp = clientRepo;
+    }
 
     @Override
     public FollowedListDto getFollowedList(FollowedListReqDto req) {
