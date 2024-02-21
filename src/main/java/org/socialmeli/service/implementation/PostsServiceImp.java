@@ -9,6 +9,7 @@ import org.socialmeli.dto.response.PostIdDto;
 import org.socialmeli.dto.response.ProductDto;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.Post;
+import org.socialmeli.entity.Product;
 import org.socialmeli.entity.Vendor;
 import org.socialmeli.exception.BadRequestException;
 import org.socialmeli.exception.NotFoundException;
@@ -110,7 +111,12 @@ public class PostsServiceImp implements IPostsService {
         if (vendor.getUserId() == null) {
             throw new NotFoundException("No se encontró ningun usuario en el sistema con el ID indicado.");
         }
-        Post post = new Post(postReqDto.getUserId(), postReqDto.getDate(), postReqDto.getProduct(), postReqDto.getCategory(), postReqDto.getPrice());
+        Post post = new Post(
+                postReqDto.getUserId(),
+                postReqDto.getDate(),
+                mapper.convertValue(postReqDto.getProduct(), Product.class),
+                postReqDto.getCategory(),
+                postReqDto.getPrice());
         Integer response =  postRepositoryImp.save(post);
         return new PostIdDto(response);
     }
