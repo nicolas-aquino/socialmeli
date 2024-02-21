@@ -14,10 +14,11 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PostReqDto {
+        @JsonProperty("user_id")
         Integer userId;
         @JsonFormat(pattern = "dd-MM-yyyy")
         LocalDate date;
-        Product product;
+        Product product; //TODO: Cambiar a ProductDto
         Integer category;
         Double price;
 }
