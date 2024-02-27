@@ -1,38 +1,18 @@
 # SocialMeli
 
+## Acceso rápido
 - [Trello](https://trello.com/b/wJBNHdHB/bejavahispw25g05)
 - [Excalibur (Diagrama de clases)](https://excalidraw.com/#room=3525b414b8674fc9a010,4H2FJFBKAW5q2_6V6Tcg4w)
-- [Especificación técnica funcional](https://www.google.com/url?q=https://docs.google.com/document/d/1Q-xGaOMPij-qk_gMvcN0Sk0isbCPqjJS/edit?usp%3Dsharing%26ouid%3D109742565608469686147%26rtpof%3Dtrue%26sd%3Dtrue&sa=D&source=editors&ust=1708099270823216&usg=AOvVaw2JhBoFP4pvFzUyAwHRjz3Z)
+- [Enunciado](https://learning.mercadolibre.com/courses/course-v1:it_prod+S2_esp+v1_2024/courseware/98996ace57964ee49eb38318393a6cd4/4115e03109fd476dbab0fc6cecc74e62/?activate_block_id=block-v1%3Ait_prod%2BS2_esp%2Bv1_2024%2Btype%40sequential%2Bblock%404115e03109fd476dbab0fc6cecc74e62)
+- [Especificación técnica funcional - Sprint 1](https://www.google.com/url?q=https://docs.google.com/document/d/1Q-xGaOMPij-qk_gMvcN0Sk0isbCPqjJS/edit?usp%3Dsharing%26ouid%3D109742565608469686147%26rtpof%3Dtrue%26sd%3Dtrue&sa=D&source=editors&ust=1708099270823216&usg=AOvVaw2JhBoFP4pvFzUyAwHRjz3Z)
+- [Especificación técnica funcional - Sprint 2](https://docs.google.com/document/d/1f-M02GbaXRYO_g3zfcFqzoxZaM7Lg5WY/edit)
 
-## A. Escenario y requerimientos iniciales (Desarrollo GRUPAL)
-Mercado Libre sigue creciendo y para el año que viene  tiene como objetivo empezar a implementar una serie de herramientas que permitan a los compradores y vendedores tener una experiencia totalmente innovadora, en donde el lazo que los una sea mucho más cercano.
+### Condiciones y tiempos de entrega
+- La fecha de entrega y cierre es: __01/03/2024__ hasta las __15:00 hs__.
+- Nombre de la carpeta para entregar (grupal): __be_java_hisp_w25_g05__
+- Nombre de la carpeta para entregar (individual): __be_java_hisp_w25_g05_apellido__
 
-La fecha de lanzamiento se aproxima, por lo cual es necesaria la presentación de una versión Beta de lo que va a ser conocido como __"SocialMeli"__, en donde los compradores van a poder seguir a sus vendedores favoritos y enterarse de todas las novedades que los mismos posteen.
-
-Para poder realizar esto, un analista funcional relevó una serie de requerimientos que deben llevarse a cabo; sin embargo, como cuentan con una determinada complejidad y los tiempos son escasos, deberán ser ejecutados en __equipos de trabajo__. Los mismos se detallan a continuación:
-
-
-### Se plantea creación de una API Rest que permita:
-
-1. Poder realizar la acción de “Follow” (seguir) a un determinado usuario
-2. Obtener el resultado de la cantidad de usuarios que siguen a un determinado vendedor
-3. Obtener un listado de todos los usuarios que siguen a un determinado vendedor (¿Quién me sigue?)
-4. Obtener un listado de todos los vendedores a los cuales sigue un determinado usuario (¿A quién sigo?)
-5. Dar de alta una nueva publicación.
-6. Obtener un listado de las publicaciones realizadas en las últimas dos semanas, por los vendedores que un usuario sigue (para esto tener en cuenta ordenamiento por fecha, publicaciones más recientes primero).
-7. Poder realizar la acción de “Unfollow” (dejar de seguir) a un determinado vendedor.
-
-Por otra parte, dado que se pretende una buena experiencia de usuario con respecto a la forma de presentación de los resultados de cada consulta, se necesita que los mismos puedan ser ordenados mediante cualquiera de los siguientes criterios:
-
-8. Alfabético Ascendente y Descendente
-9. Fecha Ascendente y Descendente
-
-Un analista funcional llevó a cabo el __relevamiento de los requerimientos técnicos funcionales__ y ha proporcionado la documentación que se cita a continuación para tener en cuenta a la hora de llevar a cabo el desarrollo correspondiente:
-
-
-[Especificación técnica funcional](https://www.google.com/url?q=https://docs.google.com/document/d/1Q-xGaOMPij-qk_gMvcN0Sk0isbCPqjJS/edit?usp%3Dsharing%26ouid%3D109742565608469686147%26rtpof%3Dtrue%26sd%3Dtrue&sa=D&source=editors&ust=1708099270823216&usg=AOvVaw2JhBoFP4pvFzUyAwHRjz3Z)
-
-## Git Flow
+# Git Flow
 
 Supongamos que queremos trabajar en la feature US_0XX. Lo ideal sería seguir este procedimiento:
 1. Crear rama correspondiente a la feature (En la terminal: `git checkout -b US_0XX`)
@@ -53,16 +33,37 @@ Supongamos que queremos trabajar en la feature US_0XX. Lo ideal sería seguir es
 ### Abrir un Pull Request
 Despues de pushear tus cambios, dentro del repo en GitHub clickear el boton __"Compare & pull request"__. Si aparecen varios botones, asegurarse de clickear el que corresponde a la branch de la feature nueva.
 
-![img.png](readme-img/img.png)
+![img.png](readme/readme-img/img.png)
 
 Si no se ve el boton, clickear el menu desplegable y seleccionar el branch correspondiente a la feature.
 
-![img.png](readme-img/img3.png)
+![img.png](readme/readme-img/img3.png)
 
 Una vez en la branch de tu feature, clickear el boton "Contribute" y luego en el boton "Open pull request".
 
-![img.png](readme-img/img4.png)
+![img.png](readme/readme-img/img4.png)
 
 Finalmente, asegurarse que se selecciona a `dev` como base para mergearlo _hacia_ `dev`.
 
-![img2.png](readme-img/img2.png)
+![img2.png](readme/readme-img/img2.png)
+
+# Enunciado
+
+## A. Escenario (Desarrollo GRUPAL)
+__SocialMeli__, la nueva implementación de MercadoLibre que fue realizada por el equipo de desarrollo “Bootcamp” se ha convertido en ¡Todo un éxito!. Dado esto y a que MeLi tiene unos estándares de calidad muy altos con respecto a los productos de software que utiliza, estableció una serie de validaciones que considera que sean necesarias tener en cuenta a la hora de incorporar datos como así también diferentes test unitarios que aseguren el correcto funcionamiento de cada una de las funcionalidades que incluye.
+
+Para llevar a cabo estas implementaciones, se deberá tomar como base el proyecto desarrollado de forma grupal en el Sprint Nº 1. A partir de él, se llevarán a cabo cada una de las validaciones y tests unitarios correspondientes.
+
+Como documentación de respaldo, un analista funcional adjunta el siguiente documento de requerimientos técnicos y funcionales: [Documentación](https://docs.google.com/document/d/1f-M02GbaXRYO_g3zfcFqzoxZaM7Lg5WY/edit)
+
+## B. Requerimientos incrementales (Desarrollo INDIVIDUAL)
+Siguiendo con el principio de que __MeLi__ posee unos estándares de calidad muy altos, un especialista sugirió la posibilidad de contar con la implementación de al menos un test de integración para lograr una cobertura de código mayor que la lograda con los tests unitarios.
+
+
+Tener en cuenta que, se debe respetar el desarrollo base logrado en equipo para poder realizar este nuevo incremento de manera individual.
+
+
+## C. Bonus  (Desarrollo Individual EXTRA)
+El mismo especialista en calidad que sugirió implementar al menos un test de integración anteriormente, sugiere que sería ideal lograr contar con la implementación de otros tests de integración extra para intentar lograr un __coverage mayor o igual al 75%__.
+
+El especialista conoce que los tiempos de desarrollo en bootcamp son acotados, por lo que sugiere llevar a cabo esta implementación __solo en caso de que alcancen los tiempos__ y se pueda cumplir con la fecha de entrega estimada.
