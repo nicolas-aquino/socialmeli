@@ -1,21 +1,38 @@
 package org.socialmeli.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.*;
 import lombok.Data;
-import lombok.experimental.FieldDefaults;
 
 @Data
-@AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductDto {
     @JsonProperty("product_id")
-    Integer productId;
+    @NotNull(message = "La id no puede estar vacía.")
+    @Min(value = 1, message = "El id debe ser mayor a cero.")
+    private Integer productId;
+
     @JsonProperty("product_name")
-    String productName;
-    String type;
-    String brand;
-    String color;
-    String notes;
+    @NotBlank(message = "El campo no puede estar vacío.")
+    @Size(max = 40, message = "La longitud no puede superar los 40 caracteres.")
+    @Pattern(regexp = "^[a-zA-Z0-9 ]+$", message = "El campo no puede poseer caracteres especiales.")
+    private String productName;
+
+    @NotBlank(message = "El campo no puede estar vacío.")
+    @Size(max = 15, message = "La longitud no puede superar los 15 caracteres.")
+    @Pattern(regexp = "^[a-zA-Z0-9 ]+$", message = "El campo no puede poseer caracteres especiales.")
+    private String type;
+
+    //TODO:Validar estos campos
+    private String brand;
+    private String color;
+    private String notes;
+
+    public ProductDto(Integer productId, String productName, String type, String brand, String color, String notes) {
+        this.productId = productId;
+        this.productName = productName;
+        this.type = type;
+        this.brand = brand;
+        this.color = color;
+        this.notes = notes;
+    }
 }

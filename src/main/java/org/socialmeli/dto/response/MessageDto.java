@@ -1,13 +1,12 @@
 package org.socialmeli.dto.response;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.experimental.FieldDefaults;
 
 @Data
-@AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class MessageDto {
-    String message;
+    private String message;
+
+    public MessageDto(String message) {
+        this.message = message;
+    }
 }

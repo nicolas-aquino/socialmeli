@@ -5,7 +5,7 @@ import org.socialmeli.entity.Post;
 import org.socialmeli.entity.Product;
 import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
-import org.socialmeli.repository.IRepository;
+import org.socialmeli.repository.IPostRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -14,21 +14,13 @@ import java.util.List;
 
 @Data
 @Repository
-public class PostRepositoryImp implements IRepository<Post> {
+public class PostRepositoryImp implements IPostRepository {
     private List<Post> posts = new ArrayList<>();
     private VendorRepositoryImp vendorRepositoryImp;
     
     public PostRepositoryImp(VendorRepositoryImp vendorRepositoryImp) {
         this.vendorRepositoryImp = vendorRepositoryImp;
-        Product product1 = new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
-        Product product2 = new Product(2, "Zapatos", "Calzado", "Adidas", "Negro", "N/A");
-        Product product3 = new Product(3, "Bolso", "Accesorio", "Puma", "Rojo", "Cuero");
-        Post post1 = new Post(vendorRepositoryImp.findAll().get(0).getUserId(), LocalDate.of(2023, 3, 20), product1, 1, 35.99);
-        Post post2 = new Post(vendorRepositoryImp.findAll().get(0).getUserId(), LocalDate.of(2024, 2, 15), product2, 2, 79.99);
-        Post post3 = new Post(vendorRepositoryImp.findAll().get(0).getUserId(), LocalDate.now(), product3, 1, 49.99);
-        this.save(post1);
-        this.save(post2);
-        this.save(post3);
+        initDB();
     }
 
     private Integer autoIncrementId() {
@@ -67,5 +59,23 @@ public class PostRepositoryImp implements IRepository<Post> {
             }
         }
         return auxListVendors;
+    }
+
+    @Override
+    public List<Post> getPostsByUserId(Integer vendorId) {
+        return posts.stream().filter(post -> post.getUserId().equals(vendorId)).toList();
+    }
+
+
+    private void initDB() {
+        Product product1 = new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
+        Product product2 = new Product(2, "Zapatos", "Calzado", "Adidas", "Negro", "N/A");
+        Product product3 = new Product(3, "Bolso", "Accesorio", "Puma", "Rojo", "Cuero");
+        Post post1 = new Post(vendorRepositoryImp.findAll().get(0).getUserId(), LocalDate.of(2023, 3, 20), product1, 1, 35.99);
+        Post post2 = new Post(vendorRepositoryImp.findAll().get(0).getUserId(), LocalDate.of(2024, 2, 15), product2, 2, 79.99);
+        Post post3 = new Post(vendorRepositoryImp.findAll().get(0).getUserId(), LocalDate.now(), product3, 1, 49.99);
+        this.save(post1);
+        this.save(post2);
+        this.save(post3);
     }
 }

@@ -1,7 +1,7 @@
 package org.socialmeli.util;
 
-import org.socialmeli.dto.response.UserDTO;
-import org.socialmeli.dto.response.VendorFollowersListDTO;
+import org.socialmeli.dto.response.UserDto;
+import org.socialmeli.dto.response.VendorFollowersListDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
@@ -10,30 +10,30 @@ import java.util.List;
 
 public final class DTOMapper {
     public static VendorsFollowingListDto toVendorsFollowingList(Integer userId, String userName, List<Vendor> vendors) {
-        List<UserDTO> vendorsNew = vendors
+        List<UserDto> vendorsNew = vendors
                 .stream()
-                .map(u -> new UserDTO(u.getUserId(), u.getUserName()))
+                .map(u -> new UserDto(u.getUserId(), u.getUserName()))
                 .toList();
         return new VendorsFollowingListDto(userId, userName, vendorsNew);
     }
 
-    public static VendorFollowersListDTO toVendorFollowersList(Vendor vendor) {
+    public static VendorFollowersListDto toVendorFollowersList(Vendor vendor) {
         Integer userId = vendor.getUserId();
         String userName = vendor.getUserName();
-        List<UserDTO> followers = vendor.getFollowers()
+        List<UserDto> followers = vendor.getFollowers()
                 .stream()
-                .map(u -> new UserDTO(u.getUserId(), u.getUserName()))
+                .map(u -> new UserDto(u.getUserId(), u.getUserName()))
                 .toList();
-        return new VendorFollowersListDTO(userId, userName, followers);
+        return new VendorFollowersListDto(userId, userName, followers);
     }
 
-    public static VendorFollowersListDTO toVendorFollowersList(Vendor vendor, List<User> followersList) {
+    public static VendorFollowersListDto toVendorFollowersList(Vendor vendor, List<User> followersList) {
         Integer userId = vendor.getUserId();
         String userName = vendor.getUserName();
-        List<UserDTO> followers = followersList
+        List<UserDto> followers = followersList
                 .stream()
-                .map(u -> new UserDTO(u.getUserId(), u.getUserName()))
+                .map(u -> new UserDto(u.getUserId(), u.getUserName()))
                 .toList();
-        return new VendorFollowersListDTO(userId, userName, followers);
+        return new VendorFollowersListDto(userId, userName, followers);
     }
 }
