@@ -9,7 +9,8 @@ public class UserUnfollowVendorDto {
     @NotNull(message = "El id no puede estar vacío.")
     @Min(value = 1, message = "El id debe ser mayor a cero.")
     private Integer userId;
-
+    @NotNull(message = "El id no puede estar vacío.")
+    @Min(value = 1, message = "El id debe ser mayor a cero.")
     private Integer vendorId;
 
     public UserUnfollowVendorDto(Integer userId, Integer vendorId) {

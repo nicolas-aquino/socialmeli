@@ -1,7 +1,12 @@
 package org.socialmeli.util;
 
 import org.socialmeli.entity.Client;
+import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class ObjectFactory {
 
@@ -26,10 +31,12 @@ public class ObjectFactory {
         return res;
     }
 
-    public Client getValidFollowingList() {
-        //List<Vendor> following = new ArrayList<>();
-        //following.add(new Vendor(1, "Fernando Gomez", ));
-        return null;
+    public Client getValidClientFollowingVendor() {
+        Client res = getValidClient();
+        Vendor vendor = getValidVendor();
+        res.getFollowing().add(vendor);
+        vendor.getFollowers().add(res);
+        return res;
     }
 
     public Integer getValidUserId() {
@@ -48,8 +55,13 @@ public class ObjectFactory {
         return 3;
     }
 
+    public Integer getInvalidUserId() {
+        return 99999;
+    }
+
     public String getInvalidOrder() {
         return "invalido";
     }
+
 
 }

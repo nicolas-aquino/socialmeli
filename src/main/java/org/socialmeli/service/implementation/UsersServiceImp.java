@@ -142,7 +142,7 @@ public class UsersServiceImp implements IUsersService {
         User user = clientRepositoryImp.findOne(userId);
         if (user == null) {
             user = vendorRepositoryImp.findOne(userId);
-            if (user == null) throw new NotFoundException("El usuario ingresado no existe ");
+            if (user == null) throw new NotFoundException("El usuario no existe");
         }
         return user;
     }
