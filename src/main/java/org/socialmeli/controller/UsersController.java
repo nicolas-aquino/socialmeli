@@ -59,6 +59,8 @@ public class UsersController {
     @GetMapping("/{userId}/followers/list")
     public ResponseEntity<VendorFollowersListDto> followersList(
             @PathVariable Integer userId,
+            @Min(value = 1, message = "El ID debe ser mayor que 0")
+
             @RequestParam(required = false, defaultValue = "name_desc") String order) {
 
         return new ResponseEntity<>(usersService.getFollowersList(new FollowersListReqDto(userId, order)), HttpStatus.OK);
@@ -67,7 +69,9 @@ public class UsersController {
     //US_0004
     @GetMapping("/{userId}/followed/list")
     public ResponseEntity<VendorsFollowingListDto> followingList(
-             @PathVariable Integer userId,
+            @Min(value = 1, message = "El ID debe ser mayor que 0")
+            @PathVariable Integer userId,
+
              @RequestParam(required = false, defaultValue = "name_desc") String order) {
 
         return ResponseEntity.ok(usersService.getFollowingList(new FollowingListReqDto(userId, order)));
@@ -75,8 +79,12 @@ public class UsersController {
 
     // US_0007
     @PostMapping("/{userId}/unfollow/{userIdToUnfollow}")
-    public ResponseEntity<MessageDto> unfollowVendor(@PathVariable Integer userId,
-                                                     @PathVariable Integer userIdToUnfollow) {
+    public ResponseEntity<MessageDto> unfollowVendor(
+            @Min(value = 1, message = "El ID debe ser mayor que 0")
+            @PathVariable Integer userId,
+
+            @Min(value = 1, message = "El ID debe ser mayor que 0")
+            @PathVariable Integer userIdToUnfollow) {
         return new ResponseEntity<>(usersService.unfollowVendor(new UserUnfollowVendorDto(userId, userIdToUnfollow)), HttpStatus.OK);
     }
 }
