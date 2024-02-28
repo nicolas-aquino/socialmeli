@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 public class ObjectFactory {
 
     public Client getValidClient() {
