@@ -90,20 +90,10 @@ public class ObjectFactory {
         return "invalido";
     }
 
-    public List<Post> getNewPostList(Vendor vendor) {
-        List<Post> postList = new ArrayList<>();
-        Product product1 = new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
-        Product product2 = new Product(2, "Zapatos", "Calzado", "Adidas", "Negro", "N/A");
-        Post post1 = new Post(vendor.getUserId(), LocalDate.now(), product1, 1, 35.99);
-        Post post2 = new Post(vendor.getUserId(), LocalDate.of(2023, 3, 20), product2, 2, 79.99);
-        postList.add(post1);
-        postList.add(post2);
-        return postList;
-    }
-
     public String getAscendentNameOrder() {
         return "name_asc";
     }
+
 
     public List<Post> getOldPostList(Vendor vendor) {
         List<Post> postList = new ArrayList<>();
@@ -126,6 +116,19 @@ public class ObjectFactory {
         );
     }
 
+
+    public List<Post> getPostTwoWeeksAway(Vendor vendor) {
+        List<Post> postList = new ArrayList<>();
+        Product product1 = new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
+        Product product2 = new Product(2, "Zapatos", "Calzado", "Adidas", "Negro", "N/A");
+        Post post1 = new Post(vendor.getUserId(), LocalDate.now(), product1, 1, 35.99);
+        Post post2 = new Post(vendor.getUserId(), LocalDate.now().minusDays(2), product2, 2, 79.99);
+        postList.add(post1);
+        postList.add(post2);
+        return postList;
+    }
+
+
     public VendorsFollowingListDto getVendorsFollowingListDto() {
         Client client = getValidClient();
         Vendor vendor1 = getValidVendor();
@@ -136,4 +139,5 @@ public class ObjectFactory {
                 List.of(new UserDto(vendor1.getUserId(), vendor1.getUserName()), new UserDto(vendor2.getUserId(), vendor2.getUserName()))
         );
     }
+
 }
