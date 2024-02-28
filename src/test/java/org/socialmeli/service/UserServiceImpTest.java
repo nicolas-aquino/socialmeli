@@ -207,8 +207,8 @@ public class UserServiceImpTest {
     }
 
     @Test
-    @DisplayName("[T-0002] Client can't himself")
-    void clientCantFollowHimselfTest() {
+    @DisplayName("[T-0002] Client can't unfollow himself")
+    void clientCantUnfollowHimselfTest() {
         //ARRANGE
         Integer userId = objectFactory.getValidUserId();
         UserUnfollowVendorDto inputDto = new UserUnfollowVendorDto(userId, userId);
