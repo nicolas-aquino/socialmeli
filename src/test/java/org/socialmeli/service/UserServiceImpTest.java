@@ -205,5 +205,18 @@ public class UserServiceImpTest {
                 () -> userServiceImp.unfollowVendor(inputDto),
                 "El vendedor no existe");
     }
+
+    @Test
+    @DisplayName("[T-0002] Client can't unfollow himself")
+    void clientCantUnfollowHimselfTest() {
+        //ARRANGE
+        Integer userId = objectFactory.getValidUserId();
+        UserUnfollowVendorDto inputDto = new UserUnfollowVendorDto(userId, userId);
+
+        //ACT & ASSERT
+        assertThrows(BadRequestException.class,
+                () -> userServiceImp.unfollowVendor(inputDto),
+                "Error: Ambos id son identicos");
+    }
     
 }
