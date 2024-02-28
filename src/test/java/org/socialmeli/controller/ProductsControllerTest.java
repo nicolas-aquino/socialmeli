@@ -14,10 +14,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -29,10 +29,11 @@ public class ProductsControllerTest {
     private ProductsController productsController;
 
     ObjectFactory objectFactory = new ObjectFactory();
-    
+
     // T-0008
     @Test
-    public void followedList(){
+    @DisplayName("[T-0008] Happy path")
+    public void followedList() {
         // Arrange
         Integer userId = objectFactory.getValidUserId();
         String order = "date_asc";
@@ -41,6 +42,6 @@ public class ProductsControllerTest {
         ResponseEntity<FollowedListDto> result = productsController.followedList(userId, order);
         // Assert
         verify(postsService, atLeastOnce()).getFollowedList(followedListReqDto);
-        assertEquals(HttpStatus.OK,result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 }
