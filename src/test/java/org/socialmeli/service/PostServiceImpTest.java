@@ -4,7 +4,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.socialmeli.dto.request.FollowedListReqDto;
 import org.socialmeli.dto.response.FollowedListDto;
-import org.socialmeli.dto.response.MessageDto;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.Post;
 import org.socialmeli.entity.Vendor;
@@ -16,7 +15,6 @@ import org.socialmeli.repository.implementation.VendorRepositoryImp;
 import org.socialmeli.service.implementation.PostsServiceImp;
 import org.socialmeli.util.ObjectFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

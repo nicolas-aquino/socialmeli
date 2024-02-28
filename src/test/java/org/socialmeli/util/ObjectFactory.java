@@ -1,10 +1,13 @@
 package org.socialmeli.util;
 
+import org.socialmeli.dto.response.UserDto;
+import org.socialmeli.dto.response.VendorFollowersListDto;
+import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.entity.Client;
-import org.socialmeli.entity.User;
 import org.socialmeli.entity.Post;
 import org.socialmeli.entity.Product;
 import org.socialmeli.entity.Vendor;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
@@ -15,6 +18,13 @@ public class ObjectFactory {
         Client res = new Client();
         res.setUserId(getValidUserId());
         res.setUserName("Test Man");
+        return res;
+    }
+
+    public Client getValidClient2() {
+        Client res = new Client();
+        res.setUserId(getValidUserId());
+        res.setUserName("Martin Colo");
         return res;
     }
 
@@ -52,6 +62,10 @@ public class ObjectFactory {
         return 1;
     }
 
+    public Integer getValidUserId2() {
+        return 2;
+    }
+
     public Integer getValidClientId() {
         return 6; //TODO Revisar ids de clientes
     }
@@ -68,9 +82,18 @@ public class ObjectFactory {
         return 99999;
     }
 
+    public String getValidNameOrder() {
+        return "name_desc";
+    }
+
     public String getInvalidOrder() {
         return "invalido";
     }
+
+    public String getAscendentNameOrder() {
+        return "name_asc";
+    }
+
 
     public List<Post> getOldPostList(Vendor vendor) {
         List<Post> postList = new ArrayList<>();
@@ -82,6 +105,17 @@ public class ObjectFactory {
         postList.add(post2);
         return postList;
     }
+    public VendorFollowersListDto getVendorFollowersListDto() {
+        Vendor vendor = getValidVendor();
+        Client client1 = getValidClient();
+        Client client2 = getValidClient2();
+        return new VendorFollowersListDto(
+                vendor.getUserId(),
+                vendor.getUserName(),
+                List.of(new UserDto(client1.getUserId(), client1.getUserName()), new UserDto(client2.getUserId(), client2.getUserName()))
+        );
+    }
+
 
     public List<Post> getPostTwoWeeksAway(Vendor vendor) {
         List<Post> postList = new ArrayList<>();
@@ -92,6 +126,18 @@ public class ObjectFactory {
         postList.add(post1);
         postList.add(post2);
         return postList;
+    }
+
+
+    public VendorsFollowingListDto getVendorsFollowingListDto() {
+        Client client = getValidClient();
+        Vendor vendor1 = getValidVendor();
+        Vendor vendor2 = getValidVendor2();
+        return new VendorsFollowingListDto(
+                client.getUserId(),
+                client.getUserName(),
+                List.of(new UserDto(vendor1.getUserId(), vendor1.getUserName()), new UserDto(vendor2.getUserId(), vendor2.getUserName()))
+        );
     }
 
 }
