@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.socialmeli.dto.request.FollowersListReqDto;
 import org.socialmeli.dto.request.FollowingListReqDto;
 import org.socialmeli.dto.request.UserFollowVendorDto;
+import org.socialmeli.dto.request.UserUnfollowVendorDto;
 import org.socialmeli.dto.response.MessageDto;
 import org.socialmeli.dto.response.VendorFollowersListDto;
 import org.socialmeli.dto.response.VendorsFollowingListDto;
