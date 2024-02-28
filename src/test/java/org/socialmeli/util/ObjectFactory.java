@@ -1,5 +1,8 @@
 package org.socialmeli.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.socialmeli.dto.response.PostDto;
+import org.socialmeli.dto.response.ProductDto;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.User;
 import org.socialmeli.entity.Post;
@@ -72,6 +75,14 @@ public class ObjectFactory {
         return "invalido";
     }
 
+    public List<Post> getListOfSinglePost(Vendor vendor) {
+        List<Post> postList = new ArrayList<>();
+        Product product = new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
+        Post post = new Post(vendor.getUserId(), LocalDate.now(), product, 1, 35.99);
+        postList.add(post);
+        return postList;
+    }
+
     public List<Post> getNewPostList(Vendor vendor) {
         List<Post> postList = new ArrayList<>();
         Product product1 = new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
@@ -92,6 +103,30 @@ public class ObjectFactory {
         postList.add(post1);
         postList.add(post2);
         return postList;
+    }
+
+    public PostDto convertToPostDto(Post p) {
+        ObjectMapper mapper = new ObjectMapper();
+        PostDto res = new PostDto(
+                p.getPostId(),
+                p.getUserId(),
+                p.getDate(),
+                convertToProductDto(p.getProduct()),
+                p.getCategory(),
+                p.getPrice()
+        );
+        return res;
+    }
+
+    public ProductDto convertToProductDto(Product p) {
+        return new ProductDto(
+                p.getProductId(),
+                p.getProductName(),
+                p.getType(),
+                p.getBrand(),
+                p.getColor(),
+                p.getNotes()
+        );
     }
 
 }

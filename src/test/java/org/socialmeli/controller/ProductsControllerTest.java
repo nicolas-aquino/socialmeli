@@ -32,7 +32,7 @@ public class ProductsControllerTest {
 
     // T-0008
     @Test
-    @DisplayName("[T-0008] Happy path")
+    @DisplayName("[T-0005, T-0006, T-0008] Happy path")
     public void followedList() {
         // Arrange
         Integer userId = objectFactory.getValidUserId();

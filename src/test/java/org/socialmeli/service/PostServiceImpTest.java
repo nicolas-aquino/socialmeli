@@ -1,10 +1,12 @@
 package org.socialmeli.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.socialmeli.dto.request.FollowedListReqDto;
 import org.socialmeli.dto.response.FollowedListDto;
 import org.socialmeli.dto.response.MessageDto;
+import org.socialmeli.dto.response.PostDto;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.Post;
 import org.socialmeli.entity.Vendor;
@@ -22,9 +24,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,6 +45,7 @@ public class PostServiceImpTest {
     PostsServiceImp postsServiceImp;
 
     ObjectFactory objectFactory = new ObjectFactory();
+    ObjectMapper mapper = new ObjectMapper();
 
     // T-0008
     @Test
@@ -153,5 +154,50 @@ public class PostServiceImpTest {
         verify(clientRepositoryImp, atLeastOnce()).findOne(client.getUserId());
         assertEquals("No hay posteos realizados por los vendedores que sigue el usuario las últimas dos semanas.",
                 exMesage);
+    }
+
+    // ------------------ T-0005 ------------------
+    @Test
+    @DisplayName("[T-0005] ")
+    void sortByDateAscExistsTest() {
+        //ARRANGE
+        Client mockClient = objectFactory.getValidClientFollowingVendor();
+        Integer userId = mockClient.getUserId();
+        String order = "date_asc";
+
+        List<Vendor> mockFollowingVendorList = mockClient.getFollowing();
+        List<Post> mockPostList = objectFactory.getListOfSinglePost(mockClient.getFollowing().get(0));
+        List<PostDto> mockPostDtoList = mockPostList.stream().map(p -> objectFactory.convertToPostDto(p)).toList();
+        FollowedListReqDto inputDto = new FollowedListReqDto(userId, order);
+        FollowedListDto expectedDto = new FollowedListDto(userId, mockPostDtoList);
+
+        when(clientRepositoryImp.findOne(userId)).thenReturn(mockClient);
+        when(vendorRepositoryImp.findOne(userId)).thenReturn(null);
+        when(postRepositoryImp.getFollowedList(mockClient, mockFollowingVendorList)).thenReturn(mockFollowingVendorList);
+        when(postRepositoryImp.getPostsByUserId(anyInt())).thenReturn(mockPostList);
+        //ACT
+        FollowedListDto response = postsServiceImp.getFollowedList(inputDto);
+        //ASSERT
+        assertEquals(expectedDto, response);
+    }
+
+    @Test
+    @DisplayName("[T-0005] ")
+    void sortByDateDescExistsTest() {
+        //ARRANGE
+
+        //ACT
+
+        //ASSERT
+    }
+
+    @Test
+    @DisplayName("[T-0005] ")
+    void invalidSortParamExceptionTest() {
+        //ARRANGE
+
+        //ACT
+
+        //ASSERT
     }
 }

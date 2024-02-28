@@ -56,7 +56,6 @@ public class UsersControllerTest {
         assertEquals(result,expected);
     }
 
-    //
     @Test
     @DisplayName("[T-0002] Client unfollows followed Vendor")
     void unfollowVendorOk() {
