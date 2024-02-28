@@ -1,5 +1,8 @@
 package org.socialmeli.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import org.socialmeli.dto.request.*;
 import org.socialmeli.dto.response.*;
 import org.socialmeli.service.IPostsService;
@@ -8,11 +11,14 @@ import org.socialmeli.service.implementation.PostsServiceImp;
 import org.socialmeli.service.implementation.UsersServiceImp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
 @RestController
 @RequestMapping("/users")
+@Validated
 public class UsersController {
 
     private IPostsService postsService;
@@ -25,11 +31,12 @@ public class UsersController {
 
     // US_0001
     @PostMapping("/{userId}/follow/{userIdToFollow}")
-    public ResponseEntity<MessageDto> followUser(@PathVariable Integer userId,
-                                       @PathVariable Integer userIdToFollow) {
+    public ResponseEntity<MessageDto> followUser(
+            @Valid @PathVariable @Positive(message = "asd") Integer userId,
+            @PathVariable Integer userIdToFollow)
+    {
         usersService.userFollowVendor(new UserFollowVendorDto(userId,userIdToFollow));
         return new ResponseEntity<>(new MessageDto("Vendedor seguido exitosamente"), HttpStatus.OK);
-
     }
 
     // US_0002

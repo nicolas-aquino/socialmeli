@@ -71,11 +71,10 @@ public class UsersServiceImp implements IUsersService {
         List<User> followerUsers = vendor.getFollowers();
 
         switch (order) {
-            case "name_asc" -> followerUsers = ordenarListaUsuariosPor(followerUsers, comparing(User::getUserName));
-            //break;
+            case "name_asc" ->
+                    followerUsers = ordenarListaUsuariosPor(followerUsers, comparing(User::getUserName));
             case "name_desc" ->
                     followerUsers = ordenarListaUsuariosPor(followerUsers, comparing(User::getUserName).reversed());
-            //break;
             default -> throw new BadRequestException("El ordenamiento pedido es inválido");
         }
 

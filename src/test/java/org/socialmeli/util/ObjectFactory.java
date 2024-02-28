@@ -1,11 +1,8 @@
 package org.socialmeli.util;
 
 import org.socialmeli.entity.Client;
-import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class ObjectFactory {
@@ -63,5 +60,9 @@ public class ObjectFactory {
         return "invalido";
     }
 
+
+    public String getAscendentNameOrder() {
+        return "name_asc";
+    }
 
 }

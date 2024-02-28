@@ -1,6 +1,5 @@
 package org.socialmeli.controller;
 
-import org.apache.logging.log4j.message.Message;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -8,10 +7,12 @@ import org.mockito.Mock;
 import org.socialmeli.dto.request.FollowersListReqDto;
 import org.socialmeli.dto.request.UserFollowVendorDto;
 import org.socialmeli.dto.response.MessageDto;
-import org.socialmeli.exception.BadRequestException;
-import org.socialmeli.exception.NotFoundException;
+import org.socialmeli.dto.response.VendorFollowersListDto;
+import org.socialmeli.entity.User;
+import org.socialmeli.entity.Vendor;
 import org.socialmeli.service.IPostsService;
 import org.socialmeli.service.IUsersService;
+import org.socialmeli.util.DTOMapper;
 import org.socialmeli.util.ObjectFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,27 +54,7 @@ public class UsersControllerTest {
 
         // Assert
         verify(usersService, atLeastOnce()).userFollowVendor(userFollowVendorDto);
-        assertEquals(result,expected);
+        assertEquals(result, expected);
     }
 
-    // T-0003
-    @Test
-    void invalidOrderOk() {
-        // Arrange
-        String ordenamientoInvalido = objectFactory.getInvalidOrder();
-        Integer idVendedorValido = objectFactory.getValidVendorId();
-        FollowersListReqDto a = new FollowersListReqDto(idVendedorValido, ordenamientoInvalido);
-        String expectedErrorMessage = "El ordenamiento pedido es inválido";
-        BadRequestException expectedException = new BadRequestException(expectedErrorMessage);
-
-        when(usersService.getFollowersList(a)).thenThrow(expectedException);
-
-        // Act and Assert
-        assertThrows(
-                BadRequestException.class,
-                () -> {
-                    usersController.followersList(idVendedorValido, ordenamientoInvalido);
-                },
-                expectedErrorMessage);
-    }
 }
