@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.socialmeli.dto.request.FollowersListReqDto;
 import org.socialmeli.dto.request.UserFollowVendorDto;
+import org.socialmeli.dto.request.UserUnfollowVendorDto;
 import org.socialmeli.dto.response.MessageDto;
 import org.socialmeli.exception.BadRequestException;
 import org.socialmeli.exception.NotFoundException;
@@ -36,7 +37,6 @@ public class UsersControllerTest {
 
     ObjectFactory objectFactory = new ObjectFactory();
 
-    // T-0001
     @Test
     @DisplayName("[T-0001] Happy path")
     void followUserOk() {
@@ -55,6 +55,27 @@ public class UsersControllerTest {
         verify(usersService, atLeastOnce()).userFollowVendor(userFollowVendorDto);
         assertEquals(result,expected);
     }
+
+    //
+    @Test
+    @DisplayName("[T-0002] Client unfollows followed Vendor")
+    void unfollowVendorOk() {
+        // Arrange
+        Integer userId = objectFactory.getValidUserId();
+        Integer userIdToUnfollow = objectFactory.getValidVendorId();
+        UserUnfollowVendorDto userUnfollowVendorDto = new UserUnfollowVendorDto(userId, userIdToUnfollow);
+        ResponseEntity<MessageDto> expected = ResponseEntity.ok(new MessageDto("El usuario con id " + userId + " ha dejado de seguir al vendedor con id " + userIdToUnfollow));
+
+        when(usersService.unfollowVendor(userUnfollowVendorDto)).thenReturn(new MessageDto("El usuario con id " + userId + " ha dejado de seguir al vendedor con id " + userIdToUnfollow));
+
+        // Act
+        ResponseEntity<MessageDto> result = usersController.unfollowVendor(userId, userIdToUnfollow);
+
+        // Assert
+        verify(usersService, atLeastOnce()).unfollowVendor(userUnfollowVendorDto);
+        assertEquals(result,expected);
+    }
+
 
     // T-0003
     @Test

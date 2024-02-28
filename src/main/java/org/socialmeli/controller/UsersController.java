@@ -73,14 +73,6 @@ public class UsersController {
         return ResponseEntity.ok(usersService.getFollowingList(new FollowingListReqDto(userId, order)));
     }
 
-    // US_0006
-    @GetMapping("/followed/{userId}/list")
-    public ResponseEntity<FollowedListDto> followedList(
-            @PathVariable Integer userId,
-            @RequestParam(required = false, defaultValue = "date_desc") String order) {
-        return new ResponseEntity<>(postsService.getFollowedList(new FollowedListReqDto(userId, order)), HttpStatus.OK);
-    }
-
     // US_0007
     @PostMapping("/{userId}/unfollow/{userIdToUnfollow}")
     public ResponseEntity<MessageDto> unfollowVendor(@PathVariable Integer userId,
