@@ -1,8 +1,13 @@
 package org.socialmeli.util;
 
 import org.socialmeli.entity.Client;
+import org.socialmeli.entity.Post;
+import org.socialmeli.entity.Product;
 import org.socialmeli.entity.Vendor;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 public class ObjectFactory {
 
     public Client getValidClient() {
@@ -50,6 +55,28 @@ public class ObjectFactory {
 
     public String getInvalidOrder() {
         return "invalido";
+    }
+
+    public List<Post> getNewPostList(Vendor vendor) {
+        List<Post> postList = new ArrayList<>();
+        Product product1 = new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
+        Product product2 = new Product(2, "Zapatos", "Calzado", "Adidas", "Negro", "N/A");
+        Post post1 = new Post(vendor.getUserId(), LocalDate.now(), product1, 1, 35.99);
+        Post post2 = new Post(vendor.getUserId(), LocalDate.of(2023, 3, 20), product2, 2, 79.99);
+        postList.add(post1);
+        postList.add(post2);
+        return postList;
+    }
+
+    public List<Post> getOldPostList(Vendor vendor) {
+        List<Post> postList = new ArrayList<>();
+        Product product1 = new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
+        Product product2 = new Product(2, "Zapatos", "Calzado", "Adidas", "Negro", "N/A");
+        Post post1 = new Post(vendor.getUserId(), LocalDate.of(2023, 3, 20), product1, 1, 35.99);
+        Post post2 = new Post(vendor.getUserId(), LocalDate.of(2023, 3, 20), product2, 2, 79.99);
+        postList.add(post1);
+        postList.add(post2);
+        return postList;
     }
 
 }
