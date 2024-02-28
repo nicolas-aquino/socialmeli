@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.socialmeli.dto.request.UserFollowVendorDto;
+import org.socialmeli.dto.request.UserUnfollowVendorDto;
 import org.socialmeli.dto.response.ExceptionDto;
+import org.socialmeli.dto.response.MessageDto;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.Vendor;
 import org.socialmeli.exception.BadRequestException;
@@ -20,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -143,6 +146,64 @@ public class UserServiceImpTest {
         );
     }
 
+    // --------------------- T-0002 ---------------------
+    @Test
+    @DisplayName("[T-0002] Client unfollows vendor OK")
+    void clientUnfollowVendorOkTest() {
+        //ARRANGE
+        Client mockClient = objectFactory.getValidClientFollowingVendor();
+        Vendor mockVendor = mockClient.getFollowing().get(0);
+        Integer userId = mockClient.getUserId();
+        Integer userIdToUnfollow = mockVendor.getUserId();
 
+        UserUnfollowVendorDto inputDto = new UserUnfollowVendorDto(userId, userIdToUnfollow);
+        MessageDto expected = new MessageDto("El usuario con id " + userId + " ha dejado de seguir al vendedor con id " + userIdToUnfollow);
+
+        when(clientRepositoryImp.findOne(userId)).thenReturn(mockClient);
+        when(vendorRepositoryImp.findOne(userIdToUnfollow)).thenReturn(mockVendor);
+        //ACT
+        MessageDto response = userServiceImp.unfollowVendor(inputDto);
+        //ASSERT
+        assertEquals(expected, response);
+    }
+
+    @Test
+    @DisplayName("[T-0002] Vendor unfollows vendor OK")
+    void vendorUnfollowVendorOkTest() {
+        //ARRANGE
+        Vendor mockFollower = objectFactory.getValidVendorFollowingVendor();
+        Vendor mockVendorToUnfollow = mockFollower.getFollowing().get(0);
+        Integer userId = mockFollower.getUserId();
+        Integer userIdToUnfollow = mockVendorToUnfollow.getUserId();
+
+        UserUnfollowVendorDto inputDto = new UserUnfollowVendorDto(userId, userIdToUnfollow);
+        MessageDto expected = new MessageDto("El usuario con id " + userId + " ha dejado de seguir al vendedor con id " + userIdToUnfollow);
+
+        when(clientRepositoryImp.findOne(userId)).thenReturn(null);
+        when(vendorRepositoryImp.findOne(userId)).thenReturn(mockFollower);
+        when(vendorRepositoryImp.findOne(userIdToUnfollow)).thenReturn(mockVendorToUnfollow);
+        //ACT
+        MessageDto response = userServiceImp.unfollowVendor(inputDto);
+        //ASSERT
+        assertEquals(expected, response);
+    }
+
+    @Test
+    @DisplayName("[T-0002] Client can't unfollow a non existing vendor")
+    void clientUnfollowNonExistingVendorTest() {
+        //ARRANGE
+        Client mockClient = objectFactory.getValidClientFollowingVendor();
+        Integer userId = mockClient.getUserId();
+        Integer userIdToUnfollow = objectFactory.getInvalidUserId();
+
+        UserUnfollowVendorDto inputDto = new UserUnfollowVendorDto(userId, userIdToUnfollow);
+
+        when(clientRepositoryImp.findOne(userId)).thenReturn(mockClient);
+        when(vendorRepositoryImp.findOne(userIdToUnfollow)).thenReturn(null);
+        //ACT & ASSERT
+        assertThrows(NotFoundException.class,
+                () -> userServiceImp.unfollowVendor(inputDto),
+                "El vendedor no existe");
+    }
     
 }

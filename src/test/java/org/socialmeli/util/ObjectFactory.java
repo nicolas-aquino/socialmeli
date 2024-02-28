@@ -39,6 +39,14 @@ public class ObjectFactory {
         return res;
     }
 
+    public Vendor getValidVendorFollowingVendor() {
+        Vendor follower = getValidVendor();
+        Vendor followingVendor = getValidVendor2();
+        follower.getFollowing().add(followingVendor);
+        followingVendor.getFollowers().add(follower);
+        return follower;
+    }
+
     public Integer getValidUserId() {
         return 1;
     }
