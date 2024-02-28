@@ -70,7 +70,6 @@ public class UserServiceImpTest {
         Integer userIdToFollow = vendor2.getUserId();
         UserFollowVendorDto userFollowVendorDto = new UserFollowVendorDto(userId, userIdToFollow);
 
-        //TODO preguntar si esto es necesario
         when(clientRepositoryImp.findOne(userId)).thenReturn(null);
 
         when(vendorRepositoryImp.findOne(userId)).thenReturn(vendor1);
@@ -93,10 +92,9 @@ public class UserServiceImpTest {
         Integer userIdToFollow = objectFactory.getInvalidUserId();
         UserFollowVendorDto userFollowVendorDto = new UserFollowVendorDto(userId, userIdToFollow);
 
-        when(clientRepositoryImp.findOne(userId)).thenReturn(client);
+        when(vendorRepositoryImp.findOne(userId)).thenReturn(null);
 
-        //TODO preguntar si esto es necesario
-        //when(vendorRepositoryImp.findOne(userId)).thenReturn(null);
+        when(clientRepositoryImp.findOne(userId)).thenReturn(client);
 
         // Act & Assert
         assertThrows(
@@ -142,7 +140,4 @@ public class UserServiceImpTest {
                 "Ya se esta siguiendo al vendedor."
         );
     }
-
-
-    
 }

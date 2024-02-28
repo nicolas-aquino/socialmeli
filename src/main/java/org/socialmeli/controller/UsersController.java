@@ -38,21 +38,19 @@ public class UsersController {
         return  new ResponseEntity<>(usersService.vendorFollowersCount(new UserIdDto(userId)),HttpStatus.OK);
     }
 
-    //US_0003
+    // US_0003 & US_0008
     @GetMapping("/{userId}/followers/list")
     public ResponseEntity<VendorFollowersListDto> followersList(
             @PathVariable Integer userId,
             @RequestParam(required = false, defaultValue = "name_desc") String order) {
-
         return new ResponseEntity<>(usersService.getFollowersList(new FollowersListReqDto(userId, order)), HttpStatus.OK);
     }
 
-    //US_0004
+    // US_0004 & US_0008
     @GetMapping("/{userId}/followed/list")
     public ResponseEntity<VendorsFollowingListDto> followingList(
              @PathVariable Integer userId,
              @RequestParam(required = false, defaultValue = "name_desc") String order) {
-
         return ResponseEntity.ok(usersService.getFollowingList(new FollowingListReqDto(userId, order)));
     }
 
