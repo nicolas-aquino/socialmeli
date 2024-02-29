@@ -70,14 +70,15 @@ public class PostServiceImpTest {
 
     // T-0008
     @Test
-    @DisplayName("[T-0008] Sad path - El usuario ingresado no sigue a ningun vendedor")
+    @DisplayName("[T-0008] Sad path - El cliente ingresado no sigue a ningun vendedor")
     void getFollowedListUserNotFollowVendorTest() {
         // Arrange:
         Client client = objectFactory.getValidClient();
+        client.setUserId(1);
         String order = "date_asc";
         List<Vendor> emptyVendorList = new ArrayList<>();
         when(clientRepositoryImp.findOne(client.getUserId())).thenReturn(client);
-        when(vendorRepositoryImp.findOne(1)).thenReturn(null);
+        when(vendorRepositoryImp.findOne(client.getUserId())).thenReturn(null);
         when(vendorRepositoryImp.findAll()).thenReturn(emptyVendorList);
         when(postRepositoryImp.getFollowedList(client, emptyVendorList)).thenReturn(emptyVendorList);
         // Act && Assert:
@@ -85,7 +86,29 @@ public class PostServiceImpTest {
                 NotFoundException.class,
                 () -> postsServiceImp.getFollowedList(new FollowedListReqDto(client.getUserId(), order))).getMessage();
         verify(clientRepositoryImp, atLeastOnce()).findOne(client.getUserId());
-        verify(vendorRepositoryImp, atLeastOnce()).findOne(1);
+        verify(vendorRepositoryImp, atLeastOnce()).findOne(client.getUserId());
+        assertEquals("El usuario ingresado no sigue a ningun vendedor.", mess);
+    }
+
+    // T-0008
+    @Test
+    @DisplayName("[T-0008] Sad path - El vendedor ingresado no sigue a ningun vendedor")
+    void getFollowedListVendorNotFollowVendorTest() {
+        // Arrange:
+        Vendor vendor = objectFactory.getValidVendor();
+        vendor.setUserId(1);
+        String order = "date_asc";
+        List<Vendor> emptyVendorList = new ArrayList<>();
+        when(clientRepositoryImp.findOne(vendor.getUserId())).thenReturn(null);
+        when(vendorRepositoryImp.findOne(vendor.getUserId())).thenReturn(vendor);
+        when(vendorRepositoryImp.findAll()).thenReturn(emptyVendorList);
+        when(postRepositoryImp.getFollowedList(vendor, emptyVendorList)).thenReturn(emptyVendorList);
+        // Act && Assert:
+        String mess = assertThrows(
+                NotFoundException.class,
+                () -> postsServiceImp.getFollowedList(new FollowedListReqDto(vendor.getUserId(), order))).getMessage();
+        verify(clientRepositoryImp, atLeastOnce()).findOne(vendor.getUserId());
+        verify(vendorRepositoryImp, atLeastOnce()).findOne(vendor.getUserId());
         assertEquals("El usuario ingresado no sigue a ningun vendedor.", mess);
     }
 
