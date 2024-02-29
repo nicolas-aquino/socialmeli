@@ -30,6 +30,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
+import static org.socialmeli.util.TestDTOMapper.*;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -60,7 +61,7 @@ public class PostServiceImpTest {
         when(vendorRepositoryImp.findOne(1)).thenReturn(null);
         when(vendorRepositoryImp.findAll()).thenReturn(vendorList);
         when(postRepositoryImp.getFollowedList(client, vendorList)).thenReturn(vendorList);
-        when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getPostTwoWeeksAway(vendor));
+        when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getPostsFromTodayAndTwoDaysAgo(vendor));
 
         // Act
         FollowedListDto followersList = postsServiceImp
@@ -174,7 +175,7 @@ public class PostServiceImpTest {
         when(vendorRepositoryImp.findOne(1)).thenReturn(null);
         when(vendorRepositoryImp.findAll()).thenReturn(vendorList);
         when(postRepositoryImp.getFollowedList(client, vendorList)).thenReturn(vendorList);
-        when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getOldPostList(vendor));
+        when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getTwoPostsOlderThanTwoWeeks(vendor));
 
         // Act & Assert
         String exMesage = assertThrows(
@@ -197,7 +198,7 @@ public class PostServiceImpTest {
 
         List<Vendor> mockFollowingVendorList = mockClient.getFollowing();
         List<Post> mockPostList = objectFactory.getListOfSinglePost(mockVendor);
-        List<PostDto> mockPostDtoList = mockPostList.stream().map(p -> objectFactory.convertToPostDto(p)).toList();
+        List<PostDto> mockPostDtoList = mockPostList.stream().map(p -> convertToPostDto(p)).toList();
         FollowedListReqDto inputDto = new FollowedListReqDto(userId, order);
         FollowedListDto expectedDto = new FollowedListDto(userId, mockPostDtoList);
 
@@ -226,7 +227,7 @@ public class PostServiceImpTest {
 
         List<Vendor> mockFollowingVendorList = mockClient.getFollowing();
         List<Post> mockPostList = objectFactory.getListOfSinglePost(mockVendor);
-        List<PostDto> mockPostDtoList = mockPostList.stream().map(p -> objectFactory.convertToPostDto(p)).toList();
+        List<PostDto> mockPostDtoList = mockPostList.stream().map(p -> convertToPostDto(p)).toList();
         FollowedListReqDto inputDto = new FollowedListReqDto(userId, order);
         FollowedListDto expectedDto = new FollowedListDto(userId, mockPostDtoList);
 
@@ -258,7 +259,7 @@ public class PostServiceImpTest {
         when(vendorRepositoryImp.findOne(1)).thenReturn(null);
         when(vendorRepositoryImp.findAll()).thenReturn(vendorList);
         when(postRepositoryImp.getFollowedList(client, vendorList)).thenReturn(vendorList);
-        when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getPostTwoWeeksAway(vendor));
+        when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getPostsFromTodayAndTwoDaysAgo(vendor));
 
         // Act & Assert
         String exMesage = assertThrows(
@@ -282,7 +283,7 @@ public class PostServiceImpTest {
        when(vendorRepositoryImp.findOne(1)).thenReturn(null);
        when(vendorRepositoryImp.findAll()).thenReturn(vendorList);
        when(postRepositoryImp.getFollowedList(client, vendorList)).thenReturn(vendorList);
-       when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getPostTwoWeeksAway(vendor));
+       when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getPostsFromTodayAndTwoDaysAgo(vendor));
 
        // Act
        FollowedListDto followersList = postsServiceImp.getFollowedList(new FollowedListReqDto(client.getUserId(), order));
@@ -305,7 +306,7 @@ public class PostServiceImpTest {
         when(vendorRepositoryImp.findOne(1)).thenReturn(null);
         when(vendorRepositoryImp.findAll()).thenReturn(vendorList);
         when(postRepositoryImp.getFollowedList(client, vendorList)).thenReturn(vendorList);
-        when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getPostTwoWeeksAway(vendor));
+        when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getPostsFromTodayAndTwoDaysAgo(vendor));
 
         // Act
         FollowedListDto followersList = postsServiceImp.getFollowedList(new FollowedListReqDto(client.getUserId(), order));
@@ -326,7 +327,7 @@ public class PostServiceImpTest {
         when(postRepositoryImp.save(post)).thenReturn(post.getPostId());
 
         // Act
-        PostIdDto postIdDto = postsServiceImp.savePost(new PostReqDto(post.getUserId(), post.getDate(), objectFactory.convertToProductDto(post.getProduct()), post.getCategory(), post.getPrice()));
+        PostIdDto postIdDto = postsServiceImp.savePost(new PostReqDto(post.getUserId(), post.getDate(), convertToProductDto(post.getProduct()), post.getCategory(), post.getPrice()));
 
         // Assert
         assertEquals(post.getPostId(), postIdDto.getPostId());

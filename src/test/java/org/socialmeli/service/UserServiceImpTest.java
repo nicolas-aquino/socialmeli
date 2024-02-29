@@ -292,7 +292,7 @@ public class UserServiceImpTest {
     @DisplayName("[T_0004] -> [US_0003] & [US_0008] Happy path: Get a list of users who follow a vendor with DESC order")
     void followersListDescOk() {
         // Arrange
-        Vendor vendor = objectFactory.getVendorWithFollowers();
+        Vendor vendor = objectFactory.getVendorWithTwoFollowers();
         FollowersListReqDto followersListReqDto = new FollowersListReqDto(vendor.getUserId(), objectFactory.getDescendentNameOrder());
         FollowersListDto expected = new FollowersListDto(vendor.getUserId(), vendor.getUserName(), List.of(
                 new UserDto(vendor.getFollowers().get(0).getUserId(), vendor.getFollowers().get(0).getUserName()),
@@ -313,7 +313,7 @@ public class UserServiceImpTest {
     @DisplayName("[T_0004] -> [US_0003] & [US_0008] Happy path: Get a list of users who follow a vendor with ASC order")
     void followersListAscOk() {
         // Arrange
-        Vendor vendor = objectFactory.getVendorWithFollowers();
+        Vendor vendor = objectFactory.getVendorWithTwoFollowers();
         FollowersListReqDto followersListReqDto = new FollowersListReqDto(vendor.getUserId(), objectFactory.getAscendentNameOrder());
         FollowersListDto expected = new FollowersListDto(vendor.getUserId(), vendor.getUserName(), List.of(
                 new UserDto(vendor.getFollowers().get(1).getUserId(), vendor.getFollowers().get(1).getUserName()),
@@ -334,7 +334,7 @@ public class UserServiceImpTest {
     @DisplayName("[T_0004] -> [US_0003] & [US_0008] Happy path: Get a list of vendors followed by a user with DESC order")
     void followingListDescOk() {
         // Arrange
-        Client client = objectFactory.getClientFollowingVendors();
+        Client client = objectFactory.getClientFollowingTwoVendors();
         FollowingListReqDto followingListReqDto = new FollowingListReqDto(client.getUserId(), objectFactory.getDescendentNameOrder());
         FollowingListDto expected = new FollowingListDto(client.getUserId(), client.getUserName(), List.of(
                 new UserDto(client.getFollowing().get(0).getUserId(), client.getFollowing().get(0).getUserName()),
@@ -355,7 +355,7 @@ public class UserServiceImpTest {
     @DisplayName("[T_0004] -> [US_0003] & [US_0008] Happy path: Get a list of vendors followed by a user with ASC order")
     void followingListAscOk() {
         // Arrange
-        Client client = objectFactory.getClientFollowingVendors();
+        Client client = objectFactory.getClientFollowingTwoVendors();
         FollowingListReqDto followingListReqDto = new FollowingListReqDto(client.getUserId(), objectFactory.getAscendentNameOrder());
         FollowingListDto expected = new FollowingListDto(client.getUserId(), client.getUserName(), List.of(
                 new UserDto(client.getFollowing().get(1).getUserId(), client.getFollowing().get(1).getUserName()),

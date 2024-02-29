@@ -12,7 +12,53 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.socialmeli.util.TestDTOMapper.*;
+
 public class ObjectFactory {
+
+    public Integer getValidUserId() {
+        return 1;
+    }
+
+    public Integer getValidUserId2() {
+        return 2;
+    }
+
+    public Integer getValidClientId() {
+        return 6;
+    }
+
+    public Integer getValidVendorId() {
+        return 2;
+    }
+
+    public Integer getValidVendorId2() {
+        return 3;
+    }
+
+    public Integer getInvalidUserId() {
+        return 99999;
+    }
+
+    public String getAscendentNameOrder() {
+        return "name_asc";
+    }
+
+    public String getDescendentNameOrder() {
+        return "name_desc";
+    }
+
+    public String getInvalidOrder() {
+        return "invalido";
+    }
+
+    public String getValidDateOrder() {
+        return getAscendentDateOrder();
+    }
+
+    public String getAscendentDateOrder() {
+        return "date_desc";
+    }
 
     public Client getValidClient() {
         Client res = new Client();
@@ -58,7 +104,7 @@ public class ObjectFactory {
         return follower;
     }
 
-    public Vendor getVendorWithFollowers() {
+    public Vendor getVendorWithTwoFollowers() {
         Vendor vendor = getValidVendor();
         Client follower1 = getValidClient();
         Client follower2 = getValidClient2();
@@ -67,7 +113,7 @@ public class ObjectFactory {
         return vendor;
     }
 
-    public Client getClientFollowingVendors() {
+    public Client getClientFollowingTwoVendors() {
         Client res = getValidClient();
         Vendor vendor = getValidVendor();
         Vendor vendor2 = getValidVendor2();
@@ -78,56 +124,37 @@ public class ObjectFactory {
         return res;
     }
 
-    public Integer getValidUserId() {
-        return 1;
+    public Product getValidProduct() {
+        return new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
     }
 
-    public Integer getValidUserId2() {
-        return 2;
+    public Product getValidProduct2() {
+        return new Product(2, "Zapatos", "Calzado", "Adidas", "Negro", "N/A");
     }
 
-    public Integer getValidClientId() {
-        return 6;
+    public Post getPostFromToday(Vendor vendor) {
+        return new Post(vendor.getUserId(), LocalDate.now(), getValidProduct(), 1, 35.99);
     }
-
-    public Integer getValidVendorId() {
-        return 2;
-    }
-
-    public Integer getValidVendorId2() {
-        return 3;
-    }
-
-    public Integer getInvalidUserId() {
-        return 99999;
-    }
-
-    public String getAscendentNameOrder() {
-        return "name_asc";
-    }
-    public String getDescendentNameOrder() {
-        return "name_desc";
-    }
-
-    public String getInvalidOrder() {
-        return "invalido";
-    }
-
 
     public List<Post> getListOfSinglePost(Vendor vendor) {
+        return List.of(getPostFromToday(vendor));
+    }
+
+    public List<Post> getTwoPostsOlderThanTwoWeeks(Vendor vendor) {
         List<Post> postList = new ArrayList<>();
-        Product product = new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
-        Post post = new Post(vendor.getUserId(), LocalDate.now(), product, 1, 35.99);
-        postList.add(post);
+        Post post1 = new Post(vendor.getUserId(), LocalDate.of(2023, 3, 20), getValidProduct(), 1, 35.99);
+        Post post2 = new Post(vendor.getUserId(), LocalDate.of(2023, 3, 20), getValidProduct2(), 2, 79.99);
+        postList.add(post1);
+        postList.add(post2);
         return postList;
     }
 
-    public List<Post> getOldPostList(Vendor vendor) {
+    public List<Post> getPostsFromTodayAndTwoDaysAgo(Vendor vendor) {
         List<Post> postList = new ArrayList<>();
-        Product product1 = new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
-        Product product2 = new Product(2, "Zapatos", "Calzado", "Adidas", "Negro", "N/A");
-        Post post1 = new Post(vendor.getUserId(), LocalDate.of(2023, 3, 20), product1, 1, 35.99);
-        Post post2 = new Post(vendor.getUserId(), LocalDate.of(2023, 3, 20), product2, 2, 79.99);
+        Product product1 = getValidProduct();
+        Product product2 = getValidProduct2();
+        Post post1 = new Post(vendor.getUserId(), LocalDate.now(), product1, 1, 35.99);
+        Post post2 = new Post(vendor.getUserId(), LocalDate.now().minusDays(2), product2, 2, 79.99);
         postList.add(post1);
         postList.add(post2);
         return postList;
@@ -137,66 +164,16 @@ public class ObjectFactory {
         Vendor vendor = getValidVendor();
         Client client1 = getValidClient();
         Client client2 = getValidClient2();
-        return new FollowersListDto(
-                vendor.getUserId(),
-                vendor.getUserName(),
-                List.of(new UserDto(client1.getUserId(), client1.getUserName()), new UserDto(client2.getUserId(), client2.getUserName()))
-        );
-    }
-
-    public List<Post> getPostTwoWeeksAway(Vendor vendor) {
-        List<Post> postList = new ArrayList<>();
-        Product product1 = new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
-        Product product2 = new Product(2, "Zapatos", "Calzado", "Adidas", "Negro", "N/A");
-        Post post1 = new Post(vendor.getUserId(), LocalDate.now(), product1, 1, 35.99);
-        Post post2 = new Post(vendor.getUserId(), LocalDate.now().minusDays(2), product2, 2, 79.99);
-        postList.add(post1);
-        postList.add(post2);
-        return postList;
-    }
-
-    public PostDto convertToPostDto(Post p) {
-        ObjectMapper mapper = new ObjectMapper();
-        PostDto res = new PostDto(
-                p.getPostId(),
-                p.getUserId(),
-                p.getDate(),
-                convertToProductDto(p.getProduct()),
-                p.getCategory(),
-                p.getPrice()
-        );
-        return res;
-    }
-
-    public ProductDto convertToProductDto(Product p) {
-        return new ProductDto(
-                p.getProductId(),
-                p.getProductName(),
-                p.getType(),
-                p.getBrand(),
-                p.getColor(),
-                p.getNotes()
-        );
+        return new FollowersListDto(vendor.getUserId(), vendor.getUserName(), List.of(new UserDto(client1.getUserId(), client1.getUserName()), new UserDto(client2.getUserId(), client2.getUserName())));
     }
 
     public FollowingListDto getVendorsFollowingListDto() {
         Client client = getValidClient();
         Vendor vendor1 = getValidVendor();
         Vendor vendor2 = getValidVendor2();
-        return new FollowingListDto(
-                client.getUserId(),
-                client.getUserName(),
-                List.of(new UserDto(vendor1.getUserId(), vendor1.getUserName()), new UserDto(vendor2.getUserId(), vendor2.getUserName()))
-        );
+        return new FollowingListDto(client.getUserId(), client.getUserName(), List.of(new UserDto(vendor1.getUserId(), vendor1.getUserName()), new UserDto(vendor2.getUserId(), vendor2.getUserName())));
     }
 
-    public String getValidDateOrder() {
-        return getAscendentDateOrder();
-    }
-
-    public String getAscendentDateOrder() {
-        return "date_desc";
-    }
 
     public FollowedListDto getFollowedListDto(Vendor vendor) {
         List<PostDto> postDto = getValidPostDto(vendor);
@@ -204,50 +181,20 @@ public class ObjectFactory {
     }
 
     public List<PostDto> getValidPostDto(Vendor vendor) {
-        ObjectMapper mapper = new ObjectMapper();
-
-        return getPostTwoWeeksAway(vendor).stream().map(this::convertToPostDto).toList();
+        return getPostsFromTodayAndTwoDaysAgo(vendor).stream().map(TestDTOMapper::convertToPostDto).toList();
     }
 
     public FollowerCountDto getFollowerCountDto(Vendor vendor) {
-        return new FollowerCountDto(
-                vendor.getUserId(),
-                vendor.getUserName(),
-                0
-        );
+        return new FollowerCountDto(vendor.getUserId(), vendor.getUserName(), 0);
     }
 
     public PostReqDto getValidPostReqDto() {
-        return new PostReqDto(
-                getValidUserId(),
-                LocalDate.now(),
-                getValidProductDto(),
-                100,
-                500.0
-        );
+        return new PostReqDto(getValidUserId(), LocalDate.now(), getValidProductDto(), 100, 500.0);
     }
 
-    public ProductDto getValidProductDto(){
+    public ProductDto getValidProductDto() {
         return convertToProductDto(getValidProduct());
     }
 
-    public Product getValidProduct(){
-        return new Product(
-                1,
-                "Camiseta",
-                "Ropa",
-                "Nike",
-                "Blanco",
-                "Con logo");
-    }
 
-    public Product getValidProduct2() {
-        return new Product(
-                2,
-                "Zapatos",
-                "Calzado",
-                "Adidas",
-                "Negro",
-                "N/A");
-    }
 }
