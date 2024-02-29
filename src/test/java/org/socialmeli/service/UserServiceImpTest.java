@@ -100,8 +100,6 @@ public class UserServiceImpTest {
         Integer userIdToFollow = objectFactory.getInvalidUserId();
         UserFollowVendorDto userFollowVendorDto = new UserFollowVendorDto(userId, userIdToFollow);
 
-        when(vendorRepositoryImp.findOne(userId)).thenReturn(null);
-
         when(clientRepositoryImp.findOne(userId)).thenReturn(client);
 
         // Act & Assert
