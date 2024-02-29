@@ -236,8 +236,6 @@ public class UserServiceImpTest {
 
         String expectedErrorMessage = "El ordenamiento pedido es inválido";
 
-        when(vendorRepositoryImp.findOne(idVendedorValido)).thenReturn(vendor);
-
         // Act and Assert
         BadRequestException actualException = assertThrows(
                 BadRequestException.class,
@@ -260,9 +258,6 @@ public class UserServiceImpTest {
                 new FollowingListReqDto(idVendedorValido, ordenamientoInvalido);
 
         String expectedErrorMessage = "El ordenamiento pedido es inválido";
-
-        when(clientRepositoryImp.findOne(idVendedorValido)).thenReturn(client);
-        when(vendorRepositoryImp.findOne(idVendedorValido)).thenReturn(vendor);
 
         // Act and Assert
         BadRequestException actualException = assertThrows(

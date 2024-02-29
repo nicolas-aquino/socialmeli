@@ -27,6 +27,9 @@ public class UsersServiceImp implements IUsersService {
     ClientRepositoryImp clientRepositoryImp;
     VendorRepositoryImp vendorRepositoryImp;
 
+    private final String ASCENDANT_NAME_ORDER = "name_asc";
+    private final String DESCENDENT_NAME_ORDER = "name_desc";
+
     ObjectMapper mapper = new ObjectMapper();
 
     public UsersServiceImp(ClientRepositoryImp clientRepo, VendorRepositoryImp vendorRepo) {
@@ -64,18 +67,19 @@ public class UsersServiceImp implements IUsersService {
 
     @Override
     public VendorFollowersListDto getFollowersList(FollowersListReqDto req) {
-        Integer userId = req.getUserId();
         String order = req.getOrder();
+
+        verifyOrder(order);
+
+        Integer userId = req.getUserId();
         Vendor vendor = getVendorById(userId);
 
         List<User> followerUsers = vendor.getFollowers();
 
-        switch (order) {
-            case "name_asc" ->
-                    followerUsers = ordenarListaUsuariosPor(followerUsers, comparing(User::getUserName));
-            case "name_desc" ->
-                    followerUsers = ordenarListaUsuariosPor(followerUsers, comparing(User::getUserName).reversed());
-            default -> throw new BadRequestException("El ordenamiento pedido es inválido");
+        if (order.equals(ASCENDANT_NAME_ORDER)) {
+            followerUsers = ordenarListaUsuariosPor(followerUsers, comparing(User::getUserName));
+        } else {
+            followerUsers = ordenarListaUsuariosPor(followerUsers, comparing(User::getUserName).reversed());
         }
 
         return DTOMapper.toVendorFollowersList(vendor, followerUsers);
@@ -87,8 +91,10 @@ public class UsersServiceImp implements IUsersService {
 
     @Override
     public VendorsFollowingListDto getFollowingList(FollowingListReqDto req) {
-        Integer userId = req.getUserId();
+
         String order = req.getOrder();
+        verifyOrder(order);
+        Integer userId = req.getUserId();
 
         Client client = getClientById(userId);
         Vendor vendor = getVendorById(userId);
@@ -102,14 +108,20 @@ public class UsersServiceImp implements IUsersService {
         throw new NotFoundException(String.format("No se encontró un usuario con el ID %d.", userId));
     }
 
+    private void verifyOrder(String order) {
+        if (!order.equals(ASCENDANT_NAME_ORDER) && !order.equals(DESCENDENT_NAME_ORDER) ) {
+            throw new BadRequestException("El ordenamiento pedido es inválido");
+        }
+    }
+
     private VendorsFollowingListDto getVendorsFollowingListDto(String order, User user) {
         if (user != null) {
             List<Vendor> following = user.getFollowing();
-            following = switch (order) {
-                case "name_asc" -> following.stream().sorted(comparing(User::getUserName)).toList();
-                case "name_desc" -> following.stream().sorted(comparing(User::getUserName).reversed()).toList();
-                default -> throw new BadRequestException("El ordenamiento pedido es inválido");
-            };
+            if (order.equals(ASCENDANT_NAME_ORDER)){
+                following = following.stream().sorted(comparing(User::getUserName)).toList();
+            } else {
+                following = following.stream().sorted(comparing(User::getUserName).reversed()).toList();
+            }
             return DTOMapper.toVendorsFollowingList(user.getUserId(), user.getUserName(), following);
         }
         return null;

@@ -44,7 +44,7 @@ public class ClientRepositoryImpTest {
      */
 
     @Test
-    @DisplayName("fffff")
+    @DisplayName("saveUserOK")
     void testSave() {
     Integer expectedId = 5;
     Client client = new Client();
@@ -56,7 +56,7 @@ public class ClientRepositoryImpTest {
     }
 
     @Test
-    @DisplayName("jkjkjk")
+    @DisplayName("findOneUserOK")
     void testFindOne() {
     Client client = new Client();
     client.setUserName("Test User");
@@ -70,7 +70,7 @@ public class ClientRepositoryImpTest {
     }
 
     @Test
-    @DisplayName("asasas")
+    @DisplayName("deleteUserOK")
     void testDeleteOne() {
     Client client = new Client();
     client.setUserName("Test User");
