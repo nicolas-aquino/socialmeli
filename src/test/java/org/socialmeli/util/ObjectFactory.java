@@ -1,9 +1,9 @@
 package org.socialmeli.util;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.socialmeli.dto.response.*;
 import org.socialmeli.entity.Client;
-import org.socialmeli.entity.User;
 import org.socialmeli.entity.Post;
 import org.socialmeli.entity.Product;
 import org.socialmeli.entity.Vendor;
@@ -172,4 +172,22 @@ public class ObjectFactory {
         );
     }
 
+    public String getValidDateOrder() {
+        return getAscendentDateOrder();
+    }
+
+    public String getAscendentDateOrder() {
+        return "date_desc";
+    }
+
+    public FollowedListDto getFollowedListDto(Vendor vendor) {
+        List<PostDto> postDto = getValidPostDto(vendor);
+        return new FollowedListDto(vendor.getUserId(), postDto);
+    }
+
+    public List<PostDto> getValidPostDto(Vendor vendor) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        return getPostTwoWeeksAway(vendor).stream().map(this::convertToPostDto).toList();
+    }
 }

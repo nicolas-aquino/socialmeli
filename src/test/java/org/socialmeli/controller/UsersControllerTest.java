@@ -4,13 +4,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.socialmeli.dto.request.FollowersListReqDto;
-import org.socialmeli.dto.request.FollowingListReqDto;
-import org.socialmeli.dto.request.UserFollowVendorDto;
-import org.socialmeli.dto.request.UserUnfollowVendorDto;
+import org.socialmeli.dto.request.*;
+import org.socialmeli.dto.response.FollowedListDto;
 import org.socialmeli.dto.response.MessageDto;
 import org.socialmeli.dto.response.FollowersListDto;
 import org.socialmeli.dto.response.FollowingListDto;
+import org.socialmeli.entity.Vendor;
 import org.socialmeli.exception.BadRequestException;
 import org.socialmeli.service.IPostsService;
 import org.socialmeli.service.IUsersService;
@@ -21,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -138,5 +138,26 @@ public class UsersControllerTest {
         // Assert
         verify(usersService, atLeastOnce()).getFollowingList(followingListReqDto);
         assertEquals(result, expected);
+    }
+
+    @Test
+    void followedListOK() {
+        //Arrange
+        Integer clientId = objectFactory.getValidClientId();
+        String order = objectFactory.getValidDateOrder();
+        FollowedListReqDto followedListReqDto = new FollowedListReqDto(clientId, order);
+
+        Vendor vendor = objectFactory.getValidVendor();
+        FollowedListDto followedListDto = objectFactory.getFollowedListDto(vendor);
+
+        when(postsService.getFollowedList(followedListReqDto)).thenReturn(followedListDto);
+
+        ResponseEntity<FollowedListDto> expected = new ResponseEntity<>(followedListDto, HttpStatus.OK);
+
+        //Act
+        ResponseEntity<FollowedListDto> actual = usersController.followedList(clientId, order);
+
+        //Assert
+        assertThat(actual).isEqualTo(expected);
     }
 }
