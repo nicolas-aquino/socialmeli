@@ -305,9 +305,9 @@ public class PostServiceImpTest {
         assertEquals(LocalDate.now().minusDays(2), followersList.getPosts().get(1).getDate());
     }
 
-    // AUX-TEST
+    // COV-0003
     @Test
-    @DisplayName("[AUX-TEST] Sad path")
+    @DisplayName("[COV-0003] Sad path")
     void savePostNotOkTest() {
         // Arrange:
         Vendor vendor = objectFactory.getValidVendor();
@@ -320,9 +320,9 @@ public class PostServiceImpTest {
                 assertEquals("No se encontró ningun usuario en el sistema con el ID indicado.", exMesage);
     }
 
-    // AUX-TEST
+    // COV-0003
     @Test
-    @DisplayName("[AUX-TEST] Happy path")
+    @DisplayName("[COV-0003] Happy path")
     void savePostOkTest() {
         // Arrange:
         Vendor vendor = objectFactory.getValidVendor();
