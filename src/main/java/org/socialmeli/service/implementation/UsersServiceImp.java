@@ -91,21 +91,13 @@ public class UsersServiceImp implements IUsersService {
 
     @Override
     public FollowingListDto getFollowingList(FollowingListReqDto req) {
-
         String order = req.getOrder();
         verifyOrder(order);
         Integer userId = req.getUserId();
 
-        Client client = getClientById(userId);
-        Vendor vendor = getVendorById(userId);
+        User user = getUserById(userId);
 
-        FollowingListDto clientFollowing = getVendorsFollowingListDto(order, client);
-        if (clientFollowing != null) return clientFollowing;
-
-        FollowingListDto vendorFollowing = getVendorsFollowingListDto(order, vendor);
-        if (vendorFollowing != null) return vendorFollowing;
-
-        throw new NotFoundException(String.format("No se encontró un usuario con el ID %d.", userId));
+        return getVendorsFollowingListDto(order, user);
     }
 
     private void verifyOrder(String order) {
@@ -115,16 +107,13 @@ public class UsersServiceImp implements IUsersService {
     }
 
     private FollowingListDto getVendorsFollowingListDto(String order, User user) {
-        if (user != null) {
-            List<Vendor> following = user.getFollowing();
-            if (order.equals(ASCENDANT_NAME_ORDER)){
-                following = following.stream().sorted(comparing(User::getUserName)).toList();
-            } else {
-                following = following.stream().sorted(comparing(User::getUserName).reversed()).toList();
-            }
-            return DTOMapper.toVendorsFollowingList(user.getUserId(), user.getUserName(), following);
+        List<Vendor> following = user.getFollowing();
+        if (order.equals(ASCENDANT_NAME_ORDER)){
+            following = following.stream().sorted(comparing(User::getUserName)).toList();
+        } else {
+            following = following.stream().sorted(comparing(User::getUserName).reversed()).toList();
         }
-        return null;
+        return DTOMapper.toVendorsFollowingList(user.getUserId(), user.getUserName(), following);
     }
 
     @Override
@@ -145,7 +134,7 @@ public class UsersServiceImp implements IUsersService {
         if (removed) {
             return new MessageDto("El usuario con id " + userId + " ha dejado de seguir al vendedor con id " + vendorId);
         } else {
-            throw new NotFoundException("Error: El usuario con id " + userId + " no está siguiendo al vendedor con id " + vendorId);
+            throw new BadRequestException("Error: El usuario con id " + userId + " no está siguiendo al vendedor con id " + vendorId);
         }
     }
 
