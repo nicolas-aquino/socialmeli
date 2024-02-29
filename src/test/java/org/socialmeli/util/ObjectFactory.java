@@ -1,8 +1,8 @@
 package org.socialmeli.util;
 
-import org.socialmeli.dto.response.UserDto;
-import org.socialmeli.dto.response.FollowersListDto;
-import org.socialmeli.dto.response.FollowingListDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.socialmeli.dto.request.PostReqDto;
+import org.socialmeli.dto.response.*;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.Post;
 import org.socialmeli.entity.Product;
@@ -114,6 +114,13 @@ public class ObjectFactory {
     }
 
 
+    public List<Post> getListOfSinglePost(Vendor vendor) {
+        List<Post> postList = new ArrayList<>();
+        Product product = new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
+        Post post = new Post(vendor.getUserId(), LocalDate.now(), product, 1, 35.99);
+        postList.add(post);
+        return postList;
+    }
 
     public List<Post> getOldPostList(Vendor vendor) {
         List<Post> postList = new ArrayList<>();
@@ -148,6 +155,29 @@ public class ObjectFactory {
         return postList;
     }
 
+    public PostDto convertToPostDto(Post p) {
+        ObjectMapper mapper = new ObjectMapper();
+        PostDto res = new PostDto(
+                p.getPostId(),
+                p.getUserId(),
+                p.getDate(),
+                convertToProductDto(p.getProduct()),
+                p.getCategory(),
+                p.getPrice()
+        );
+        return res;
+    }
+
+    public ProductDto convertToProductDto(Product p) {
+        return new ProductDto(
+                p.getProductId(),
+                p.getProductName(),
+                p.getType(),
+                p.getBrand(),
+                p.getColor(),
+                p.getNotes()
+        );
+    }
 
     public FollowingListDto getVendorsFollowingListDto() {
         Client client = getValidClient();
@@ -160,4 +190,64 @@ public class ObjectFactory {
         );
     }
 
+    public String getValidDateOrder() {
+        return getAscendentDateOrder();
+    }
+
+    public String getAscendentDateOrder() {
+        return "date_desc";
+    }
+
+    public FollowedListDto getFollowedListDto(Vendor vendor) {
+        List<PostDto> postDto = getValidPostDto(vendor);
+        return new FollowedListDto(vendor.getUserId(), postDto);
+    }
+
+    public List<PostDto> getValidPostDto(Vendor vendor) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        return getPostTwoWeeksAway(vendor).stream().map(this::convertToPostDto).toList();
+    }
+
+    public FollowerCountDto getFollowerCountDto(Vendor vendor) {
+        return new FollowerCountDto(
+                vendor.getUserId(),
+                vendor.getUserName(),
+                0
+        );
+    }
+
+    public PostReqDto getValidPostReqDto() {
+        return new PostReqDto(
+                getValidUserId(),
+                LocalDate.now(),
+                getValidProductDto(),
+                100,
+                500.0
+        );
+    }
+
+    public ProductDto getValidProductDto(){
+        return convertToProductDto(getValidProduct());
+    }
+
+    public Product getValidProduct(){
+        return new Product(
+                1,
+                "Camiseta",
+                "Ropa",
+                "Nike",
+                "Blanco",
+                "Con logo");
+    }
+
+    public Product getValidProduct2() {
+        return new Product(
+                2,
+                "Zapatos",
+                "Calzado",
+                "Adidas",
+                "Negro",
+                "N/A");
+    }
 }
