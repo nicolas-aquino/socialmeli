@@ -1,12 +1,10 @@
 package org.socialmeli.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.socialmeli.dto.request.FollowedListReqDto;
 import org.socialmeli.dto.request.PostReqDto;
 import org.socialmeli.dto.response.FollowedListDto;
-import org.socialmeli.dto.response.MessageDto;
 import org.socialmeli.dto.response.PostDto;
 import org.socialmeli.dto.response.PostIdDto;
 import org.socialmeli.entity.Client;
@@ -27,7 +25,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -52,16 +49,42 @@ public class PostServiceImpTest {
 
     ObjectFactory objectFactory = new ObjectFactory();
 
-    // T-0008
+    // T_0008 & US_0006
     @Test
-    @DisplayName("[T-0008] Sad path - No hay usuario registrado con el id indicado")
+    @DisplayName("[T_0008] -> [US_0006] Happy path")
+    void getFollowedListOkTest() {
+        // Arrange
+        Client client = objectFactory.getValidClient();
+        client.setUserId(1);
+        Vendor vendor = objectFactory.getValidVendor();
+        String order = "date_asc";
+        List<Vendor> vendorList = List.of(objectFactory.getValidVendor());
+        when(clientRepositoryImp.findOne(client.getUserId())).thenReturn(client);
+        when(vendorRepositoryImp.findOne(1)).thenReturn(null);
+        when(vendorRepositoryImp.findAll()).thenReturn(vendorList);
+        when(postRepositoryImp.getFollowedList(client, vendorList)).thenReturn(vendorList);
+        when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getPostTwoWeeksAway(vendor));
+
+        // Act
+        FollowedListDto followersList = postsServiceImp
+                .getFollowedList(new FollowedListReqDto(client.getUserId(), order));
+
+        // Assert
+        assertEquals(2, followersList.getPosts().size());
+        assertEquals(1, followersList.getUserId());
+    }
+
+    // T_0008 & US_0006
+    @Test
+    @DisplayName("[T_0008] -> [US_0006] Sad path: No hay usuario registrado con el id indicado")
     void getFollowedListUserNotRegisterTest() {
-        // Arrange:
+        // Arrange
         String order = "date_asc";
         Integer id = 1;
         when(clientRepositoryImp.findOne(id)).thenReturn(null);
         when(vendorRepositoryImp.findOne(id)).thenReturn(null);
-        // Act && Assert:
+
+        // Act & Assert
         String mess = assertThrows(
                 NotFoundException.class,
                 () -> postsServiceImp.getFollowedList(new FollowedListReqDto(id, order))).getMessage();
@@ -70,11 +93,11 @@ public class PostServiceImpTest {
         assertEquals("No se encontró ningun usuario en el sistema con el ID indicado.", mess);
     }
 
-    // T-0008
+    // T_0008 & US_0006
     @Test
-    @DisplayName("[T-0008] Sad path - El cliente ingresado no sigue a ningun vendedor")
+    @DisplayName("[T_0008] -> [US_0006] Sad path: El cliente ingresado no sigue a ningun vendedor")
     void getFollowedListUserNotFollowVendorTest() {
-        // Arrange:
+        // Arrange
         Client client = objectFactory.getValidClient();
         client.setUserId(1);
         String order = "date_asc";
@@ -83,7 +106,8 @@ public class PostServiceImpTest {
         when(vendorRepositoryImp.findOne(client.getUserId())).thenReturn(null);
         when(vendorRepositoryImp.findAll()).thenReturn(emptyVendorList);
         when(postRepositoryImp.getFollowedList(client, emptyVendorList)).thenReturn(emptyVendorList);
-        // Act && Assert:
+
+        // Act & Assert
         String mess = assertThrows(
                 NotFoundException.class,
                 () -> postsServiceImp.getFollowedList(new FollowedListReqDto(client.getUserId(), order))).getMessage();
@@ -92,11 +116,11 @@ public class PostServiceImpTest {
         assertEquals("El usuario ingresado no sigue a ningun vendedor.", mess);
     }
 
-    // T-0008
+    // T_0008 & US_0006
     @Test
-    @DisplayName("[T-0008] Sad path - El vendedor ingresado no sigue a ningun vendedor")
+    @DisplayName("[T_0008] -> [US_0006] Sad path: El vendedor ingresado no sigue a ningun vendedor")
     void getFollowedListVendorNotFollowVendorTest() {
-        // Arrange:
+        // Arrange
         Vendor vendor = objectFactory.getValidVendor();
         vendor.setUserId(1);
         String order = "date_asc";
@@ -105,7 +129,8 @@ public class PostServiceImpTest {
         when(vendorRepositoryImp.findOne(vendor.getUserId())).thenReturn(vendor);
         when(vendorRepositoryImp.findAll()).thenReturn(emptyVendorList);
         when(postRepositoryImp.getFollowedList(vendor, emptyVendorList)).thenReturn(emptyVendorList);
-        // Act && Assert:
+
+        // Act & Assert
         String mess = assertThrows(
                 NotFoundException.class,
                 () -> postsServiceImp.getFollowedList(new FollowedListReqDto(vendor.getUserId(), order))).getMessage();
@@ -114,9 +139,9 @@ public class PostServiceImpTest {
         assertEquals("El usuario ingresado no sigue a ningun vendedor.", mess);
     }
 
-    // T-0008
+    // T_0008 & US_0006
     @Test
-    @DisplayName("[T-0008] Sad path - No hay posteos realizados por los vendedores.")
+    @DisplayName("[T_0008] -> [US_0006] Sad path: No hay posteos realizados por los vendedores.")
     void getFollowedListEmptyPostListTest() {
         // Arrange:
         Client client = objectFactory.getValidClient();
@@ -137,34 +162,11 @@ public class PostServiceImpTest {
                 exMesage);
     }
 
-    // T-0008
+    // T_0008 & US_0006
     @Test
-    @DisplayName("[T-0008] Happy path")
-    void getFollowedListOkTest() {
-        // Arrange:
-        Client client = objectFactory.getValidClient();
-        client.setUserId(1);
-        Vendor vendor = objectFactory.getValidVendor();
-        String order = "date_asc";
-        List<Vendor> vendorList = List.of(objectFactory.getValidVendor());
-        when(clientRepositoryImp.findOne(client.getUserId())).thenReturn(client);
-        when(vendorRepositoryImp.findOne(1)).thenReturn(null);
-        when(vendorRepositoryImp.findAll()).thenReturn(vendorList);
-        when(postRepositoryImp.getFollowedList(client, vendorList)).thenReturn(vendorList);
-        when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getPostTwoWeeksAway(vendor));
-        // Act:
-        FollowedListDto followersList = postsServiceImp
-                .getFollowedList(new FollowedListReqDto(client.getUserId(), order));
-        // Assert:
-        assertEquals(2, followersList.getPosts().size());
-        assertEquals(1, followersList.getUserId());
-    }
-
-    // T-0008
-    @Test
-    @DisplayName("[T-0008] Sad path - No hay posteos realizados por los vendedores que sigue el usuario las últimas dos semanas.")
+    @DisplayName("[T_0008] -> [US_0006] Sad path: No hay posteos realizados por los vendedores que sigue el usuario las últimas dos semanas.")
     void getFollowedListNoPostTest() {
-        // Arrange:
+        // Arrange
         Client client = objectFactory.getValidClient();
         client.setUserId(1);
         Vendor vendor = objectFactory.getValidVendor();
@@ -175,7 +177,8 @@ public class PostServiceImpTest {
         when(vendorRepositoryImp.findAll()).thenReturn(vendorList);
         when(postRepositoryImp.getFollowedList(client, vendorList)).thenReturn(vendorList);
         when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getOldPostList(vendor));
-        // Act && Assert:
+
+        // Act & Assert
         String exMesage = assertThrows(
                 NotFoundException.class,
                 () -> postsServiceImp.getFollowedList(new FollowedListReqDto(client.getUserId(), order))).getMessage();
@@ -184,11 +187,11 @@ public class PostServiceImpTest {
                 exMesage);
     }
 
-    // ------------------ T-0005 ------------------
+    // T_0005 & US_0009
     @Test
-    @DisplayName("[T-0005] Existe ordenamiento por fecha ascendente")
+    @DisplayName("[T-0005] -> [US_0009] Happy path: Existe ordenamiento por fecha ascendente")
     void sortByDateAscExistsTest() {
-        //ARRANGE
+        // Arrange
         Client mockClient = objectFactory.getValidClientFollowingVendor();
         Vendor mockVendor = mockClient.getFollowing().get(0);
         Integer userId = mockClient.getUserId();
@@ -205,16 +208,19 @@ public class PostServiceImpTest {
         when(vendorRepositoryImp.findAll()).thenReturn(mockFollowingVendorList);
         when(postRepositoryImp.getFollowedList(mockClient, mockFollowingVendorList)).thenReturn(mockFollowingVendorList);
         when(postRepositoryImp.getPostsByUserId(mockVendor.getUserId())).thenReturn(objectFactory.getListOfSinglePost(mockVendor));
-        //ACT
+
+        // Act
         FollowedListDto response = postsServiceImp.getFollowedList(inputDto);
-        //ASSERT
+
+        // Assert
         assertEquals(expectedDto, response);
     }
 
+    // T_0005 & US_0009
     @Test
-    @DisplayName("[T-0005] Existe ordenamiento por fecha descendente")
+    @DisplayName("[T_0005] -> [US_0009] Happy path: Existe ordenamiento por fecha descendente")
     void sortByDateDescExistsTest() {
-        //ARRANGE
+        // Arrange
         Client mockClient = objectFactory.getValidClientFollowingVendor();
         Vendor mockVendor = mockClient.getFollowing().get(0);
         Integer userId = mockClient.getUserId();
@@ -231,18 +237,19 @@ public class PostServiceImpTest {
         when(vendorRepositoryImp.findAll()).thenReturn(mockFollowingVendorList);
         when(postRepositoryImp.getFollowedList(mockClient, mockFollowingVendorList)).thenReturn(mockFollowingVendorList);
         when(postRepositoryImp.getPostsByUserId(mockVendor.getUserId())).thenReturn(objectFactory.getListOfSinglePost(mockVendor));
-        //ACT
+
+        // Act
         FollowedListDto response = postsServiceImp.getFollowedList(inputDto);
-        //ASSERT
+        // Assert
         assertEquals(expectedDto, response);
     }
 
 
-    // T-0005
+    // T_0005 & US_0009
     @Test
-    @DisplayName("[T-0005] Sad path - indicación de orden no valida")
+    @DisplayName("[T_0005] -> [US_0009] Sad path: indicación de orden no valida")
     void getFollowedListNotValidOrdenTest() {
-        // Arrange:
+        // Arrange
         Client client = objectFactory.getValidClient();
         client.setUserId(1);
         Vendor vendor = objectFactory.getValidVendor();
@@ -253,7 +260,8 @@ public class PostServiceImpTest {
         when(vendorRepositoryImp.findAll()).thenReturn(vendorList);
         when(postRepositoryImp.getFollowedList(client, vendorList)).thenReturn(vendorList);
         when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getPostTwoWeeksAway(vendor));
-        // Act && Assert:
+
+        // Act & Assert
         String exMesage = assertThrows(
                 BadRequestException.class,
                 () -> postsServiceImp.getFollowedList(new FollowedListReqDto(client.getUserId(), order))).getMessage();
@@ -261,11 +269,11 @@ public class PostServiceImpTest {
                 exMesage);
     }
 
-    // T-0006
+    // T_0006 & US_0009
     @Test
-    @DisplayName("[T-0006] Happy path - Ordena de forma ascendente")
+    @DisplayName("[T_0006] -> [US_0009] Happy path: Ordena de forma ascendente")
     void getFollowedListOrdenAscOkTest() {
-       // Arrange:
+       // Arrange
        Client client = objectFactory.getValidClient();
        client.setUserId(1);
        Vendor vendor = objectFactory.getValidVendor();
@@ -276,18 +284,19 @@ public class PostServiceImpTest {
        when(vendorRepositoryImp.findAll()).thenReturn(vendorList);
        when(postRepositoryImp.getFollowedList(client, vendorList)).thenReturn(vendorList);
        when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getPostTwoWeeksAway(vendor));
-       // Act:
+
+       // Act
        FollowedListDto followersList = postsServiceImp.getFollowedList(new FollowedListReqDto(client.getUserId(), order));
-       // Assert:
+       // Assert
        assertEquals(LocalDate.now().minusDays(2), followersList.getPosts().get(0).getDate());
        assertEquals(LocalDate.now(), followersList.getPosts().get(1).getDate());
     }
 
-    // T-0006
+    // T_0006 & US_0009
     @Test
-    @DisplayName("[T-0006] Happy path - Ordena de forma ascendente")
+    @DisplayName("[T_0006] -> [US_0009] Happy path: Ordena de forma ascendente")
     void getFollowedListOrdenDescOkTest() {
-        // Arrange:
+        // Arrange
         Client client = objectFactory.getValidClient();
         client.setUserId(1);
         Vendor vendor = objectFactory.getValidVendor();
@@ -298,40 +307,45 @@ public class PostServiceImpTest {
         when(vendorRepositoryImp.findAll()).thenReturn(vendorList);
         when(postRepositoryImp.getFollowedList(client, vendorList)).thenReturn(vendorList);
         when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getPostTwoWeeksAway(vendor));
-        // Act:
+
+        // Act
         FollowedListDto followersList = postsServiceImp.getFollowedList(new FollowedListReqDto(client.getUserId(), order));
-        // Assert:
+
+        // Assert
         assertEquals(LocalDate.now(), followersList.getPosts().get(0).getDate());
         assertEquals(LocalDate.now().minusDays(2), followersList.getPosts().get(1).getDate());
     }
 
-    // COV-0003
+    // COV_0003
     @Test
-    @DisplayName("[COV-0003] Sad path")
-    void savePostNotOkTest() {
-        // Arrange:
-        Vendor vendor = objectFactory.getValidVendor();
-        vendor.setUserId(null);
-        when(vendorRepositoryImp.findOne(vendor.getUserId())).thenReturn(vendor);
-        // Act && Assert:
-        String exMesage = assertThrows(
-                NotFoundException.class,
-                () -> postsServiceImp.savePost(new PostReqDto(vendor.getUserId(), LocalDate.now(), objectFactory.getValidProductDto(), 1, 10.0))).getMessage();
-                assertEquals("No se encontró ningun usuario en el sistema con el ID indicado.", exMesage);
-    }
-
-    // COV-0003
-    @Test
-    @DisplayName("[COV-0003] Happy path")
+    @DisplayName("[COV_0003] Happy path")
     void savePostOkTest() {
-        // Arrange:
+        // Arrange
         Vendor vendor = objectFactory.getValidVendor();
         Post post = new Post(vendor.getUserId(), LocalDate.now(), objectFactory.getValidProduct(), 1, 10.0);
         when(vendorRepositoryImp.findOne(vendor.getUserId())).thenReturn(vendor);
         when(postRepositoryImp.save(post)).thenReturn(post.getPostId());
-        // Act:
+
+        // Act
         PostIdDto postIdDto = postsServiceImp.savePost(new PostReqDto(post.getUserId(), post.getDate(), objectFactory.convertToProductDto(post.getProduct()), post.getCategory(), post.getPrice()));
-        // Assert:
+
+        // Assert
         assertEquals(post.getPostId(), postIdDto.getPostId());
+    }
+
+    // COV_0003
+    @Test
+    @DisplayName("[COV_0003] Sad path")
+    void savePostNotOkTest() {
+        // Arrange
+        Vendor vendor = objectFactory.getValidVendor();
+        vendor.setUserId(null);
+        when(vendorRepositoryImp.findOne(vendor.getUserId())).thenReturn(vendor);
+
+        // Act && Assert
+        String exMesage = assertThrows(
+                NotFoundException.class,
+                () -> postsServiceImp.savePost(new PostReqDto(vendor.getUserId(), LocalDate.now(), objectFactory.getValidProductDto(), 1, 10.0))).getMessage();
+                assertEquals("No se encontró ningun usuario en el sistema con el ID indicado.", exMesage);
     }
 }
