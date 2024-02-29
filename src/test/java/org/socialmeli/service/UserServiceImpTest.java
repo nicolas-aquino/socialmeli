@@ -223,6 +223,22 @@ public class UserServiceImpTest {
                 "Error: Ambos id son identicos");
     }
 
+    @Test
+    @DisplayName("[T-0002] Client can't unfollow an unfollowed vendor")
+    void clientCantUnfollowUnfollowedVendorTest() {
+        //ARRANGE
+        Client mockClient = objectFactory.getValidClient();
+        Vendor mockVendor = objectFactory.getValidVendor();
+        UserUnfollowVendorDto inputDto = new UserUnfollowVendorDto(mockClient.getUserId(), mockVendor.getUserId());
+
+        when(clientRepositoryImp.findOne(mockClient.getUserId())).thenReturn(mockClient);
+        when(vendorRepositoryImp.findOne(mockVendor.getUserId())).thenReturn(mockVendor);
+        //ACT & ASSERT
+        assertThrows(BadRequestException.class,
+                () -> userServiceImp.unfollowVendor(inputDto),
+                "Error: El usuario con id " + mockClient.getUserId() + " no está siguiendo al vendedor con id " + mockVendor.getUserId());
+    }
+
     //US-0003
     @Test
     @DisplayName("[T-0003] - No se acepta un ordenamiento inválido al obtener lista de seguidores")
