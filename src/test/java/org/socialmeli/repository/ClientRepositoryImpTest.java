@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -20,8 +21,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.annotation.DirtiesContext;
 
-import jakarta.validation.OverridesAttribute.List;
-
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -33,15 +32,15 @@ public class ClientRepositoryImpTest {
     
     //Tests unitarios del repositorio
     
-    /*
-     * @Test
-    @DisplayName("")
+
+    @Test
+    @DisplayName("findAllOk")
     void testFindAll() {
         List<Client> allClients = clientRepositoryImp.findAll();
         assertNotNull(allClients);
         assertEquals(4, allClients.size());
     }
-     */
+
 
     @Test
     @DisplayName("saveUserOK")

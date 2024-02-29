@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class VendorRepositoryImpTest {
@@ -25,18 +27,16 @@ public class VendorRepositoryImpTest {
 
     //Tests unitarios del repositorio
     
-    /*
-     * @Test
-    @DisplayName("")
+    @Test
+    @DisplayName("findAllOk")
     void testFindAll() {
         List<Vendor> allVendors = vendorRepositoryImp.findAll();
         assertNotNull(allVendors);
         assertEquals(5, allVendors.size());
     }
-     */
 
     @Test
-    @DisplayName("fffff")
+    @DisplayName("saveOk")
     void testSave() {
     Integer expectedId = 5;
     Vendor vendor = new Vendor();
@@ -48,7 +48,7 @@ public class VendorRepositoryImpTest {
     }
 
     @Test
-    @DisplayName("jkjkjk")
+    @DisplayName("findOneOk")
     void testFindOne() {
     Vendor vendor = new Vendor();
     vendor.setUserName("Test User");
@@ -62,7 +62,7 @@ public class VendorRepositoryImpTest {
     }
 
     @Test
-    @DisplayName("asasas")
+    @DisplayName("deleteOk")
     void testDeleteOne() {
     Vendor vendor = new Vendor();
     vendor.setUserName("Test User");
