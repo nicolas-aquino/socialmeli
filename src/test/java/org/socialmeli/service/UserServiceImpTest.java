@@ -6,14 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.socialmeli.dto.request.FollowersListReqDto;
-import org.socialmeli.dto.request.FollowingListReqDto;
-import org.socialmeli.dto.request.UserFollowVendorDto;
-import org.socialmeli.dto.request.UserUnfollowVendorDto;
-import org.socialmeli.dto.response.FollowersListDto;
-import org.socialmeli.dto.response.FollowingListDto;
-import org.socialmeli.dto.response.MessageDto;
-import org.socialmeli.dto.response.UserDto;
+import org.socialmeli.dto.request.*;
+import org.socialmeli.dto.response.*;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.Vendor;
 import org.socialmeli.exception.BadRequestException;
@@ -375,5 +369,49 @@ public class UserServiceImpTest {
 
         // Assert
         assertEquals(expected, response);
+    }
+
+    // T_0007 & US_0002
+    @Test
+    @DisplayName("[T_0007] -> [US_0002] Happy path: Nuevo vendedor Arranca con cero seguidores")
+    void newVendorHasZeroFollowers() {
+        // Arrange
+        Vendor vendor = objectFactory.getValidVendor();
+        Integer expected = 0;
+        UserIdDto userIdDto = new UserIdDto(vendor.getUserId());
+        when(vendorRepositoryImp.findOne(vendor.getUserId())).thenReturn(vendor);
+
+        // Act
+        FollowerCountDto countDto = userServiceImp.vendorFollowersCount(userIdDto);
+        Integer result = countDto.getFollowersCount();
+
+        // Assert
+        assertEquals(expected,result);
+
+    }
+
+    // T_0007 & US_0002
+    @Test
+    @DisplayName("[T_0007] -> [US_0002] Happy path: Cliente sigue a vendedor e incrementa la cuenta de seguidores")
+    void clientFollowsVendorIncreaseFollowersCount() {
+        // Arrange
+        Vendor vendor = objectFactory.getValidVendor();
+        Client client = objectFactory.getValidClient();
+        UserIdDto userIdDto = new UserIdDto(vendor.getUserId());
+
+        UserFollowVendorDto userDto = new UserFollowVendorDto(client.getUserId(), vendor.getUserId());
+        Integer actualFollowersCount = vendor.getFollowers().size();
+        Integer expected = actualFollowersCount + 1;
+
+        when(clientRepositoryImp.findOne(client.getUserId())).thenReturn(client);
+        when(vendorRepositoryImp.findOne(vendor.getUserId())).thenReturn(vendor);
+        userServiceImp.userFollowVendor(userDto);
+
+        // Act
+        FollowerCountDto countDto = userServiceImp.vendorFollowersCount(userIdDto);
+        Integer result = countDto.getFollowersCount();
+
+        // Assert
+        assertEquals(expected,result);
     }
 }
