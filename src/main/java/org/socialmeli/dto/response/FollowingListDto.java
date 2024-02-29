@@ -6,16 +6,16 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class VendorFollowersListDto {
+public class FollowingListDto {
     @JsonProperty("user_id")
     private Integer userId;
     @JsonProperty("user_name")
     private String userName;
-    private List<UserDto> followers;
+    private List<UserDto> vendors;
 
-    public VendorFollowersListDto(Integer userId, String userName, List<UserDto> followers) {
+    public FollowingListDto(Integer userId, String userName, List<UserDto> vendors) {
         this.userId = userId;
         this.userName = userName;
-        this.followers = followers;
+        this.vendors = vendors;
     }
 }

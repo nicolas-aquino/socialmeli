@@ -112,12 +112,11 @@ public class ObjectFactory {
         postList.add(post2);
         return postList;
     }
-
-    public VendorFollowersListDto getVendorFollowersListDto() {
+    public FollowersListDto getVendorFollowersListDto() {
         Vendor vendor = getValidVendor();
         Client client1 = getValidClient();
         Client client2 = getValidClient2();
-        return new VendorFollowersListDto(
+        return new FollowersListDto(
                 vendor.getUserId(),
                 vendor.getUserName(),
                 List.of(new UserDto(client1.getUserId(), client1.getUserName()), new UserDto(client2.getUserId(), client2.getUserName()))
@@ -162,11 +161,11 @@ public class ObjectFactory {
 
 
 
-    public VendorsFollowingListDto getVendorsFollowingListDto() {
+    public FollowingListDto getVendorsFollowingListDto() {
         Client client = getValidClient();
         Vendor vendor1 = getValidVendor();
         Vendor vendor2 = getValidVendor2();
-        return new VendorsFollowingListDto(
+        return new FollowingListDto(
                 client.getUserId(),
                 client.getUserName(),
                 List.of(new UserDto(vendor1.getUserId(), vendor1.getUserName()), new UserDto(vendor2.getUserId(), vendor2.getUserName()))
