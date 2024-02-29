@@ -1,7 +1,5 @@
 package org.socialmeli.repository.implementation;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
 import org.socialmeli.repository.IVendorRepository;
@@ -10,8 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
 @Repository
 public class VendorRepositoryImp implements IVendorRepository {
     private List<Vendor> vendors = new ArrayList<>();

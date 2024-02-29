@@ -1,11 +1,6 @@
 package org.socialmeli.controller;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Positive;
 import org.socialmeli.dto.request.*;
 import org.socialmeli.dto.response.*;
 import org.socialmeli.service.IPostsService;
@@ -16,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
 @RestController
@@ -34,7 +28,6 @@ public class UsersController {
 
     // US_0001
     @PostMapping("/{userId}/follow/{userIdToFollow}")
-
     public ResponseEntity<MessageDto> followUser(
             @PathVariable
             @Min(value = 1, message = "El ID debe ser mayor que 0")
@@ -46,7 +39,6 @@ public class UsersController {
     {
         usersService.userFollowVendor(new UserFollowVendorDto(userId,userIdToFollow));
         return new ResponseEntity<>(new MessageDto("Vendedor seguido exitosamente"), HttpStatus.OK);
-
     }
 
     // US_0002
@@ -57,7 +49,7 @@ public class UsersController {
 
     // US_0003 & US_0008
     @GetMapping("/{userId}/followers/list")
-    public ResponseEntity<VendorFollowersListDto> followersList(
+    public ResponseEntity<FollowersListDto> followersList(
             @PathVariable Integer userId,
             @Min(value = 1, message = "El ID debe ser mayor que 0")
 
@@ -68,12 +60,10 @@ public class UsersController {
 
     // US_0004 & US_0008
     @GetMapping("/{userId}/followed/list")
-    public ResponseEntity<VendorsFollowingListDto> followingList(
+    public ResponseEntity<FollowingListDto> followingList(
             @Min(value = 1, message = "El ID debe ser mayor que 0")
             @PathVariable Integer userId,
-
              @RequestParam(required = false, defaultValue = "name_desc") String order) {
-
         return ResponseEntity.ok(usersService.getFollowingList(new FollowingListReqDto(userId, order)));
     }
 

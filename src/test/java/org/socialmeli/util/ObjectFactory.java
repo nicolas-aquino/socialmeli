@@ -1,16 +1,16 @@
 package org.socialmeli.util;
 
-import org.socialmeli.dto.response.UserDto;
-import org.socialmeli.dto.response.VendorFollowersListDto;
-import org.socialmeli.dto.response.VendorsFollowingListDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.socialmeli.dto.request.PostReqDto;
+import org.socialmeli.dto.response.*;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.Post;
 import org.socialmeli.entity.Product;
 import org.socialmeli.entity.Vendor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDate;
 
 public class ObjectFactory {
 
@@ -58,6 +58,26 @@ public class ObjectFactory {
         return follower;
     }
 
+    public Vendor getVendorWithFollowers() {
+        Vendor vendor = getValidVendor();
+        Client follower1 = getValidClient();
+        Client follower2 = getValidClient2();
+        vendor.getFollowers().add(follower1);
+        vendor.getFollowers().add(follower2);
+        return vendor;
+    }
+
+    public Client getClientFollowingVendors() {
+        Client res = getValidClient();
+        Vendor vendor = getValidVendor();
+        Vendor vendor2 = getValidVendor2();
+        res.getFollowing().add(vendor);
+        res.getFollowing().add(vendor2);
+        vendor.getFollowers().add(res);
+        vendor2.getFollowers().add(res);
+        return res;
+    }
+
     public Integer getValidUserId() {
         return 1;
     }
@@ -67,7 +87,7 @@ public class ObjectFactory {
     }
 
     public Integer getValidClientId() {
-        return 6; //TODO Revisar ids de clientes
+        return 6;
     }
 
     public Integer getValidVendorId() {
@@ -82,7 +102,10 @@ public class ObjectFactory {
         return 99999;
     }
 
-    public String getValidNameOrder() {
+    public String getAscendentNameOrder() {
+        return "name_asc";
+    }
+    public String getDescendentNameOrder() {
         return "name_desc";
     }
 
@@ -90,10 +113,14 @@ public class ObjectFactory {
         return "invalido";
     }
 
-    public String getAscendentNameOrder() {
-        return "name_asc";
-    }
 
+    public List<Post> getListOfSinglePost(Vendor vendor) {
+        List<Post> postList = new ArrayList<>();
+        Product product = new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
+        Post post = new Post(vendor.getUserId(), LocalDate.now(), product, 1, 35.99);
+        postList.add(post);
+        return postList;
+    }
 
     public List<Post> getOldPostList(Vendor vendor) {
         List<Post> postList = new ArrayList<>();
@@ -105,17 +132,17 @@ public class ObjectFactory {
         postList.add(post2);
         return postList;
     }
-    public VendorFollowersListDto getVendorFollowersListDto() {
+
+    public FollowersListDto getVendorFollowersListDto() {
         Vendor vendor = getValidVendor();
         Client client1 = getValidClient();
         Client client2 = getValidClient2();
-        return new VendorFollowersListDto(
+        return new FollowersListDto(
                 vendor.getUserId(),
                 vendor.getUserName(),
                 List.of(new UserDto(client1.getUserId(), client1.getUserName()), new UserDto(client2.getUserId(), client2.getUserName()))
         );
     }
-
 
     public List<Post> getPostTwoWeeksAway(Vendor vendor) {
         List<Post> postList = new ArrayList<>();
@@ -128,16 +155,99 @@ public class ObjectFactory {
         return postList;
     }
 
+    public PostDto convertToPostDto(Post p) {
+        ObjectMapper mapper = new ObjectMapper();
+        PostDto res = new PostDto(
+                p.getPostId(),
+                p.getUserId(),
+                p.getDate(),
+                convertToProductDto(p.getProduct()),
+                p.getCategory(),
+                p.getPrice()
+        );
+        return res;
+    }
 
-    public VendorsFollowingListDto getVendorsFollowingListDto() {
+    public ProductDto convertToProductDto(Product p) {
+        return new ProductDto(
+                p.getProductId(),
+                p.getProductName(),
+                p.getType(),
+                p.getBrand(),
+                p.getColor(),
+                p.getNotes()
+        );
+    }
+
+    public FollowingListDto getVendorsFollowingListDto() {
         Client client = getValidClient();
         Vendor vendor1 = getValidVendor();
         Vendor vendor2 = getValidVendor2();
-        return new VendorsFollowingListDto(
+        return new FollowingListDto(
                 client.getUserId(),
                 client.getUserName(),
                 List.of(new UserDto(vendor1.getUserId(), vendor1.getUserName()), new UserDto(vendor2.getUserId(), vendor2.getUserName()))
         );
     }
 
+    public String getValidDateOrder() {
+        return getAscendentDateOrder();
+    }
+
+    public String getAscendentDateOrder() {
+        return "date_desc";
+    }
+
+    public FollowedListDto getFollowedListDto(Vendor vendor) {
+        List<PostDto> postDto = getValidPostDto(vendor);
+        return new FollowedListDto(vendor.getUserId(), postDto);
+    }
+
+    public List<PostDto> getValidPostDto(Vendor vendor) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        return getPostTwoWeeksAway(vendor).stream().map(this::convertToPostDto).toList();
+    }
+
+    public FollowerCountDto getFollowerCountDto(Vendor vendor) {
+        return new FollowerCountDto(
+                vendor.getUserId(),
+                vendor.getUserName(),
+                0
+        );
+    }
+
+    public PostReqDto getValidPostReqDto() {
+        return new PostReqDto(
+                getValidUserId(),
+                LocalDate.now(),
+                getValidProductDto(),
+                100,
+                500.0
+        );
+    }
+
+    public ProductDto getValidProductDto(){
+        return convertToProductDto(getValidProduct());
+    }
+
+    public Product getValidProduct(){
+        return new Product(
+                1,
+                "Camiseta",
+                "Ropa",
+                "Nike",
+                "Blanco",
+                "Con logo");
+    }
+
+    public Product getValidProduct2() {
+        return new Product(
+                2,
+                "Zapatos",
+                "Calzado",
+                "Adidas",
+                "Negro",
+                "N/A");
+    }
 }
