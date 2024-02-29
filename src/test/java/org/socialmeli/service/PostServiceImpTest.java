@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.socialmeli.dto.request.FollowedListReqDto;
+import org.socialmeli.dto.request.PostReqDto;
 import org.socialmeli.dto.response.FollowedListDto;
 import org.socialmeli.dto.response.MessageDto;
 import org.socialmeli.dto.response.PostDto;
+import org.socialmeli.dto.response.PostIdDto;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.Post;
 import org.socialmeli.entity.Vendor;
@@ -303,5 +305,33 @@ public class PostServiceImpTest {
         assertEquals(LocalDate.now().minusDays(2), followersList.getPosts().get(1).getDate());
     }
 
+    // COV-0003
+    @Test
+    @DisplayName("[COV-0003] Sad path")
+    void savePostNotOkTest() {
+        // Arrange:
+        Vendor vendor = objectFactory.getValidVendor();
+        vendor.setUserId(null);
+        when(vendorRepositoryImp.findOne(vendor.getUserId())).thenReturn(vendor);
+        // Act && Assert:
+        String exMesage = assertThrows(
+                NotFoundException.class,
+                () -> postsServiceImp.savePost(new PostReqDto(vendor.getUserId(), LocalDate.now(), objectFactory.getValidProductDto(), 1, 10.0))).getMessage();
+                assertEquals("No se encontró ningun usuario en el sistema con el ID indicado.", exMesage);
+    }
 
+    // COV-0003
+    @Test
+    @DisplayName("[COV-0003] Happy path")
+    void savePostOkTest() {
+        // Arrange:
+        Vendor vendor = objectFactory.getValidVendor();
+        Post post = new Post(vendor.getUserId(), LocalDate.now(), objectFactory.getValidProduct(), 1, 10.0);
+        when(vendorRepositoryImp.findOne(vendor.getUserId())).thenReturn(vendor);
+        when(postRepositoryImp.save(post)).thenReturn(post.getPostId());
+        // Act:
+        PostIdDto postIdDto = postsServiceImp.savePost(new PostReqDto(post.getUserId(), post.getDate(), objectFactory.convertToProductDto(post.getProduct()), post.getCategory(), post.getPrice()));
+        // Assert:
+        assertEquals(post.getPostId(), postIdDto.getPostId());
+    }
 }

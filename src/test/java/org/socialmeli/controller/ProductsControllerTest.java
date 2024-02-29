@@ -3,7 +3,9 @@ package org.socialmeli.controller;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.socialmeli.dto.request.FollowedListReqDto;
+import org.socialmeli.dto.request.PostReqDto;
 import org.socialmeli.dto.response.FollowedListDto;
+import org.socialmeli.dto.response.PostIdDto;
 import org.socialmeli.service.IPostsService;
 import org.socialmeli.util.ObjectFactory;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,8 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,5 +44,21 @@ public class ProductsControllerTest {
         // Assert
         verify(postsService, atLeastOnce()).getFollowedList(followedListReqDto);
         assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("[COV-0001] Create post method ok")
+    public void createPostOk() {
+        // ARRANGE
+        PostReqDto inputDto = objectFactory.getValidPostReqDto();
+        PostIdDto mockPostIdDto = new PostIdDto(1);
+        ResponseEntity<PostIdDto> expected = new ResponseEntity<>(mockPostIdDto, HttpStatus.OK);
+        when(postsService.savePost(inputDto)).thenReturn(mockPostIdDto);
+
+        // ACT
+        ResponseEntity<PostIdDto> response = productsController.createPost(inputDto);
+
+        // ASSERT
+        assertEquals(expected, response);
     }
 }

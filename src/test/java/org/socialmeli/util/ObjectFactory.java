@@ -1,6 +1,7 @@
 package org.socialmeli.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.socialmeli.dto.request.PostReqDto;
 import org.socialmeli.dto.response.*;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.Post;
@@ -157,9 +158,6 @@ public class ObjectFactory {
         );
     }
 
-
-
-
     public FollowingListDto getVendorsFollowingListDto() {
         Client client = getValidClient();
         Vendor vendor1 = getValidVendor();
@@ -196,5 +194,39 @@ public class ObjectFactory {
                 vendor.getUserName(),
                 0
         );
+    }
+
+    public PostReqDto getValidPostReqDto() {
+        return new PostReqDto(
+                getValidUserId(),
+                LocalDate.now(),
+                getValidProductDto(),
+                100,
+                500.0
+        );
+    }
+
+    public ProductDto getValidProductDto(){
+        return convertToProductDto(getValidProduct());
+    }
+
+    public Product getValidProduct(){
+        return new Product(
+                1,
+                "Camiseta",
+                "Ropa",
+                "Nike",
+                "Blanco",
+                "Con logo");
+    }
+
+    public Product getValidProduct2() {
+        return new Product(
+                2,
+                "Zapatos",
+                "Calzado",
+                "Adidas",
+                "Negro",
+                "N/A");
     }
 }
