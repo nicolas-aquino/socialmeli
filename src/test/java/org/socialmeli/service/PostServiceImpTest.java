@@ -49,7 +49,6 @@ public class PostServiceImpTest {
     PostsServiceImp postsServiceImp;
 
     ObjectFactory objectFactory = new ObjectFactory();
-    ObjectMapper mapper = new ObjectMapper();
 
     // T-0008
     @Test
@@ -162,23 +161,25 @@ public class PostServiceImpTest {
 
     // ------------------ T-0005 ------------------
     @Test
-    @DisplayName("[T-0005] ")
+    @DisplayName("[T-0005] Existe ordenamiento por fecha ascendente")
     void sortByDateAscExistsTest() {
         //ARRANGE
         Client mockClient = objectFactory.getValidClientFollowingVendor();
+        Vendor mockVendor = mockClient.getFollowing().get(0);
         Integer userId = mockClient.getUserId();
         String order = "date_asc";
 
         List<Vendor> mockFollowingVendorList = mockClient.getFollowing();
-        List<Post> mockPostList = objectFactory.getListOfSinglePost(mockClient.getFollowing().get(0));
+        List<Post> mockPostList = objectFactory.getListOfSinglePost(mockVendor);
         List<PostDto> mockPostDtoList = mockPostList.stream().map(p -> objectFactory.convertToPostDto(p)).toList();
         FollowedListReqDto inputDto = new FollowedListReqDto(userId, order);
         FollowedListDto expectedDto = new FollowedListDto(userId, mockPostDtoList);
 
         when(clientRepositoryImp.findOne(userId)).thenReturn(mockClient);
         when(vendorRepositoryImp.findOne(userId)).thenReturn(null);
+        when(vendorRepositoryImp.findAll()).thenReturn(mockFollowingVendorList);
         when(postRepositoryImp.getFollowedList(mockClient, mockFollowingVendorList)).thenReturn(mockFollowingVendorList);
-        when(postRepositoryImp.getPostsByUserId(anyInt())).thenReturn(mockPostList);
+        when(postRepositoryImp.getPostsByUserId(mockVendor.getUserId())).thenReturn(objectFactory.getListOfSinglePost(mockVendor));
         //ACT
         FollowedListDto response = postsServiceImp.getFollowedList(inputDto);
         //ASSERT
@@ -186,23 +187,53 @@ public class PostServiceImpTest {
     }
 
     @Test
-    @DisplayName("[T-0005] ")
+    @DisplayName("[T-0005] Existe ordenamiento por fecha descendente")
     void sortByDateDescExistsTest() {
         //ARRANGE
+        Client mockClient = objectFactory.getValidClientFollowingVendor();
+        Vendor mockVendor = mockClient.getFollowing().get(0);
+        Integer userId = mockClient.getUserId();
+        String order = "date_desc";
 
+        List<Vendor> mockFollowingVendorList = mockClient.getFollowing();
+        List<Post> mockPostList = objectFactory.getListOfSinglePost(mockVendor);
+        List<PostDto> mockPostDtoList = mockPostList.stream().map(p -> objectFactory.convertToPostDto(p)).toList();
+        FollowedListReqDto inputDto = new FollowedListReqDto(userId, order);
+        FollowedListDto expectedDto = new FollowedListDto(userId, mockPostDtoList);
+
+        when(clientRepositoryImp.findOne(userId)).thenReturn(mockClient);
+        when(vendorRepositoryImp.findOne(userId)).thenReturn(null);
+        when(vendorRepositoryImp.findAll()).thenReturn(mockFollowingVendorList);
+        when(postRepositoryImp.getFollowedList(mockClient, mockFollowingVendorList)).thenReturn(mockFollowingVendorList);
+        when(postRepositoryImp.getPostsByUserId(mockVendor.getUserId())).thenReturn(objectFactory.getListOfSinglePost(mockVendor));
         //ACT
-
+        FollowedListDto response = postsServiceImp.getFollowedList(inputDto);
         //ASSERT
+        assertEquals(expectedDto, response);
     }
 
+
+    // T-0005
     @Test
-    @DisplayName("[T-0005] ")
-    void invalidSortParamExceptionTest() {
-        //ARRANGE
-
-        //ACT
-
-        //ASSERT
+    @DisplayName("[T-0005] Sad path - indicación de orden no valida")
+    void getFollowedListNotValidOrdenTest() {
+        // Arrange:
+        Client client = objectFactory.getValidClient();
+        client.setUserId(1);
+        Vendor vendor = objectFactory.getValidVendor();
+        String order = "date_descd";
+        List<Vendor> vendorList = List.of(objectFactory.getValidVendor());
+        when(clientRepositoryImp.findOne(client.getUserId())).thenReturn(client);
+        when(vendorRepositoryImp.findOne(1)).thenReturn(null);
+        when(vendorRepositoryImp.findAll()).thenReturn(vendorList);
+        when(postRepositoryImp.getFollowedList(client, vendorList)).thenReturn(vendorList);
+        when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getPostTwoWeeksAway(vendor));
+        // Act && Assert:
+        String exMesage = assertThrows(
+                BadRequestException.class,
+                () -> postsServiceImp.getFollowedList(new FollowedListReqDto(client.getUserId(), order))).getMessage();
+        assertEquals("Indicación de ordenamiento no válida. La misma tiene que ser \"date_asc\" o \"date_desc\"",
+                exMesage);
     }
 
     // T-0006
@@ -249,26 +280,5 @@ public class PostServiceImpTest {
         assertEquals(LocalDate.now().minusDays(2), followersList.getPosts().get(1).getDate());
     }
 
-    // T-0006
-    @Test
-    @DisplayName("[T-0006] Sad path - indicación de orden no valida")
-    void getFollowedListNotValidOrdenTest() {
-        // Arrange:
-        Client client = objectFactory.getValidClient();
-        client.setUserId(1);
-        Vendor vendor = objectFactory.getValidVendor();
-        String order = "date_descd";
-        List<Vendor> vendorList = List.of(objectFactory.getValidVendor());
-        when(clientRepositoryImp.findOne(client.getUserId())).thenReturn(client);
-        when(vendorRepositoryImp.findOne(1)).thenReturn(null);
-        when(vendorRepositoryImp.findAll()).thenReturn(vendorList);
-        when(postRepositoryImp.getFollowedList(client, vendorList)).thenReturn(vendorList);
-        when(postRepositoryImp.getPostsByUserId(vendor.getUserId())).thenReturn(objectFactory.getPostTwoWeeksAway(vendor));
-        // Act && Assert:
-        String exMesage = assertThrows(
-                BadRequestException.class,
-                () -> postsServiceImp.getFollowedList(new FollowedListReqDto(client.getUserId(), order))).getMessage();
-        assertEquals("Indicación de ordenamiento no válida. La misma tiene que ser \"date_asc\" o \"date_desc\"",
-                exMesage);
-        }
+
 }

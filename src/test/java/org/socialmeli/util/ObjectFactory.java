@@ -1,10 +1,7 @@
 package org.socialmeli.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.socialmeli.dto.response.PostDto;
-import org.socialmeli.dto.response.ProductDto;
-import org.socialmeli.dto.response.UserDto;
-import org.socialmeli.dto.response.VendorFollowersListDto;
+import org.socialmeli.dto.response.*;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.User;
 import org.socialmeli.entity.Post;
