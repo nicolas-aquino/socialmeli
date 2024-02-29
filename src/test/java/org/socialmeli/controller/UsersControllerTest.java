@@ -5,10 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.socialmeli.dto.request.*;
-import org.socialmeli.dto.response.FollowedListDto;
-import org.socialmeli.dto.response.MessageDto;
-import org.socialmeli.dto.response.FollowersListDto;
-import org.socialmeli.dto.response.FollowingListDto;
+import org.socialmeli.dto.response.*;
 import org.socialmeli.entity.Vendor;
 import org.socialmeli.exception.BadRequestException;
 import org.socialmeli.service.IPostsService;
@@ -156,6 +153,25 @@ public class UsersControllerTest {
 
         //Act
         ResponseEntity<FollowedListDto> actual = usersController.followedList(clientId, order);
+
+        //Assert
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void followersCountOK() {
+        //Arrange
+        Vendor vendor = objectFactory.getValidVendor();
+        UserIdDto userIdDto = new UserIdDto(vendor.getUserId());
+        FollowerCountDto followerCountDto = objectFactory.getFollowerCountDto(vendor);
+
+
+        when(usersService.vendorFollowersCount(userIdDto)).thenReturn(followerCountDto);
+
+        ResponseEntity<FollowerCountDto> expected = new ResponseEntity<>(followerCountDto, HttpStatus.OK);
+
+        //Act
+        ResponseEntity<FollowerCountDto> actual = usersController.followersCount(vendor.getUserId());
 
         //Assert
         assertThat(actual).isEqualTo(expected);

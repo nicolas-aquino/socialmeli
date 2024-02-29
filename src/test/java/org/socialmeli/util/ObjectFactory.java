@@ -1,6 +1,5 @@
 package org.socialmeli.util;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.socialmeli.dto.response.*;
 import org.socialmeli.entity.Client;
@@ -189,5 +188,13 @@ public class ObjectFactory {
         ObjectMapper mapper = new ObjectMapper();
 
         return getPostTwoWeeksAway(vendor).stream().map(this::convertToPostDto).toList();
+    }
+
+    public FollowerCountDto getFollowerCountDto(Vendor vendor) {
+        return new FollowerCountDto(
+                vendor.getUserId(),
+                vendor.getUserName(),
+                0
+        );
     }
 }
