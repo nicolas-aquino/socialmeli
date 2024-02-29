@@ -68,6 +68,7 @@ public class UserServiceImpTest {
         verify(vendorRepositoryImp, atLeastOnce()).findOne(userIdToFollow);
     }
 
+    // T_0001 & US_0001
     @Test
     @DisplayName("[T-0001] -> [US_0001] Happy path: Vendor follows existing vendor")
     void vendorFollowUserOkTest() {
@@ -91,6 +92,7 @@ public class UserServiceImpTest {
         verify(vendorRepositoryImp, atLeastOnce()).findOne(userIdToFollow);
     }
 
+    // T_0001 & US_0001
     @Test
     @DisplayName("[T-0001] -> [US_0001] Sad path: User follows non-existing vendor")
     void vendorFollowsNonExistingUserTest() {
@@ -110,6 +112,7 @@ public class UserServiceImpTest {
         );
     }
 
+    // T_0001 & US_0001
     @Test
     @DisplayName("[T-0001] -> [US_0001] Sad path: User follows himself")
     void userFollowsHimselfTest() {
@@ -126,6 +129,7 @@ public class UserServiceImpTest {
         );
     }
 
+    // T_0001 & US_0001
     @Test
     @DisplayName("[T-0001] -> [US_0001] Sad path: Vendor already followed")
     void vendorAlreadyFollowedTest() {
@@ -139,7 +143,7 @@ public class UserServiceImpTest {
         when(clientRepositoryImp.findOne(userId)).thenReturn(client);
         when(vendorRepositoryImp.findOne(userIdToFollow)).thenReturn(vendor);
 
-        // Act & Assertc
+        // Act & Assert
         assertThrows(
                 BadRequestException.class,
                 () -> userServiceImp.userFollowVendor(userFollowVendorDto),
@@ -170,6 +174,7 @@ public class UserServiceImpTest {
         assertEquals(expected, response);
     }
 
+    // T_0002 & US_0007
     @Test
     @DisplayName("[T-0002] -> [US_0007] Happy path: Vendor unfollows vendor")
     void vendorUnfollowVendorOkTest() {
@@ -193,6 +198,7 @@ public class UserServiceImpTest {
         assertEquals(expected, response);
     }
 
+    // T_0002 & US_0007
     @Test
     @DisplayName("[T-0002] -> [US_0007] Sad path: Client unfollows a non existing vendor")
     void clientUnfollowNonExistingVendorTest() {
@@ -212,6 +218,7 @@ public class UserServiceImpTest {
                 "El vendedor no existe");
     }
 
+    // T_0002 & US_0007
     @Test
     @DisplayName("[T-0002] -> [US_0007] Sad path: Client unfollows himself")
     void clientCantUnfollowHimselfTest() {
@@ -223,6 +230,23 @@ public class UserServiceImpTest {
         assertThrows(BadRequestException.class,
                 () -> userServiceImp.unfollowVendor(inputDto),
                 "Error: Ambos id son identicos");
+    }
+
+    // T_0002 & US_0007
+    @Test
+    @DisplayName("[T-0002] -> [US_0007] Sad path: Client can't unfollow an unfollowed vendor")
+    void clientCantUnfollowUnfollowedVendorTest() {
+        //ARRANGE
+        Client mockClient = objectFactory.getValidClient();
+        Vendor mockVendor = objectFactory.getValidVendor();
+        UserUnfollowVendorDto inputDto = new UserUnfollowVendorDto(mockClient.getUserId(), mockVendor.getUserId());
+
+        when(clientRepositoryImp.findOne(mockClient.getUserId())).thenReturn(mockClient);
+        when(vendorRepositoryImp.findOne(mockVendor.getUserId())).thenReturn(mockVendor);
+        //ACT & ASSERT
+        assertThrows(BadRequestException.class,
+                () -> userServiceImp.unfollowVendor(inputDto),
+                "Error: El usuario con id " + mockClient.getUserId() + " no está siguiendo al vendedor con id " + mockVendor.getUserId());
     }
 
     // T_0003 & US_0003 & US_0008
