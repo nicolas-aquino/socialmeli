@@ -58,6 +58,26 @@ public class ObjectFactory {
         return follower;
     }
 
+    public Vendor getVendorWithFollowers() {
+        Vendor vendor = getValidVendor();
+        Client follower1 = getValidClient();
+        Client follower2 = getValidClient2();
+        vendor.getFollowers().add(follower1);
+        vendor.getFollowers().add(follower2);
+        return vendor;
+    }
+
+    public Client getClientFollowingVendors() {
+        Client res = getValidClient();
+        Vendor vendor = getValidVendor();
+        Vendor vendor2 = getValidVendor2();
+        res.getFollowing().add(vendor);
+        res.getFollowing().add(vendor2);
+        vendor.getFollowers().add(res);
+        vendor2.getFollowers().add(res);
+        return res;
+    }
+
     public Integer getValidUserId() {
         return 1;
     }
@@ -67,7 +87,7 @@ public class ObjectFactory {
     }
 
     public Integer getValidClientId() {
-        return 6; //TODO Revisar ids de clientes
+        return 6;
     }
 
     public Integer getValidVendorId() {
@@ -82,7 +102,10 @@ public class ObjectFactory {
         return 99999;
     }
 
-    public String getValidNameOrder() {
+    public String getAscendentNameOrder() {
+        return "name_asc";
+    }
+    public String getDescendentNameOrder() {
         return "name_desc";
     }
 
@@ -90,9 +113,6 @@ public class ObjectFactory {
         return "invalido";
     }
 
-    public String getAscendentNameOrder() {
-        return "name_asc";
-    }
 
 
     public List<Post> getOldPostList(Vendor vendor) {
@@ -105,6 +125,7 @@ public class ObjectFactory {
         postList.add(post2);
         return postList;
     }
+
     public FollowersListDto getVendorFollowersListDto() {
         Vendor vendor = getValidVendor();
         Client client1 = getValidClient();
@@ -115,7 +136,6 @@ public class ObjectFactory {
                 List.of(new UserDto(client1.getUserId(), client1.getUserName()), new UserDto(client2.getUserId(), client2.getUserName()))
         );
     }
-
 
     public List<Post> getPostTwoWeeksAway(Vendor vendor) {
         List<Post> postList = new ArrayList<>();

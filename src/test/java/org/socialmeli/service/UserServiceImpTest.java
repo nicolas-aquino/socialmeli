@@ -4,13 +4,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.socialmeli.dto.request.FollowedListReqDto;
 import org.socialmeli.dto.request.FollowersListReqDto;
 import org.socialmeli.dto.request.FollowingListReqDto;
 import org.socialmeli.dto.request.UserFollowVendorDto;
 import org.socialmeli.dto.request.UserUnfollowVendorDto;
-import org.socialmeli.dto.response.ExceptionDto;
+import org.socialmeli.dto.response.FollowersListDto;
+import org.socialmeli.dto.response.FollowingListDto;
 import org.socialmeli.dto.response.MessageDto;
+import org.socialmeli.dto.response.UserDto;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.Vendor;
 import org.socialmeli.exception.BadRequestException;
@@ -22,8 +23,8 @@ import org.socialmeli.util.ObjectFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,9 +46,9 @@ public class UserServiceImpTest {
 
     ObjectFactory objectFactory = new ObjectFactory();
 
-    // T-0001
+    // T_0001 & US_0001
     @Test
-    @DisplayName("[T-0001] Happy path - Client follows existing vendor")
+    @DisplayName("[T-0001] -> [US_0001] Happy path: Client follows existing vendor")
     void followUserOkTest() {
         // Arrange
         Client client = objectFactory.getValidClient();
@@ -68,7 +69,7 @@ public class UserServiceImpTest {
     }
 
     @Test
-    @DisplayName("[T-0001] Happy path - Vendor follows existing vendor")
+    @DisplayName("[T-0001] -> [US_0001] Happy path: Vendor follows existing vendor")
     void vendorFollowUserOkTest() {
         // Arrange
         Vendor vendor1 = objectFactory.getValidVendor();
@@ -77,7 +78,6 @@ public class UserServiceImpTest {
         Integer userIdToFollow = vendor2.getUserId();
         UserFollowVendorDto userFollowVendorDto = new UserFollowVendorDto(userId, userIdToFollow);
 
-        //TODO preguntar si esto es necesario
         when(clientRepositoryImp.findOne(userId)).thenReturn(null);
 
         when(vendorRepositoryImp.findOne(userId)).thenReturn(vendor1);
@@ -92,7 +92,7 @@ public class UserServiceImpTest {
     }
 
     @Test
-    @DisplayName("[T-0001] Sad path - User follows non-existing vendor")
+    @DisplayName("[T-0001] -> [US_0001] Sad path: User follows non-existing vendor")
     void vendorFollowsNonExistingUserTest() {
         // Arrange
         Client client = objectFactory.getValidClient();
@@ -100,10 +100,9 @@ public class UserServiceImpTest {
         Integer userIdToFollow = objectFactory.getInvalidUserId();
         UserFollowVendorDto userFollowVendorDto = new UserFollowVendorDto(userId, userIdToFollow);
 
-        when(clientRepositoryImp.findOne(userId)).thenReturn(client);
+        when(vendorRepositoryImp.findOne(userId)).thenReturn(null);
 
-        //TODO preguntar si esto es necesario
-        //when(vendorRepositoryImp.findOne(userId)).thenReturn(null);
+        when(clientRepositoryImp.findOne(userId)).thenReturn(client);
 
         // Act & Assert
         assertThrows(
@@ -114,7 +113,7 @@ public class UserServiceImpTest {
     }
 
     @Test
-    @DisplayName("[T-0001-OP] Sad path - User follows himself")
+    @DisplayName("[T-0001] -> [US_0001] Sad path: User follows himself")
     void userFollowsHimselfTest() {
         // Arrange
         Client client = objectFactory.getValidClient();
@@ -130,7 +129,7 @@ public class UserServiceImpTest {
     }
 
     @Test
-    @DisplayName("[T-0001-OP] Sad path - Vendor already followed")
+    @DisplayName("[T-0001] -> [US_0001] Sad path: Vendor already followed")
     void vendorAlreadyFollowedTest() {
         // Arrange
         Client client = objectFactory.getValidClientFollowingVendor();
@@ -150,11 +149,11 @@ public class UserServiceImpTest {
         );
     }
 
-    // --------------------- T-0002 ---------------------
+    // T_0002 & US_0007
     @Test
-    @DisplayName("[T-0002] Client unfollows vendor OK")
+    @DisplayName("[T-0002] -> [US_0007] Happy path: Client unfollows vendor")
     void clientUnfollowVendorOkTest() {
-        //ARRANGE
+        // Arrange
         Client mockClient = objectFactory.getValidClientFollowingVendor();
         Vendor mockVendor = mockClient.getFollowing().get(0);
         Integer userId = mockClient.getUserId();
@@ -165,16 +164,18 @@ public class UserServiceImpTest {
 
         when(clientRepositoryImp.findOne(userId)).thenReturn(mockClient);
         when(vendorRepositoryImp.findOne(userIdToUnfollow)).thenReturn(mockVendor);
-        //ACT
+
+        // Act
         MessageDto response = userServiceImp.unfollowVendor(inputDto);
-        //ASSERT
+
+        // Assert
         assertEquals(expected, response);
     }
 
     @Test
-    @DisplayName("[T-0002] Vendor unfollows vendor OK")
+    @DisplayName("[T-0002] -> [US_0007] Happy path: Vendor unfollows vendor")
     void vendorUnfollowVendorOkTest() {
-        //ARRANGE
+        // Arrange
         Vendor mockFollower = objectFactory.getValidVendorFollowingVendor();
         Vendor mockVendorToUnfollow = mockFollower.getFollowing().get(0);
         Integer userId = mockFollower.getUserId();
@@ -186,16 +187,18 @@ public class UserServiceImpTest {
         when(clientRepositoryImp.findOne(userId)).thenReturn(null);
         when(vendorRepositoryImp.findOne(userId)).thenReturn(mockFollower);
         when(vendorRepositoryImp.findOne(userIdToUnfollow)).thenReturn(mockVendorToUnfollow);
-        //ACT
+
+        // Act
         MessageDto response = userServiceImp.unfollowVendor(inputDto);
-        //ASSERT
+
+        // Assert
         assertEquals(expected, response);
     }
 
     @Test
-    @DisplayName("[T-0002] Client can't unfollow a non existing vendor")
+    @DisplayName("[T-0002] -> [US_0007] Sad path: Client unfollows a non existing vendor")
     void clientUnfollowNonExistingVendorTest() {
-        //ARRANGE
+        // Arrange
         Client mockClient = objectFactory.getValidClientFollowingVendor();
         Integer userId = mockClient.getUserId();
         Integer userIdToUnfollow = objectFactory.getInvalidUserId();
@@ -204,29 +207,30 @@ public class UserServiceImpTest {
 
         when(clientRepositoryImp.findOne(userId)).thenReturn(mockClient);
         when(vendorRepositoryImp.findOne(userIdToUnfollow)).thenReturn(null);
-        //ACT & ASSERT
+
+        // Act & Assert
         assertThrows(NotFoundException.class,
                 () -> userServiceImp.unfollowVendor(inputDto),
                 "El vendedor no existe");
     }
 
     @Test
-    @DisplayName("[T-0002] Client can't unfollow himself")
+    @DisplayName("[T-0002] -> [US_0007] Sad path: Client unfollows himself")
     void clientCantUnfollowHimselfTest() {
-        //ARRANGE
+        // Arrange
         Integer userId = objectFactory.getValidUserId();
         UserUnfollowVendorDto inputDto = new UserUnfollowVendorDto(userId, userId);
 
-        //ACT & ASSERT
+        // Act & Assert
         assertThrows(BadRequestException.class,
                 () -> userServiceImp.unfollowVendor(inputDto),
                 "Error: Ambos id son identicos");
     }
 
-    //US-0003
+    // T_0003 & US_0003 & US_0008
     @Test
-    @DisplayName("[T-0003] - No se acepta un ordenamiento inválido al obtener lista de seguidores")
-    void followersListInvalidOrderOk() {
+    @DisplayName("[T_0003] -> [US_0003] & [US_0008] Sad path: No se acepta un ordenamiento inválido al obtener lista de seguidores")
+    void followersListInvalidOrder() {
         // Arrange
         Vendor vendor = objectFactory.getValidVendor();
 
@@ -244,13 +248,12 @@ public class UserServiceImpTest {
         assertThat(actualException.getMessage()).isEqualTo(expectedErrorMessage);
     }
 
-    //US-0004
+    // T_0003 & US_0004 & US_0008
     @Test
-    @DisplayName("[T-0003] - No se acepta un ordenamiento inválido al obtener lista de seguidos")
-    void followedListInvalidOrderOk() {
+    @DisplayName("[T_0003] -> [US_0004] & [US_0008] Sad path: No se acepta un ordenamiento inválido al obtener lista de seguidos")
+    void followedListInvalidOrder() {
         // Arrange
         Vendor vendor = objectFactory.getValidVendor();
-        Client client = objectFactory.getValidClient();
 
         Integer idVendedorValido = vendor.getUserId();
         String ordenamientoInvalido = objectFactory.getInvalidOrder();
@@ -265,5 +268,89 @@ public class UserServiceImpTest {
                 () -> userServiceImp.getFollowingList(serviceRequest),
                 "No se arrojó el error esperado");
         assertThat(actualException.getMessage()).isEqualTo(expectedErrorMessage);
+    }
+
+    // T_0004 & US_0003 & US_0008
+    @Test
+    @DisplayName("[T_0004] -> [US_0003] & [US_0008] Happy path: Get a list of users who follow a vendor with DESC order")
+    void followersListDescOk() {
+        // Arrange
+        Vendor vendor = objectFactory.getVendorWithFollowers();
+        FollowersListReqDto followersListReqDto = new FollowersListReqDto(vendor.getUserId(), objectFactory.getDescendentNameOrder());
+        FollowersListDto expected = new FollowersListDto(vendor.getUserId(), vendor.getUserName(), List.of(
+                new UserDto(vendor.getFollowers().get(0).getUserId(), vendor.getFollowers().get(0).getUserName()),
+                new UserDto(vendor.getFollowers().get(1).getUserId(), vendor.getFollowers().get(1).getUserName())
+        ));
+
+        when(vendorRepositoryImp.findOne(vendor.getUserId())).thenReturn(vendor);
+
+        // Act
+        var response = userServiceImp.getFollowersList(followersListReqDto);
+
+        // Assert
+        assertEquals(expected, response);
+    }
+
+    // T_0004 & US_0003 & US_0008
+    @Test
+    @DisplayName("[T_0004] -> [US_0003] & [US_0008] Happy path: Get a list of users who follow a vendor with ASC order")
+    void followersListAscOk() {
+        // Arrange
+        Vendor vendor = objectFactory.getVendorWithFollowers();
+        FollowersListReqDto followersListReqDto = new FollowersListReqDto(vendor.getUserId(), objectFactory.getAscendentNameOrder());
+        FollowersListDto expected = new FollowersListDto(vendor.getUserId(), vendor.getUserName(), List.of(
+                new UserDto(vendor.getFollowers().get(1).getUserId(), vendor.getFollowers().get(1).getUserName()),
+                new UserDto(vendor.getFollowers().get(0).getUserId(), vendor.getFollowers().get(0).getUserName())
+        ));
+
+        when(vendorRepositoryImp.findOne(vendor.getUserId())).thenReturn(vendor);
+
+        // Act
+        var response = userServiceImp.getFollowersList(followersListReqDto);
+
+        // Assert
+        assertEquals(expected, response);
+    }
+
+    // T_0004 & US_0004 & US_0008
+    @Test
+    @DisplayName("[T_0004] -> [US_0003] & [US_0008] Happy path: Get a list of vendors followed by a user with DESC order")
+    void followingListDescOk() {
+        // Arrange
+        Client client = objectFactory.getClientFollowingVendors();
+        FollowingListReqDto followingListReqDto = new FollowingListReqDto(client.getUserId(), objectFactory.getDescendentNameOrder());
+        FollowingListDto expected = new FollowingListDto(client.getUserId(), client.getUserName(), List.of(
+                new UserDto(client.getFollowing().get(0).getUserId(), client.getFollowing().get(0).getUserName()),
+                new UserDto(client.getFollowing().get(1).getUserId(), client.getFollowing().get(1).getUserName())
+        ));
+
+        when(clientRepositoryImp.findOne(client.getUserId())).thenReturn(client);
+
+        // Act
+        var response = userServiceImp.getFollowingList(followingListReqDto);
+
+        // Assert
+        assertEquals(expected, response);
+    }
+
+    // T_0004 & US_0004 & US_0008
+    @Test
+    @DisplayName("[T_0004] -> [US_0003] & [US_0008] Happy path: Get a list of vendors followed by a user with ASC order")
+    void followingListAscOk() {
+        // Arrange
+        Client client = objectFactory.getClientFollowingVendors();
+        FollowingListReqDto followingListReqDto = new FollowingListReqDto(client.getUserId(), objectFactory.getAscendentNameOrder());
+        FollowingListDto expected = new FollowingListDto(client.getUserId(), client.getUserName(), List.of(
+                new UserDto(client.getFollowing().get(1).getUserId(), client.getFollowing().get(1).getUserName()),
+                new UserDto(client.getFollowing().get(0).getUserId(), client.getFollowing().get(0).getUserName())
+        ));
+
+        when(clientRepositoryImp.findOne(client.getUserId())).thenReturn(client);
+
+        // Act
+        var response = userServiceImp.getFollowingList(followingListReqDto);
+
+        // Assert
+        assertEquals(expected, response);
     }
 }

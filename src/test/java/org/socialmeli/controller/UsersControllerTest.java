@@ -58,7 +58,7 @@ public class UsersControllerTest {
         assertEquals(result, expected);
     }
 
-    // T-0003
+    // T_0003
     @Test
     void invalidOrderOk() {
         // Arrange
@@ -79,12 +79,13 @@ public class UsersControllerTest {
                 expectedErrorMessage);
     }
 
-    // T-0004
+    // T_0004 & US_0003 & US_0008
     @Test
+    @DisplayName("[T_0004] -> [US_0003] & [US_0008] - Happy path")
     void followersListOk() {
         // Arrange
         Integer vendorId = objectFactory.getValidVendorId();
-        String order = objectFactory.getValidNameOrder();
+        String order = objectFactory.getDescendentNameOrder();
         FollowersListReqDto followersListReqDto = new FollowersListReqDto(vendorId, order);
         FollowersListDto followersListDto = objectFactory.getVendorFollowersListDto();
         ResponseEntity<FollowersListDto> expected = new ResponseEntity<>(followersListDto, HttpStatus.OK);
@@ -99,12 +100,13 @@ public class UsersControllerTest {
         assertEquals(result, expected);
     }
 
-    // T-0004
+    // T_0004 & US_0004 & US_0008
     @Test
+    @DisplayName("[T_0004] -> [US_0004] & [US_0008] - Happy path")
     void followingListOk() {
         // Arrange
         Integer clientId = objectFactory.getValidClientId();
-        String order = objectFactory.getValidNameOrder();
+        String order = objectFactory.getDescendentNameOrder();
         FollowingListReqDto followingListReqDto = new FollowingListReqDto(clientId, order);
         FollowingListDto followingListDto = objectFactory.getVendorsFollowingListDto();
         ResponseEntity<FollowingListDto> expected = new ResponseEntity<>(followingListDto, HttpStatus.OK);
