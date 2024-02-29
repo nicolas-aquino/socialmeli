@@ -158,9 +158,6 @@ public class ObjectFactory {
         );
     }
 
-
-
-
     public FollowingListDto getVendorsFollowingListDto() {
         Client client = getValidClient();
         Vendor vendor1 = getValidVendor();
@@ -172,4 +169,11 @@ public class ObjectFactory {
         );
     }
 
+    public ProductDto getValidProductDto(){
+        return convertToProductDto(getValidProduct());
+    }
+
+    public Product getValidProduct(){
+        return new Product(1, "Camiseta", "Ropa", "Nike", "Blanco", "Con logo");
+    }
 }
