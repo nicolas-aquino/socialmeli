@@ -159,9 +159,6 @@ public class ObjectFactory {
         );
     }
 
-
-
-
     public FollowingListDto getVendorsFollowingListDto() {
         Client client = getValidClient();
         Vendor vendor1 = getValidVendor();
@@ -177,13 +174,17 @@ public class ObjectFactory {
         return new PostReqDto(
                 getValidUserId(),
                 LocalDate.now(),
-                convertToProductDto(getValidProduct()),
+                getValidProductDto(),
                 100,
                 500.0
         );
     }
 
-    public Product getValidProduct() {
+    public ProductDto getValidProductDto(){
+        return convertToProductDto(getValidProduct());
+    }
+
+    public Product getValidProduct(){
         return new Product(
                 1,
                 "Camiseta",
@@ -202,6 +203,4 @@ public class ObjectFactory {
                 "Negro",
                 "N/A");
     }
-
-
 }
