@@ -4,6 +4,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.socialmeli.dto.request.FollowedListReqDto;
+import org.socialmeli.dto.request.FollowersListReqDto;
+import org.socialmeli.dto.request.FollowingListReqDto;
 import org.socialmeli.dto.request.UserFollowVendorDto;
 import org.socialmeli.dto.request.UserUnfollowVendorDto;
 import org.socialmeli.dto.response.ExceptionDto;
@@ -23,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -218,5 +222,53 @@ public class UserServiceImpTest {
                 () -> userServiceImp.unfollowVendor(inputDto),
                 "Error: Ambos id son identicos");
     }
-    
+
+    //US-0003
+    @Test
+    @DisplayName("[T-0003] - No se acepta un ordenamiento inválido al obtener lista de seguidores")
+    void followersListInvalidOrderOk() {
+        // Arrange
+        Vendor vendor = objectFactory.getValidVendor();
+
+        Integer idVendedorValido = vendor.getUserId();
+        String ordenamientoInvalido = objectFactory.getInvalidOrder();
+        FollowersListReqDto serviceRequest = new FollowersListReqDto(idVendedorValido, ordenamientoInvalido);
+
+        String expectedErrorMessage = "El ordenamiento pedido es inválido";
+
+        when(vendorRepositoryImp.findOne(idVendedorValido)).thenReturn(vendor);
+
+        // Act and Assert
+        BadRequestException actualException = assertThrows(
+                BadRequestException.class,
+                () -> userServiceImp.getFollowersList(serviceRequest),
+                "No se arrojó el error esperado");
+        assertThat(actualException.getMessage()).isEqualTo(expectedErrorMessage);
+    }
+
+    //US-0004
+    @Test
+    @DisplayName("[T-0003] - No se acepta un ordenamiento inválido al obtener lista de seguidos")
+    void followedListInvalidOrderOk() {
+        // Arrange
+        Vendor vendor = objectFactory.getValidVendor();
+        Client client = objectFactory.getValidClient();
+
+        Integer idVendedorValido = vendor.getUserId();
+        String ordenamientoInvalido = objectFactory.getInvalidOrder();
+        FollowingListReqDto serviceRequest =
+                new FollowingListReqDto(idVendedorValido, ordenamientoInvalido);
+
+        String expectedErrorMessage = "El ordenamiento pedido es inválido";
+
+        when(clientRepositoryImp.findOne(idVendedorValido)).thenReturn(client);
+        when(vendorRepositoryImp.findOne(idVendedorValido)).thenReturn(vendor);
+
+        // Act and Assert
+        BadRequestException actualException = assertThrows(
+                BadRequestException.class,
+                () -> userServiceImp.getFollowingList(serviceRequest),
+                "No se arrojó el error esperado");
+        assertThat(actualException.getMessage()).isEqualTo(expectedErrorMessage);
+    }
 }
