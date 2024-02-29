@@ -7,17 +7,12 @@ import org.mockito.Mock;
 import org.socialmeli.dto.request.FollowersListReqDto;
 import org.socialmeli.dto.request.FollowingListReqDto;
 import org.socialmeli.dto.request.UserFollowVendorDto;
-import org.socialmeli.dto.request.UserUnfollowVendorDto;
 import org.socialmeli.dto.response.MessageDto;
-import org.socialmeli.dto.response.VendorFollowersListDto;
-import org.socialmeli.dto.response.VendorsFollowingListDto;
+import org.socialmeli.dto.response.FollowersListDto;
+import org.socialmeli.dto.response.FollowingListDto;
 import org.socialmeli.exception.BadRequestException;
-import org.socialmeli.dto.response.VendorFollowersListDto;
-import org.socialmeli.entity.User;
-import org.socialmeli.entity.Vendor;
 import org.socialmeli.service.IPostsService;
 import org.socialmeli.service.IUsersService;
-import org.socialmeli.util.DTOMapper;
 import org.socialmeli.util.ObjectFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -91,10 +86,10 @@ public class UsersControllerTest {
         Integer vendorId = objectFactory.getValidVendorId();
         String order = objectFactory.getValidNameOrder();
         FollowersListReqDto followersListReqDto = new FollowersListReqDto(vendorId, order);
-        VendorFollowersListDto vendorFollowersListDto = objectFactory.getVendorFollowersListDto();
-        ResponseEntity<VendorFollowersListDto> expected = new ResponseEntity<>(vendorFollowersListDto, HttpStatus.OK);
+        FollowersListDto followersListDto = objectFactory.getVendorFollowersListDto();
+        ResponseEntity<FollowersListDto> expected = new ResponseEntity<>(followersListDto, HttpStatus.OK);
 
-        when(usersService.getFollowersList(followersListReqDto)).thenReturn(vendorFollowersListDto);
+        when(usersService.getFollowersList(followersListReqDto)).thenReturn(followersListDto);
 
         // Act
         ResponseEntity<?> result = usersController.followersList(vendorId, order);
@@ -111,10 +106,10 @@ public class UsersControllerTest {
         Integer clientId = objectFactory.getValidClientId();
         String order = objectFactory.getValidNameOrder();
         FollowingListReqDto followingListReqDto = new FollowingListReqDto(clientId, order);
-        VendorsFollowingListDto vendorsFollowingListDto = objectFactory.getVendorsFollowingListDto();
-        ResponseEntity<VendorsFollowingListDto> expected = new ResponseEntity<>(vendorsFollowingListDto, HttpStatus.OK);
+        FollowingListDto followingListDto = objectFactory.getVendorsFollowingListDto();
+        ResponseEntity<FollowingListDto> expected = new ResponseEntity<>(followingListDto, HttpStatus.OK);
 
-        when(usersService.getFollowingList(followingListReqDto)).thenReturn(vendorsFollowingListDto);
+        when(usersService.getFollowingList(followingListReqDto)).thenReturn(followingListDto);
 
         // Act
         ResponseEntity<?> result = usersController.followingList(clientId, order);

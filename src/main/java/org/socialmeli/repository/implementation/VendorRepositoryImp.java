@@ -10,8 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
 @Repository
 public class VendorRepositoryImp implements IVendorRepository {
     private List<Vendor> vendors = new ArrayList<>();

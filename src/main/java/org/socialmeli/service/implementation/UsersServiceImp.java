@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.socialmeli.dto.request.*;
 import org.socialmeli.dto.response.FollowerCountDto;
 import org.socialmeli.dto.response.MessageDto;
-import org.socialmeli.dto.response.VendorFollowersListDto;
-import org.socialmeli.dto.response.VendorsFollowingListDto;
+import org.socialmeli.dto.response.FollowersListDto;
+import org.socialmeli.dto.response.FollowingListDto;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
@@ -66,7 +66,7 @@ public class UsersServiceImp implements IUsersService {
     }
 
     @Override
-    public VendorFollowersListDto getFollowersList(FollowersListReqDto req) {
+    public FollowersListDto getFollowersList(FollowersListReqDto req) {
         String order = req.getOrder();
 
         verifyOrder(order);
@@ -90,7 +90,7 @@ public class UsersServiceImp implements IUsersService {
     }
 
     @Override
-    public VendorsFollowingListDto getFollowingList(FollowingListReqDto req) {
+    public FollowingListDto getFollowingList(FollowingListReqDto req) {
 
         String order = req.getOrder();
         verifyOrder(order);
@@ -99,10 +99,10 @@ public class UsersServiceImp implements IUsersService {
         Client client = getClientById(userId);
         Vendor vendor = getVendorById(userId);
 
-        VendorsFollowingListDto clientFollowing = getVendorsFollowingListDto(order, client);
+        FollowingListDto clientFollowing = getVendorsFollowingListDto(order, client);
         if (clientFollowing != null) return clientFollowing;
 
-        VendorsFollowingListDto vendorFollowing = getVendorsFollowingListDto(order, vendor);
+        FollowingListDto vendorFollowing = getVendorsFollowingListDto(order, vendor);
         if (vendorFollowing != null) return vendorFollowing;
 
         throw new NotFoundException(String.format("No se encontró un usuario con el ID %d.", userId));
@@ -114,7 +114,7 @@ public class UsersServiceImp implements IUsersService {
         }
     }
 
-    private VendorsFollowingListDto getVendorsFollowingListDto(String order, User user) {
+    private FollowingListDto getVendorsFollowingListDto(String order, User user) {
         if (user != null) {
             List<Vendor> following = user.getFollowing();
             if (order.equals(ASCENDANT_NAME_ORDER)){
