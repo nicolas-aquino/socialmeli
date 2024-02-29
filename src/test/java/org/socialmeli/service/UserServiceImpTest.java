@@ -2,8 +2,10 @@ package org.socialmeli.service;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.socialmeli.dto.request.FollowersListReqDto;
 import org.socialmeli.dto.request.FollowingListReqDto;
 import org.socialmeli.dto.request.UserFollowVendorDto;
@@ -21,13 +23,11 @@ import org.socialmeli.repository.implementation.VendorRepositoryImp;
 import org.socialmeli.service.implementation.UsersServiceImp;
 import org.socialmeli.util.ObjectFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -236,14 +236,15 @@ public class UserServiceImpTest {
     @Test
     @DisplayName("[T-0002] -> [US_0007] Sad path: Client can't unfollow an unfollowed vendor")
     void clientCantUnfollowUnfollowedVendorTest() {
-        //ARRANGE
+        // Arrange
         Client mockClient = objectFactory.getValidClient();
         Vendor mockVendor = objectFactory.getValidVendor();
         UserUnfollowVendorDto inputDto = new UserUnfollowVendorDto(mockClient.getUserId(), mockVendor.getUserId());
 
         when(clientRepositoryImp.findOne(mockClient.getUserId())).thenReturn(mockClient);
         when(vendorRepositoryImp.findOne(mockVendor.getUserId())).thenReturn(mockVendor);
-        //ACT & ASSERT
+
+        // Act & Assert
         assertThrows(BadRequestException.class,
                 () -> userServiceImp.unfollowVendor(inputDto),
                 "Error: El usuario con id " + mockClient.getUserId() + " no está siguiendo al vendedor con id " + mockVendor.getUserId());

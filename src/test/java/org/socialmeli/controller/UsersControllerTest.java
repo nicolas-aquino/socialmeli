@@ -2,8 +2,10 @@ package org.socialmeli.controller;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.socialmeli.dto.request.*;
 import org.socialmeli.dto.response.*;
 import org.socialmeli.entity.Vendor;
@@ -12,8 +14,6 @@ import org.socialmeli.service.IPostsService;
 import org.socialmeli.service.IUsersService;
 import org.socialmeli.util.ObjectFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

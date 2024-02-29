@@ -1,7 +1,11 @@
 package org.socialmeli.service;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.socialmeli.dto.request.FollowedListReqDto;
 import org.socialmeli.dto.request.PostReqDto;
 import org.socialmeli.dto.response.FollowedListDto;
@@ -25,14 +29,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -143,7 +140,7 @@ public class PostServiceImpTest {
     @Test
     @DisplayName("[T_0008] -> [US_0006] Sad path: No hay posteos realizados por los vendedores.")
     void getFollowedListEmptyPostListTest() {
-        // Arrange:
+        // Arrange
         Client client = objectFactory.getValidClient();
         String order = "date_asc";
         List<Post> emptyPostList = new ArrayList<>();
@@ -153,7 +150,8 @@ public class PostServiceImpTest {
         when(vendorRepositoryImp.findAll()).thenReturn(vendorList);
         when(postRepositoryImp.getFollowedList(client, vendorList)).thenReturn(vendorList);
         when(postRepositoryImp.getPostsByUserId(objectFactory.getValidVendor().getUserId())).thenReturn(emptyPostList);
-        // Act && Assert:
+
+        // Act & Assert
         String exMesage = assertThrows(
                 NotFoundException.class,
                 () -> postsServiceImp.getFollowedList(new FollowedListReqDto(client.getUserId(), order))).getMessage();
@@ -240,6 +238,7 @@ public class PostServiceImpTest {
 
         // Act
         FollowedListDto response = postsServiceImp.getFollowedList(inputDto);
+
         // Assert
         assertEquals(expectedDto, response);
     }
@@ -342,7 +341,7 @@ public class PostServiceImpTest {
         vendor.setUserId(null);
         when(vendorRepositoryImp.findOne(vendor.getUserId())).thenReturn(vendor);
 
-        // Act && Assert
+        // Act & Assert
         String exMesage = assertThrows(
                 NotFoundException.class,
                 () -> postsServiceImp.savePost(new PostReqDto(vendor.getUserId(), LocalDate.now(), objectFactory.getValidProductDto(), 1, 10.0))).getMessage();

@@ -1,7 +1,11 @@
 package org.socialmeli.controller;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.socialmeli.dto.request.FollowedListReqDto;
 import org.socialmeli.dto.request.PostReqDto;
 import org.socialmeli.dto.response.FollowedListDto;
@@ -14,11 +18,6 @@ import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)

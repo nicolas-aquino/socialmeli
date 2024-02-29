@@ -1,8 +1,8 @@
 package org.socialmeli.util;
 
-import org.socialmeli.dto.response.UserDto;
 import org.socialmeli.dto.response.FollowersListDto;
 import org.socialmeli.dto.response.FollowingListDto;
+import org.socialmeli.dto.response.UserDto;
 import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
 

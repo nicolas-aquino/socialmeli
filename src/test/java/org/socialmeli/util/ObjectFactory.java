@@ -8,9 +8,9 @@ import org.socialmeli.entity.Post;
 import org.socialmeli.entity.Product;
 import org.socialmeli.entity.Vendor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDate;
 
 public class ObjectFactory {
 

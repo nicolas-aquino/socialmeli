@@ -1,20 +1,5 @@
 package org.socialmeli.repository;
 
-import org.socialmeli.entity.Post;
-import org.socialmeli.entity.Product;
-import org.socialmeli.entity.Vendor;
-import org.socialmeli.repository.implementation.PostRepositoryImp;
-import org.socialmeli.repository.implementation.VendorRepositoryImp;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +8,18 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.socialmeli.entity.Post;
+import org.socialmeli.entity.Product;
+import org.socialmeli.entity.Vendor;
+import org.socialmeli.repository.implementation.PostRepositoryImp;
+import org.socialmeli.repository.implementation.VendorRepositoryImp;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
