@@ -49,7 +49,7 @@ public class PostRepositoryImpTest {
     }
 
     @Test
-    @DisplayName("aaa")
+    @DisplayName("findAllOk")
     void testFindAll() {
         List<Post> allPosts = postRepositoryImp.findAll();
 
@@ -58,7 +58,7 @@ public class PostRepositoryImpTest {
     }
 
     @Test
-    @DisplayName("bbb")
+    @DisplayName("savePostOk")
     void testSave() {
         Product product = new Product(4, "Pantalón", "Ropa", "Levis", "Azul", "N/A");
         Post post = new Post(1, LocalDate.now(), product, 1, 59.99);
@@ -69,7 +69,7 @@ public class PostRepositoryImpTest {
     }
 
     @Test
-    @DisplayName("ccc")
+    @DisplayName("findOnePostOK")
     void testFindOne() {
         Product product = new Product(2, "Zapatos", "Calzado", "Adidas", "Negro", "N/A");
         Post post = new Post(1, LocalDate.of(2024, 2, 15), product, 2, 79.99);
@@ -83,7 +83,7 @@ public class PostRepositoryImpTest {
     }
 
     @Test
-    @DisplayName("ddd")
+    @DisplayName("deletePostOK")
     void testDeleteOne() {
         Product product = new Product(3, "Bolso", "Accesorio", "Puma", "Rojo", "Cuero");
         Post post = new Post(1, LocalDate.now(), product, 1, 49.99);
