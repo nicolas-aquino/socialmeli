@@ -5,14 +5,16 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class FollowedListReqDto {
+public class UserUnfollowVendorDto {
     @NotNull(message = "El id no puede estar vacío.")
     @Min(value = 1, message = "El id debe ser mayor a cero.")
     private Integer userId;
-    private String order;
+    @NotNull(message = "El id no puede estar vacío.")
+    @Min(value = 1, message = "El id debe ser mayor a cero.")
+    private Integer vendorId;
 
-    public FollowedListReqDto(Integer userId, String order) {
+    public UserUnfollowVendorDto(Integer userId, Integer vendorId) {
         this.userId = userId;
-        this.order = order;
+        this.vendorId = vendorId;
     }
 }

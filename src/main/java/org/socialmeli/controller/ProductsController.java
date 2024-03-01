@@ -1,5 +1,6 @@
 package org.socialmeli.controller;
 
+import jakarta.validation.Valid;
 import org.socialmeli.dto.request.FollowedListReqDto;
 import org.socialmeli.dto.request.PostReqDto;
 import org.socialmeli.dto.response.FollowedListDto;
@@ -22,7 +23,7 @@ public class ProductsController {
 
     // US_0005
     @PostMapping("/post")
-    public ResponseEntity<PostIdDto> createPost(@RequestBody PostReqDto postDto) {
+    public ResponseEntity<PostIdDto> createPost(@Valid @RequestBody PostReqDto postDto) {
         return new ResponseEntity<>(postsService.savePost(postDto), HttpStatus.OK);
     }
 

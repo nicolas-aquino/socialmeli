@@ -1,9 +1,15 @@
 package org.socialmeli.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-@AllArgsConstructor
 public class Client extends User {
+    public Client() {
+    }
+
+    public Client(Integer userId, String userName, List<Vendor> following) {
+        super(userId, userName, following);
+    }
 }

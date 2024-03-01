@@ -3,18 +3,19 @@ package org.socialmeli.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-public class FollowerCountDto {
+public class FollowingListDto {
     @JsonProperty("user_id")
     private Integer userId;
     @JsonProperty("user_name")
     private String userName;
-    @JsonProperty("followers_count")
-    private Integer followersCount;
+    private List<UserDto> vendors;
 
-    public FollowerCountDto(Integer userId, String userName, Integer followersCount) {
+    public FollowingListDto(Integer userId, String userName, List<UserDto> vendors) {
         this.userId = userId;
         this.userName = userName;
-        this.followersCount = followersCount;
+        this.vendors = vendors;
     }
 }

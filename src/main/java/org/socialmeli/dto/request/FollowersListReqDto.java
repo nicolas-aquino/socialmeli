@@ -1,14 +1,18 @@
 package org.socialmeli.dto.request;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.experimental.FieldDefaults;
 
 @Data
-@AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class FollowersListReqDto {
-    Integer userId;
-    String order;
+    @NotNull(message = "El id no puede estar vacío.")
+    @Min(value = 1, message = "El id debe ser mayor a cero.")
+    private Integer userId;
+    private String order;
+
+    public FollowersListReqDto(Integer userId, String order) {
+        this.userId = userId;
+        this.order = order;
+    }
 }

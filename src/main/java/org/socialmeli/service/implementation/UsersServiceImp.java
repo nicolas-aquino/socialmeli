@@ -3,9 +3,9 @@ package org.socialmeli.service.implementation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.socialmeli.dto.request.*;
 import org.socialmeli.dto.response.FollowerCountDto;
+import org.socialmeli.dto.response.FollowersListDto;
+import org.socialmeli.dto.response.FollowingListDto;
 import org.socialmeli.dto.response.MessageDto;
-import org.socialmeli.dto.response.VendorFollowersListDTO;
-import org.socialmeli.dto.response.VendorsFollowingListDto;
 import org.socialmeli.entity.Client;
 import org.socialmeli.entity.User;
 import org.socialmeli.entity.Vendor;
@@ -27,6 +27,9 @@ public class UsersServiceImp implements IUsersService {
     ClientRepositoryImp clientRepositoryImp;
     VendorRepositoryImp vendorRepositoryImp;
 
+    private final String ASCENDANT_NAME_ORDER = "name_asc";
+    private final String DESCENDENT_NAME_ORDER = "name_desc";
+
     ObjectMapper mapper = new ObjectMapper();
 
     public UsersServiceImp(ClientRepositoryImp clientRepo, VendorRepositoryImp vendorRepo) {
@@ -34,35 +37,21 @@ public class UsersServiceImp implements IUsersService {
         this.vendorRepositoryImp = vendorRepo;
     }
 
-    private User getUserById(Integer userId) {
-        User user  = clientRepositoryImp.findOne(userId);
-        if(user == null) {
-             user  = vendorRepositoryImp.findOne(userId);
-              if (user == null) throw new NotFoundException("El usuario ingresado no existe ");
-        }
-        return user;
-    }
-
-    private Vendor getVendorById(Integer vendorId) {
-            Vendor vendor = vendorRepositoryImp.findOne(vendorId);
-            if(vendor == null ) throw new NotFoundException("El vendedor no existe");
-            return vendor;
-
-    }
-    public void userFollowVendor(UserFollowVendorDto req){
+    public void userFollowVendor(UserFollowVendorDto req) {
         Integer userId = req.getUserFollower();
         Integer vendorId = req.getVendorToFollow();
 
-        if(userId.equals(vendorId))  throw new BadRequestException("Un usuario no se puede seguir a si mismo");
+        if (userId.equals(vendorId)) {
+            throw new BadRequestException("Un usuario no se puede seguir a si mismo");
+        }
+
         User user = getUserById(userId);
         Vendor vendor = getVendorById(vendorId);
 
-
         boolean alreadyFollowed = vendor.getFollowers().stream().anyMatch(u -> u.getUserId().equals(userId));
-        if(alreadyFollowed){
-                throw new BadRequestException("Ya se esta siguiendo al vendedor");
+        if (alreadyFollowed) {
+            throw new BadRequestException("Ya se esta siguiendo al vendedor");
         }
-
 
         user.getFollowing().add(vendor);
         vendor.getFollowers().add(user);
@@ -71,31 +60,26 @@ public class UsersServiceImp implements IUsersService {
     @Override
     public FollowerCountDto vendorFollowersCount(UserIdDto userIdDto) {
         Integer userId = userIdDto.getUserId();
-        Vendor vendor = vendorRepositoryImp.findOne(userId);
+        Vendor vendor = getVendorById(userId);
 
-        if(vendor == null) throw new NotFoundException(String.format("No se encontró un usuario con id %d", userId));
-
-
-        return  new FollowerCountDto(userId,vendor.getUserName(),vendor.getFollowers().size());
+        return new FollowerCountDto(userId, vendor.getUserName(), vendor.getFollowers().size());
     }
 
     @Override
-    public VendorFollowersListDTO getFollowersList(FollowersListReqDto req) {
-        Integer userId = req.getUserId();
+    public FollowersListDto getFollowersList(FollowersListReqDto req) {
         String order = req.getOrder();
-        Vendor vendor = vendorRepositoryImp.findOne(userId);
-        if (vendor == null) {
-            throw new NotFoundException(String.format("No se encontró un usuario con id %d", userId));
-        }
+
+        verifyOrder(order);
+
+        Integer userId = req.getUserId();
+        Vendor vendor = getVendorById(userId);
 
         List<User> followerUsers = vendor.getFollowers();
 
-        switch (order){
-            case "name_asc" -> followerUsers = ordenarListaUsuariosPor(followerUsers, comparing(User::getUserName));
-                //break;
-            case "name_desc" -> followerUsers = ordenarListaUsuariosPor(followerUsers, comparing(User::getUserName).reversed());
-                //break;
-            default -> throw new BadRequestException("El ordenamiento pedido es inválido");
+        if (order.equals(ASCENDANT_NAME_ORDER)) {
+            followerUsers = ordenarListaUsuariosPor(followerUsers, comparing(User::getUserName));
+        } else {
+            followerUsers = ordenarListaUsuariosPor(followerUsers, comparing(User::getUserName).reversed());
         }
 
         return DTOMapper.toVendorFollowersList(vendor, followerUsers);
@@ -106,72 +90,72 @@ public class UsersServiceImp implements IUsersService {
     }
 
     @Override
-    public VendorsFollowingListDto getFollowingList(FollowingListReqDto req) {
-        Integer userId = req.getUserId();
+    public FollowingListDto getFollowingList(FollowingListReqDto req) {
         String order = req.getOrder();
-        Client client = clientRepositoryImp.findOne(userId);
-        Vendor vendor = vendorRepositoryImp.findOne(userId);
+        verifyOrder(order);
+        Integer userId = req.getUserId();
 
-        VendorsFollowingListDto clientFollowing = getVendorsFollowingListDto(order, client);
-        if (clientFollowing != null) return clientFollowing;
+        User user = getUserById(userId);
 
-        VendorsFollowingListDto vendorFollowing = getVendorsFollowingListDto(order, vendor);
-        if (vendorFollowing != null) return vendorFollowing;
-
-        throw new NotFoundException(String.format("No se encontró un usuario con el ID %d.", userId));
+        return getVendorsFollowingListDto(order, user);
     }
 
-    private VendorsFollowingListDto getVendorsFollowingListDto(String order, User user) {
-        if (user != null) {
-            List<Vendor> following = user.getFollowing();
-            switch (order) {
-                case "name_asc":
-                    following = following.stream().sorted(comparing(User::getUserName)).toList();
-                    break;
-                case "name_desc":
-                    following = following.stream().sorted(comparing(User::getUserName).reversed()).toList();
-                    break;
-                default:
-                    throw new BadRequestException("El ordenamiento pedido es inválido");
-            }
-            return DTOMapper.toVendorsFollowingList(user.getUserId(), user.getUserName(), following);
+    private void verifyOrder(String order) {
+        if (!order.equals(ASCENDANT_NAME_ORDER) && !order.equals(DESCENDENT_NAME_ORDER) ) {
+            throw new BadRequestException("El ordenamiento pedido es inválido");
         }
-        return null;
+    }
+
+    private FollowingListDto getVendorsFollowingListDto(String order, User user) {
+        List<Vendor> following = user.getFollowing();
+        if (order.equals(ASCENDANT_NAME_ORDER)){
+            following = following.stream().sorted(comparing(User::getUserName)).toList();
+        } else {
+            following = following.stream().sorted(comparing(User::getUserName).reversed()).toList();
+        }
+        return DTOMapper.toVendorsFollowingList(user.getUserId(), user.getUserName(), following);
     }
 
     @Override
-    public MessageDto unfollowVendor(UserUnfollowVendorDTO req) {
-        boolean removedFromClient = false;
-        boolean removedFromVendor = false;
+    public MessageDto unfollowVendor(UserUnfollowVendorDto req) {
+        boolean removed;
         Integer userId = req.getUserId();
         Integer vendorId = req.getVendorId();
 
         if (userId.equals(vendorId))
             throw new BadRequestException("Error: Ambos id son identicos");
 
-        Client userClient = clientRepositoryImp.findOne(userId);
-        Vendor userVendor = vendorRepositoryImp.findOne(userId);
-        Vendor vendorToUnfollow = vendorRepositoryImp.findOne(vendorId);
+        User user = getUserById(userId);
+        Vendor vendorToUnfollow = getVendorById(vendorId);
 
-        //Check if IDs exist
-        if (userClient == null && userVendor == null)
-            throw new NotFoundException("Error: No se encontró el usuario con id " + userId);
-        if (vendorToUnfollow == null)
-            throw new NotFoundException("Error: No se encontró el vendedor con id " + vendorId);
+        removed = user.getFollowing().removeIf(v -> v.getUserId().equals(vendorId));
+        vendorToUnfollow.getFollowers().removeIf(u -> u.getUserId().equals(userId));
 
-        // El 'userId' ingresado es un cliente
-        if (userClient != null) {
-            //Usé new ArrayList para que no tire excepcion ya que devuelve UnmodifiableCollection
-            removedFromClient = userClient.getFollowing().removeIf(v -> v.getUserId().equals(vendorId));
-            vendorToUnfollow.getFollowers().removeIf(u -> u.getUserId().equals(userId));
-        } else { // El 'userId' ingresado es un vendedor
-            removedFromVendor = userVendor.getFollowing().removeIf(v -> v.getUserId().equals(vendorId));
-            userVendor.getFollowers().removeIf(u -> u.getUserId().equals(userId));
-        }
-        if (removedFromClient || removedFromVendor) {
+        if (removed) {
             return new MessageDto("El usuario con id " + userId + " ha dejado de seguir al vendedor con id " + vendorId);
         } else {
-            throw new NotFoundException("Error: El usuario con id " + userId + " no está siguiendo al vendedor con id " + vendorId);
+            throw new BadRequestException("Error: El usuario con id " + userId + " no está siguiendo al vendedor con id " + vendorId);
         }
+    }
+
+    private User getUserById(Integer userId) {
+        User user = clientRepositoryImp.findOne(userId);
+        if (user == null) {
+            user = vendorRepositoryImp.findOne(userId);
+            if (user == null) throw new NotFoundException("El usuario no existe");
+        }
+        return user;
+    }
+
+    private Client getClientById(Integer clientId) {
+        Client client = clientRepositoryImp.findOne(clientId);
+        if (client == null) throw new NotFoundException("El cliente no existe");
+        return client;
+    }
+
+    private Vendor getVendorById(Integer vendorId) {
+        Vendor vendor = vendorRepositoryImp.findOne(vendorId);
+        if (vendor == null) throw new NotFoundException("El vendedor no existe");
+        return vendor;
     }
 }
